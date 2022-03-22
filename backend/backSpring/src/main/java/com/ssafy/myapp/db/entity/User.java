@@ -1,4 +1,4 @@
-package com.ssafy.myapp.test;
+package com.ssafy.myapp.db.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
