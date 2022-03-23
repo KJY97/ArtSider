@@ -40,7 +40,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Api(value = "À¯Àú API", tags = {"User"})
+@Api(value = "ìœ ì € API", tags = {"User"})
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
@@ -58,24 +58,23 @@ public class UserController {
     
     
     @PostMapping()
-    @ApiOperation(value = "È¸¿ø °¡ÀÔ", notes = "<strong>¾ÆÀÌµğ¿Í ÆĞ½º¿öµå</strong>¸¦ ÅëÇØ È¸¿ø°¡ÀÔ ÇÑ´Ù.")
+    @ApiOperation(value = "íšŒì› ê°€ì…", notes = "<strong>ì•„ì´ë””ì™€ íŒ¨ìŠ¤ì›Œë“œ</strong>ë¥¼ í†µí•´ íšŒì›ê°€ì… í•œë‹¤.")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "È¸¿ø°¡ÀÔ ¼º°ø"),
-            @ApiResponse(code = 401, message = "È¸¿ø°¡ÀÔ ½ÇÆĞ"),
-            @ApiResponse(code = 500, message = "¼­¹ö ¿À·ù")
+            @ApiResponse(code = 200, message = "íšŒì›ê°€ì… ì„±ê³µ"),
+            @ApiResponse(code = 401, message = "íšŒì›ê°€ì… ì‹¤íŒ¨"),
+            @ApiResponse(code = 500, message = "ì„œë²„ ì˜¤ë¥˜")
     })
     public ResponseEntity<Map<String, Object>> createUser(
-            @RequestBody @ApiParam(value = "È¸¿ø°¡ÀÔ Á¤º¸", required = true) UserRegisterPostReq registerInfo) {
+            @RequestBody @ApiParam(value = "íšŒì›ê°€ì… ì •ë³´", required = true) UserRegisterPostReq registerInfo) {
 
         String userId = registerInfo.getEmail();
         Map<String, Object> resultMap = new HashMap<>();
         
-        if(userService.chkDplByEmail(userId)) { //À¯Àú Á¤º¸°¡ Á¸ÀçÇÏ¸é
+        if(userService.chkDplByEmail(userId)) {
         	resultMap.put("message", "fail");
             HttpStatus status = HttpStatus.BAD_REQUEST;
             return new ResponseEntity<Map<String, Object>>(resultMap, status);
         }
-        //ÀÓÀÇ·Î ¸®ÅÏµÈ User ÀÎ½ºÅÏ½º. ÇöÀç ÄÚµå´Â È¸¿ø °¡ÀÔ ¼º°ø ¿©ºÎ¸¸ ÆÇ´ÜÇÏ±â ¶§¹®¿¡ ±»ÀÌ Insert µÈ À¯Àú Á¤º¸¸¦ ÀÀ´äÇÏÁö ¾ÊÀ½.
         User user = userService.createUser(registerInfo);
         resultMap.put("message", "success");
         HttpStatus status = HttpStatus.ACCEPTED;

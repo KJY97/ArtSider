@@ -22,14 +22,11 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponses;
 import io.swagger.annotations.ApiResponse;
 
-/**
- * ÀÎÁõ °ü·Ã API ¿äÃ» Ã³¸®¸¦ À§ÇÑ ÄÁÆ®·Ñ·¯ Á¤ÀÇ.
-	http://localhost:8080/swagger-ui/
- */
 
-@Api(value = "ÀÎÁõ API", tags = {"Auth."})
+
+@Api(value = "ì¸ì¦ API", tags = {"Auth."})
 @RestController
-@RequestMapping("/api/auth/login")
+@RequestMapping("/api/auth")
 public class AuthController {
 
 	private final UserService userService;
@@ -42,14 +39,14 @@ public class AuthController {
 	}
 	
 	@PostMapping("/login")
-	@ApiOperation(value = "·Î±×ÀÎ", notes = "<strong>¾ÆÀÌµğ¿Í ÆĞ½º¿öµå</strong>¸¦ ÅëÇØ ·Î±×ÀÎ ÇÑ´Ù.")
+	@ApiOperation(value = "ë¡œê·¸ì¸", notes = "<strong>ì•„ì´ë””ì™€ íŒ¨ìŠ¤ì›Œë“œ</strong>ë¥¼ í†µí•´ ë¡œê·¸ì¸ í•œë‹¤.")
     @ApiResponses({
-        @ApiResponse(code = 200, message = "¼º°ø", response = UserLoginPostRes.class),
-        @ApiResponse(code = 401, message = "À¯È¿ÇÏÁö ¾ÊÀº ¾ÆÀÌµğ/ÆĞ½º¿öµå"),
-        @ApiResponse(code = 404, message = "»ç¿ëÀÚ ¾øÀ½"),
-        @ApiResponse(code = 500, message = "¼­¹ö ¿À·ù")
+        @ApiResponse(code = 200, message = "ì„±ê³µ", response = UserLoginPostRes.class),
+        @ApiResponse(code = 401, message = "ìœ íš¨í•˜ì§€ ì•Šì€ ì•„ì´ë””/íŒ¨ìŠ¤ì›Œë“œ"),
+        @ApiResponse(code = 404, message = "ì‚¬ìš©ì ì—†ìŒ"),
+        @ApiResponse(code = 500, message = "ì„œë²„ ì˜¤ë¥˜")
     })
-	public ResponseEntity<UserLoginPostRes> login(@RequestBody @ApiParam(value="·Î±×ÀÎ Á¤º¸", required = true) UserLoginPostReq loginInfo) {
+	public ResponseEntity<UserLoginPostRes> login(@RequestBody @ApiParam(value="ë¡œê·¸ì¸ ì •ë³´", required = true) UserLoginPostReq loginInfo) {
 		System.out.println(loginInfo.toString());
 		String email = loginInfo.getEmail();
 		String password = loginInfo.getPassword();
@@ -60,12 +57,11 @@ public class AuthController {
 			return ResponseEntity.status(404).body(UserLoginPostRes.of(404, "user doesn't exist", null));
 		}
 		
-		// ·Î±×ÀÎ ¿äÃ»ÇÑ À¯Àú·ÎºÎÅÍ ÀÔ·ÂµÈ ÆĞ½º¿öµå ¿Í µğºñ¿¡ ÀúÀåµÈ À¯ÀúÀÇ ¾ÏÈ£È­µÈ ÆĞ½º¿öµå°¡ °°ÀºÁö È®ÀÎ.(À¯È¿ÇÑ ÆĞ½º¿öµåÀÎÁö ¿©ºÎ È®ÀÎ)
 		if(passwordEncoder.matches(password, user.getPassword())) {
-			// À¯È¿ÇÑ ÆĞ½º¿öµå°¡ ¸Â´Â °æ¿ì, ·Î±×ÀÎ ¼º°øÀ¸·Î ÀÀ´ä.(¾×¼¼½º ÅäÅ«À» Æ÷ÇÔÇÏ¿© ÀÀ´ä°ª Àü´Ş)
+
 			return ResponseEntity.ok(UserLoginPostRes.of(200, "Success", JwtTokenUtil.getToken(email)));
 		}
-		// À¯È¿ÇÏÁö ¾Ê´Â ÆĞ½º¿öµåÀÎ °æ¿ì, ·Î±×ÀÎ ½ÇÆĞ·Î ÀÀ´ä.
+
 		return ResponseEntity.status(401).body(UserLoginPostRes.of(401, "Invalid Password", null));
 	}
 }

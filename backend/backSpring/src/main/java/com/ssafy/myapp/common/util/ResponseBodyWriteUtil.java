@@ -14,9 +14,7 @@ import com.google.common.collect.ImmutableMap;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-/**
- * ì»¨íŠ¸ë¡¤ëŸ¬(controller)ê°? ?•„?‹Œê³³ì—?„œ, ?„œë²? ?‘?‹µê°?(ë°”ë””) ì§ì ‘ ë³?ê²? ë°? ? „?‹¬ ?•˜ê¸°ìœ„?•œ ?œ ?‹¸ ? •?˜.
- */
+
 public class ResponseBodyWriteUtil {
 	
 	public static void sendApiResponse(HttpServletResponse response, String apiResponse) throws IOException {
