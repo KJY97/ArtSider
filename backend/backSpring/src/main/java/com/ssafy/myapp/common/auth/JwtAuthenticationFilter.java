@@ -82,7 +82,7 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
             // If so, then grab user details and create spring auth token using username, pass, authorities/roles
             if (email != null) {
 
-            		User user = userService.getUserByEmail(email);
+            		User user = userService.findUserByEmail(email);
                     System.out.println("jwtAuth :"+ user);
                 if(user != null) {
                 		SsafyUserDetails userDetails = new SsafyUserDetails(user);

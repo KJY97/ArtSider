@@ -18,6 +18,9 @@ import java.util.List;
 import static com.google.common.collect.Lists.newArrayList;
 
 
+/**
+ * jwt 토큰 유틸 정의.
+ */
 @Component
 public class JwtTokenUtil {
     private static String secretKey;

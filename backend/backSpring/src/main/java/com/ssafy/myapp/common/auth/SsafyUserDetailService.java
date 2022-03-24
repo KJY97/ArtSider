@@ -25,7 +25,7 @@ public class SsafyUserDetailService implements UserDetailsService{
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-    		User user = userService.getUserByEmail(email);
+    		User user = userService.findUserByEmail(email);
     		if(user != null) {
     			SsafyUserDetails userDetails = new SsafyUserDetails(user);
     			return userDetails;

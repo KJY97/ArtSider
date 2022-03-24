@@ -52,7 +52,7 @@ public class AuthController {
 		String password = loginInfo.getPassword();
 		User user ;
 		try {
-			user = userService.getUserByEmail(email);
+			user = userService.findUserByEmail(email);
 		} catch (NoSuchElementException e) {
 			return ResponseEntity.status(404).body(UserLoginPostRes.of(404, "user doesn't exist", null));
 		}
@@ -61,7 +61,6 @@ public class AuthController {
 
 			return ResponseEntity.ok(UserLoginPostRes.of(200, "Success", JwtTokenUtil.getToken(email)));
 		}
-
 		return ResponseEntity.status(401).body(UserLoginPostRes.of(401, "Invalid Password", null));
 	}
 }
