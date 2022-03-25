@@ -60,7 +60,7 @@ public class SwaggerConfig {
     @Bean
     UiConfiguration uiConfig() {
         return UiConfigurationBuilder.builder()
-//                .supportedSubmitMethods(newArrayList("get").toArray(new String[0])) // try it ê¸°ëŠ¥ ?™œ?„±?™” ë²”ìœ„
+//                .supportedSubmitMethods(newArrayList("get").toArray(new String[0]))
 //                .operationsSorter(METHOD)
                 .build();
     }
