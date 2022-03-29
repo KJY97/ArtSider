@@ -4,16 +4,13 @@
     <div id="map" style="width:100%;height:100%;position:relative;overflow:hidden;"></div>
     <ul id="category">
       <li id="CT1" data-order="0"> 
-        <span class="category_bg"></span>
-        문화시설
+        <a @click="changeCategory(0)" class="category_bg">문화시설</a>
       </li>       
       <li id="FD6" data-order="1"> 
-        <span class="category_bg"></span>
-        음식점
+        <a @click="changeCategory(1)" class="category_bg">음식점</a>
       </li>  
       <li id="CE7" data-order="2"> 
-        <span class="category_bg pharmacy"></span>
-        카페
+        <a @click="changeCategory(2)" class="category_bg">카페</a>
       </li>  
     </ul>
   </div>
@@ -35,11 +32,14 @@ export default {
       markerPositions: [[this.latitude,this.longitude]],
       ps: '',
       placeOverlay: '',
-      contentNode: document.createElement('div'), // 커스텀 오버레이의 컨텐츠 엘리먼트 입니다 
+      contentNode: '', // 커스텀 오버레이의 컨텐츠 엘리먼트 입니다 
       currCategory: '', // 현재 선택된 카테고리를 가지고 있을 변수입니다
       map: '',
       category: '',
       children: '',
+      marker: '',
+      content: '',
+      cg: '',
     };
   },
   mounted() {
@@ -246,7 +246,7 @@ export default {
       console.log('카테고리를 클릭했을때 호출')
         var id = this.id,
             className = this.className;
-
+        console.log(id)
         this.placeOverlay.setMap(null);
 
         if (className === 'on') {
@@ -266,7 +266,7 @@ export default {
         this.category = document.getElementById('category')
         this.children = this.category.children
 
-        for ( var i=0; i<this.children.length; i++ ) {
+        for ( let i=0; i<this.children.length; i++ ) {
             this.children[i].className = '';
         }
 
@@ -274,7 +274,7 @@ export default {
             el.className = 'on';
         } 
     },
-  },
+  }
 }
 </script>
 
