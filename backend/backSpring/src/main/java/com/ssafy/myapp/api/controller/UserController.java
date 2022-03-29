@@ -6,19 +6,27 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssafy.myapp.api.request.UserModifyProfilReq;
 import com.ssafy.myapp.api.request.UserRegisterPostReq;
 import com.ssafy.myapp.api.request.UserpassPatchReq;
 import com.ssafy.myapp.api.service.UserService;
 import com.ssafy.myapp.common.auth.SsafyUserDetails;
+import com.ssafy.myapp.db.entity.Favorite;
+import com.ssafy.myapp.db.entity.Show;
 import com.ssafy.myapp.db.entity.User;
+import com.ssafy.myapp.db.entity.Viewed;
+import com.ssafy.myapp.db.mapping.ShowMapping;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import springfox.documentation.annotations.ApiIgnore;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.UUID;
@@ -176,7 +184,7 @@ public class UserController {
             @ApiResponse(code = 401, message = "비밀번호 변경 실패"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
-    public ResponseEntity<Map<String, Object>> passwordModify(Authentication authentication,
+    public ResponseEntity<Map<String, Object>> passwordModify(@ApiIgnore Authentication authentication,
             @RequestBody @ApiParam(value = "비밀번호 정보", required = true) UserpassPatchReq userpassPatchReq) {
 
     	Map<String, Object> resultMap = new HashMap<>();
@@ -193,6 +201,196 @@ public class UserController {
         }
         resultMap.put("message", "fail");
         return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.BAD_REQUEST);
+
+    }
+    
+    @PostMapping("/show/{id}/preference")
+    @ApiOperation(value = "회원 관심목록 추가 ", notes = "회원의 관심 공연을 추가한다. ")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "추가 성공  "),
+            @ApiResponse(code = 400, message = "추가 실패/중복된 공연 등록"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<Map<String, Object>> FavoriteAdd(@ApiIgnore Authentication authentication,@PathVariable("id") Long showId) {
+
+    	Map<String, Object> resultMap = new HashMap<>();
+    	
+        SsafyUserDetails userDetails = (SsafyUserDetails) authentication.getDetails();
+        User user =userDetails.getUser();
+        
+        Favorite favorite=null;
+        try {
+			favorite=userService.addFavorite(user.getId(), showId);
+		}catch(Exception e) {
+			resultMap.put("message", "duplicated favorite show");
+            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.BAD_REQUEST);
+		}
+        
+        if(favorite==null) {
+        	 resultMap.put("message", "fail");
+             return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.BAD_REQUEST);
+        }
+       
+        resultMap.put("message", "success");
+        return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
+
+    }
+    
+    @GetMapping("/profile/preference")
+    @ApiOperation(value = "회원 관심목록 조회 ", notes = "회원의 관심 공연을 조회한다. ")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "조회성공  "),
+            @ApiResponse(code = 401, message = "조회 실패"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<Map<String, Object>> FavoriteList(@ApiIgnore Authentication authentication) {
+
+    	Map<String, Object> resultMap = new HashMap<>();
+    	
+        SsafyUserDetails userDetails = (SsafyUserDetails) authentication.getDetails();
+        User user =userDetails.getUser();
+        List<ShowMapping> shows=userService.findPreferShow(user);
+        if(shows==null) {
+        	resultMap.put("message", "fail");
+            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.BAD_REQUEST);
+        }
+        resultMap.put("message", "success");
+        resultMap.put("items",shows);
+        return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
+
+    }
+    
+    
+    @PostMapping("/show/{id}")
+    @ApiOperation(value = "회원이 조회한 공연목록 추가 ", notes = "회원의 조회한 공연목록을 추가한다. ")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "추가 성공  "),
+            @ApiResponse(code = 401, message = "추가 실패"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<Map<String, Object>> ViewedAdd(@ApiIgnore Authentication authentication,@PathVariable("id") Long showId) {
+
+    	Map<String, Object> resultMap = new HashMap<>();
+    	
+        SsafyUserDetails userDetails = (SsafyUserDetails) authentication.getDetails();
+        User user =userDetails.getUser();
+      
+        Viewed viewed=userService.addViewed(user.getId(), showId);
+        if(viewed==null) {
+        	 resultMap.put("message", "fail");
+             return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.BAD_REQUEST);
+        }
+       
+        resultMap.put("message", "success");
+        return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
+
+    }
+    
+    @GetMapping("/profile/watchHistory")
+    @ApiOperation(value = "회원조회한 공연목록 조회 ", notes = "회원이 조회한 공연목록을 조회한다. ")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "조회성공  "),
+            @ApiResponse(code = 401, message = "조회 실패"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<Map<String, Object>> ViewedList(@ApiIgnore Authentication authentication) {
+
+    	Map<String, Object> resultMap = new HashMap<>();
+    	
+        SsafyUserDetails userDetails = (SsafyUserDetails) authentication.getDetails();
+        User user =userDetails.getUser();
+        List<ShowMapping> shows=userService.findViewedShow(user);
+        if(shows==null) {
+        	resultMap.put("message", "fail");
+            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.BAD_REQUEST);
+        }
+        resultMap.put("message", "success");
+        resultMap.put("items",shows);
+        return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
+
+    }
+    
+    @DeleteMapping("/show/{id}/preference")
+    @ApiOperation(value = "회원 관심목록 삭제 ", notes = "회원의 관심 공연을 삭제한다. ")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "삭제 성공  "),
+            @ApiResponse(code = 400, message = "삭제 실패/중복된 공연 등록"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<Map<String, Object>> FavoriteRemove(@ApiIgnore Authentication authentication,@PathVariable("id") Long showId) {
+
+    	Map<String, Object> resultMap = new HashMap<>();
+    	
+        SsafyUserDetails userDetails = (SsafyUserDetails) authentication.getDetails();
+        User user =userDetails.getUser();
+        
+        Favorite favorite=null;
+        try {
+			userService.removeFavorite(user.getId(), showId);
+		} catch (Exception e) {
+			resultMap.put("message", "fail");
+            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.BAD_REQUEST);
+		}
+       
+        resultMap.put("message", "success");
+        return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
+
+    }
+    
+    
+    @GetMapping("/profile")
+    @ApiOperation(value = "프로필 정보 조회 ", notes = "회원의 프로필 정보를 조회한다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "조회 성공  "),
+            @ApiResponse(code = 400, message = "조회 실패"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<Map<String, Object>> userDetail(@ApiIgnore Authentication authentication) {
+
+    	Map<String, Object> resultMap = new HashMap<>();
+    	
+        SsafyUserDetails userDetails = (SsafyUserDetails) authentication.getDetails();
+        User user =userDetails.getUser();
+        
+        user=userService.findUserByEmail(user.getEmail());
+        if(user==null) {
+        	resultMap.put("message", "fail");
+            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.BAD_REQUEST);
+        }
+       
+        resultMap.put("userId", user.getId());
+        resultMap.put("nickname", user.getNickname());
+        resultMap.put("preferTag", user.getUserTag());
+        resultMap.put("profileImg", user.getProfileImg());
+        resultMap.put("message", "success");
+        return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
+        }
+    
+    
+    @DeleteMapping("/profile")
+    @ApiOperation(value = "프로필 정보 수정", notes = "유저의 프로필 정보를 수정한다. ")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "유저 정보 수정 성공"),
+            @ApiResponse(code = 401, message = "유저 정보 수정 실패"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<Map<String, Object>> userModify(@ApiIgnore Authentication authentication,
+    		@RequestBody @ApiParam(value = "비밀번호 정보", required = true) UserModifyProfilReq userModifyProfilReq) {
+    	Map<String, Object> resultMap = new HashMap<>();
+    	
+    	SsafyUserDetails userDetails = (SsafyUserDetails) authentication.getDetails();
+        User user =userDetails.getUser();
+        
+        user=userService.findUserByEmail(user.getEmail());
+        
+        user=userService.modifyNickname(user, userModifyProfilReq.getNickname());
+        if(user==null) {
+        	resultMap.put("message", "fail");
+            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.BAD_REQUEST);
+        }
+        
+        resultMap.put("message", "success");
+        return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
 
     }
     
