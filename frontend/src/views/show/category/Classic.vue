@@ -1,22 +1,22 @@
 <template>
 <div>
   <div class=recommand-list>
-  <Popular />
+  <ClassicPopular />
   </div>
   <div class=recommand-list>
-  <ComingEnd />
+  <ClassicComingEnd />
   </div>
   <div class=recommand-list>
-  <ComingSoon />
+  <ClassicComingSoon />
   </div>
   <div class=recommand-list>
-  <PreferenceTag />
+  <ClassicPreferenceTag />
   </div>
   <div class=recommand-list>
-  <Similar />
+  <ClassicSimilar />
   </div>
   <div class=recommand-list>
-  <Place />
+  <ClassicPlace />
   </div>
 </div>
 </template>
@@ -25,12 +25,12 @@
 // import Swiper from 'swiper/js/swiper.esm.bundle'
 // import 'swiper/css/swiper.css'
 
-import Popular from '../views/show/recommand/Popular.vue'
-import ComingEnd from '../views/show/recommand/ComingSoon.vue'
-import ComingSoon from '../views/show/recommand/ComingEnd.vue'
-import PreferenceTag from '../views/show/recommand/PreferenceTag.vue'
-import Similar from '../views/show/recommand/Similar.vue'
-import Place from '../views/show/recommand/Place.vue'
+import ClassicPopular from '../views/show/recommand/classic/Popular.vue'
+import ClassicComingEnd from '../views/show/recommand/classic/ComingSoon.vue'
+import ClassicComingSoon from '../views/show/recommand/classic/ComingEnd.vue'
+import ClassicPreferenceTag from '../views/show/recommand/classic/PreferenceTag.vue'
+import ClassicSimilar from '../views/show/recommand/classic/Similar.vue'
+import ClassicPlace from '../views/show/recommand/classic/Place.vue'
 
 
 export default {
@@ -42,12 +42,12 @@ export default {
   },
 
   components: {
-    Popular,
-    ComingEnd,
-    ComingSoon,
-    PreferenceTag,
-    Similar,
-    Place,
+    ClassicPopular,
+    ClassicComingEnd,
+    ClassicComingSoon,
+    ClassicPreferenceTag,
+    ClassicSimilar,
+    ClassicPlace,
   },
   // axios 로직 
   // 클릭했을때 상세정보로 이동

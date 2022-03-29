@@ -1,22 +1,22 @@
 <template>
 <div>
   <div class=recommand-list>
-  <Popular />
+  <ConcertPopular />
   </div>
   <div class=recommand-list>
-  <ComingEnd />
+  <ConcertComingEnd />
   </div>
   <div class=recommand-list>
-  <ComingSoon />
+  <ConcertComingSoon />
   </div>
   <div class=recommand-list>
-  <PreferenceTag />
+  <ConcertPreferenceTag />
   </div>
   <div class=recommand-list>
-  <Similar />
+  <ConcertSimilar />
   </div>
   <div class=recommand-list>
-  <Place />
+  <ConcertPlace />
   </div>
 </div>
 </template>
@@ -25,12 +25,12 @@
 // import Swiper from 'swiper/js/swiper.esm.bundle'
 // import 'swiper/css/swiper.css'
 
-import Popular from '../views/show/recommand/Popular.vue'
-import ComingEnd from '../views/show/recommand/ComingSoon.vue'
-import ComingSoon from '../views/show/recommand/ComingEnd.vue'
-import PreferenceTag from '../views/show/recommand/PreferenceTag.vue'
-import Similar from '../views/show/recommand/Similar.vue'
-import Place from '../views/show/recommand/Place.vue'
+import ConcertPopular from '../views/show/recommand/concert/Popular.vue'
+import ConcertComingEnd from '../views/show/recommand/concert/ComingSoon.vue'
+import ConcertComingSoon from '../views/show/recommand/concert/ComingEnd.vue'
+import ConcertPreferenceTag from '../views/show/recommand/concert/PreferenceTag.vue'
+import ConcertSimilar from '../views/show/recommand/concert/Similar.vue'
+import ConcertPlace from '../views/show/recommand/concert/Place.vue'
 
 
 export default {
@@ -42,12 +42,12 @@ export default {
   },
 
   components: {
-    Popular,
-    ComingEnd,
-    ComingSoon,
-    PreferenceTag,
-    Similar,
-    Place,
+    ConcertPopular,
+    ConcertComingEnd,
+    ConcertComingSoon,
+    ConcertPreferenceTag,
+    ConcertSimilar,
+    ConcertPlace,
   },
   // axios 로직 
   // 클릭했을때 상세정보로 이동

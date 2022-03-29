@@ -1,22 +1,22 @@
 <template>
 <div>
   <div class=recommand-list>
-  <Popular />
+  <FamilyPopular />
   </div>
   <div class=recommand-list>
-  <ComingEnd />
+  <FamilyComingEnd />
   </div>
   <div class=recommand-list>
-  <ComingSoon />
+  <FamilyComingSoon />
   </div>
   <div class=recommand-list>
-  <PreferenceTag />
+  <FamilyPreferenceTag />
   </div>
   <div class=recommand-list>
-  <Similar />
+  <FamilySimilar />
   </div>
   <div class=recommand-list>
-  <Place />
+  <FamilyPlace />
   </div>
 </div>
 </template>
@@ -25,12 +25,12 @@
 // import Swiper from 'swiper/js/swiper.esm.bundle'
 // import 'swiper/css/swiper.css'
 
-import Popular from '../views/show/recommand/Popular.vue'
-import ComingEnd from '../views/show/recommand/ComingSoon.vue'
-import ComingSoon from '../views/show/recommand/ComingEnd.vue'
-import PreferenceTag from '../views/show/recommand/PreferenceTag.vue'
-import Similar from '../views/show/recommand/Similar.vue'
-import Place from '../views/show/recommand/Place.vue'
+import FamilyPopular from '../views/show/recommand/family/Popular.vue'
+import FamilyComingEnd from '../views/show/recommand/family/ComingSoon.vue'
+import FamilyComingSoon from '../views/show/recommand/family/ComingEnd.vue'
+import FamilyPreferenceTag from '../views/show/recommand/family/PreferenceTag.vue'
+import FamilySimilar from '../views/show/recommand/family/Similar.vue'
+import FamilyPlace from '../views/show/recommand/family/Place.vue'
 
 
 export default {
@@ -42,12 +42,12 @@ export default {
   },
 
   components: {
-    Popular,
-    ComingEnd,
-    ComingSoon,
-    PreferenceTag,
-    Similar,
-    Place,
+    FamilyPopular,
+    FamilyComingEnd,
+    FamilyComingSoon,
+    FamilyPreferenceTag,
+    FamilySimilar,
+    FamilyPlace,
   },
   // axios 로직 
   // 클릭했을때 상세정보로 이동
