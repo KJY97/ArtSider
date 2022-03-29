@@ -1,10 +1,12 @@
 package com.ssafy.myapp.api.controller;
 
 import com.ssafy.myapp.api.request.ReviewRegisterReq;
+import com.ssafy.myapp.api.response.ReviewListGetRes;
 import com.ssafy.myapp.api.service.ReviewService;
 import com.ssafy.myapp.db.entity.Review;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Api(value = "리뷰 API", tags = {"Review"})
 @RestController
@@ -35,18 +38,17 @@ public class ReviewController {
             @ApiResponse(code = 500, message = "서버 오류")
     })
     @GetMapping("/reviews/{id}")
-    public ResponseEntity<List<Review>> reviewList(
+    public ResponseEntity<Map<String, Object>> reviewList(
             @ApiParam(value = "공연번호", required = true) @PathVariable("id") Long id,
             @PageableDefault(size = 5, sort = "createDate", direction = Sort.Direction.DESC)Pageable pageable) {
-        System.out.println("pageable = " + pageable.toString());
-        return new ResponseEntity<List<Review>>(reviewService.findReview(id, pageable), HttpStatus.OK);
-    }
+        Map<String, Object> map = new HashMap<>();
+        Page<ReviewListGetRes> review = reviewService.findReview(id, pageable);
 
-//    @GetMapping("/reviews/{id}")
-//    public ResponseEntity<List<Review>> reviewList(
-//            @ApiParam(value = "공연번호", required = true) @PathVariable("id") Long id) {
-//        return new ResponseEntity<List<Review>>(reviewService.findReview(id), HttpStatus.OK);
-//    }
+        map.put("length", review.getTotalElements());
+        map.put("items", review.getContent());
+
+        return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+    }
 
     @ApiOperation(value = "관람후기 작성", notes = "<strong>공연번호 id</strong>의 관람후기를 작성한다.")
     @ApiResponses({

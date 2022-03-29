@@ -22,7 +22,6 @@ public class Review {
     private String title;
 
     @Column(columnDefinition = "TEXT", length = 500, nullable = false)
-//    @Column(length = 500, nullable = false)
     private String contents;
 
     private int rating;
@@ -37,7 +36,7 @@ public class Review {
 
     // show 테이블의 기본키와 연결
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "show_id") // 공연 테이블의 pk
     @JsonIgnore // 순환참조 방지
     private Show show;
 

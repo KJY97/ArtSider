@@ -11,6 +11,6 @@ import java.util.List;
 
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Long> {
-    @Query(value = "select r from Review r ")
-    Page<Review> findAllByPerformanceId(Long id, Pageable pageable);
+    @Query("SELECT r FROM Review r INNER JOIN r.show s WHERE s.id = :id")
+    Page<Review> findByPerformanceId(Long id, Pageable pageable);
 }
