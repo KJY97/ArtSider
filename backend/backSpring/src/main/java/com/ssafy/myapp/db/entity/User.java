@@ -31,4 +31,6 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Review> reviews = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user")
+    private List<Expectation> expectations = new ArrayList<>();
 }

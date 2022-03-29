@@ -64,6 +64,9 @@ public class Show {
     @OneToMany(mappedBy = "show")
     private List<Review> reviews = new ArrayList<>();
 
+    @OneToMany(mappedBy = "show")
+    private List<Expectation> expectations = new ArrayList<>();
+
 //    @OneToMany(mappedBy = "show")
 //    private List<CastingList> castingLists = new ArrayList<CastingList>();
 //

@@ -41,7 +41,7 @@ class ReviewServiceImplTest {
         reviewInfo.setUserId(user.getId());
 
         Show show = new Show();
-        show.setShowName("레베카");
+//        show.setShowName("레베카");
         em.persist(show);
 
         //when
