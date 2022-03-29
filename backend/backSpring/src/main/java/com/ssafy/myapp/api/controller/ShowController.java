@@ -48,7 +48,6 @@ public class ShowController {
         return new ResponseEntity<List<ShowListGetRes>>(showService.findShowAllList(),HttpStatus.OK);
     }
 
-
     // 카테고리별 전체 공연 목록 조회
     @GetMapping("/{category}/all")
     @ApiResponses({

@@ -61,6 +61,9 @@ public class Show {
     @Column(nullable = false)
     private String womenRate;    // 여성 이용자 예매율
 
+    @OneToMany(mappedBy = "show")
+    private List<Review> reviews = new ArrayList<>();
+
 //    @OneToMany(mappedBy = "show")
 //    private List<CastingList> castingLists = new ArrayList<CastingList>();
 //
