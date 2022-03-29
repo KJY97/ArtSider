@@ -1,9 +1,14 @@
 <template>
-  <v-app style="background-color: #FEFEF4">
+  <v-app 
+    app
+    id="inspire"
+    style="background-color: #FEFEF4">
     <NavBar />
-    <v-main>
-      <router-view/>
-    </v-main>
+    <v-sheet max-height="100vh" id="main" style="overflow: auto">
+      <v-main>
+        <router-view/>
+      </v-main>
+    </v-sheet>
   </v-app>
 </template>
 

@@ -1,30 +1,31 @@
 <template>
-  <v-card 
-  class="overflow-hidden pt-2"
-  style="background-color: #FEFEF4"
-  flat>
-    <v-app-bar 
-    flat
-    inverted-scroll
-    color="transparent"
-    >
-    <v-toolbar-title class="text-uppercase">
-      <span class="font-weight-light"> ArtSider </span>
-    </v-toolbar-title>
-    
-    <v-spacer></v-spacer>
+  <v-app-bar 
+  app
+  scroll-target="#main"
+  absolute
+  flat
+  inverted-scroll
+  style="background-color: rgba(233,30,99,0.9)"
+  >
+  <v-toolbar-title class="text-uppercase">
+    <span class="font-weight-light"> ArtSider </span>
+  </v-toolbar-title>
+  
+  <div class="menu-wrapper" style="margin-left: 50px;">
     <v-menu
       bottom
     >
       <template v-slot:activator="{on, attrs}">
         <v-btn
+          width="218px"
           text  
           v-bind="attrs"
           v-on="on"
         >
-          공연 카테고리
+        <span style="color: rgb(246,247,235);"> 공연 카테고리 </span>
         <v-icon
         right
+        style="color: rgb(246,247,235)"
         >
           mdi-arrow-down-drop-circle-outline
         </v-icon>
@@ -36,56 +37,57 @@
           v-for="(category, i) in categories"
           :key="i"
         >
-          <v-btn text>
+          <v-btn text style="width:100%;">
             <v-list-item-title> {{ category.title }} </v-list-item-title>
           </v-btn>
         </v-list-item>
       </v-list>
 
     </v-menu>
+  </div>
 
-      <v-spacer></v-spacer>
+    <v-spacer></v-spacer>
 
-    <v-text-field
-      solo
-      flat
-      outlined
-      rounded
-      background-color="#FFF0E1"
-      color="black"
+  <v-text-field
+    solo
+    flat
+    dense
+    rounded
+    background-color="#FFFFFF"
+    color="black"
+  >
+    <v-btn
+      slot="append"
+      icon
     >
-      <v-btn
-        slot="append"
-        icon
+      <v-icon
+        color="gray"
       >
-        <v-icon
-          color="gray"
-        >
-          mdi-magnify
-        </v-icon>
-      </v-btn>
+        mdi-magnify
+      </v-icon>
+    </v-btn>
 
-    </v-text-field>
+  </v-text-field>
 
-      <v-spacer></v-spacer>
+    <v-spacer></v-spacer>
+
+    <v-btn text color="black">
+      <span  style="color: rgb(246,247,235);"> 공연 에티켓 </span>
+    </v-btn>
+
+    <v-btn text color="gray">
+      <span  style="color: rgb(246,247,235);">로그아웃</span>
+    </v-btn>
 
       <v-btn text color="gray">
-        <span> 공연 에티켓 </span>
-      </v-btn>
+      <span  style="color: rgb(246,247,235);">마이페이지</span>
+    </v-btn>
 
-      <v-btn text color="gray">
-        <span>로그아웃</span>
-      </v-btn>
-
-        <v-btn text color="gray">
-        <span>마이페이지</span>
-      </v-btn>
-
-    </v-app-bar>
-  </v-card>
+  </v-app-bar>
 </template>
 
 <script>
+
 export default {
   name: 'NavBar',
   data(){
@@ -98,7 +100,9 @@ export default {
         { title: "아동/키즈"}
       ]
     }
-  }
+  },
+
+
 }
 </script>
 
