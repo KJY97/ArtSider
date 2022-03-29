@@ -6,7 +6,8 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    token : ''
+    token : '',
+    myContents: [],
   },
 
   getters: {
@@ -19,9 +20,13 @@ export default new Vuex.Store({
   mutations: {
     SET_MY_TOKEN(state, token){
       state.token = token
-    }
+    },
 
+    SET_MY_CONTENTS(state, posters){
+      state.myContents = posters
+    },
   },
+
   actions: {
     // 이메일 체크
     checkMultiEmail({state}, inputEmail){
@@ -74,6 +79,21 @@ export default new Vuex.Store({
         commit('SET_MY_TOKEN')
       })
 
+    },
+
+    getMyContents({commit}, token){
+      const url = '/api/users/profile/preference'
+      axios.get(url, {
+        headers: {
+          Authorization : `Bearer ${token}`
+        }
+      })
+      .then((res) => {
+        commit('SET_MY_CONTENTS', res.data.items)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
     }
 
   },
