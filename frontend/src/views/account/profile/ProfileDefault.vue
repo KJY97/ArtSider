@@ -75,9 +75,20 @@ export default {
   name: 'ProfileDefault',
   data(){
     return{
-      posters: ['poster1', 'poster2', 'poster3', 'poster4', 'poster5', 'poster6', 'poster7']
     }
   },
+
+  computed:{
+    preferencePosters(){
+      return this.$store.state.preferencePosters
+    },
+  },  
+
+
+  created(){
+    this.$store.dispatch('getMyPreference')
+    this.$store.dispatch('getMyHistory')
+  }
 }
 </script>
 

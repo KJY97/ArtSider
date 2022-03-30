@@ -51,22 +51,29 @@
 </template>
 
 <script>
-// import ProfileMyContents from './ProfileMyContents'
 
 export default {
   name: 'Profile',
   components: {
-    // ProfileMyContents
   },
   data(){
     return{
       userName: '김공연',
       userTags: ['좋아요', '명배우', '웃겨요'],
-      clickItem1: false,
-      clickItem2: false,
-      clickItem3: false
     }
   },
+
+  computed:{
+    isLogin(){
+      return this.$store.getters.loginStatus
+    }
+  },
+
+  created(){
+    if(this.$store.getters.loginStatus){
+      this.$store.dispatch('getUserInfo')
+    }
+  }
 
 }
 </script>
@@ -75,6 +82,8 @@ export default {
 #profile{
   width: 100%;
   height: 100%;
+  overflow-y: auto;
+
 }
 
 .profile-wrapper{

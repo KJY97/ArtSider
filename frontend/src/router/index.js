@@ -30,7 +30,7 @@ const routes = [
     name: 'Intro',
     component: Intro
   },
-  ...Etiquette,
+  // ...Etiquette,
   ...Main,
   // ...Classic,
   // ...KTraditionalMusic,
