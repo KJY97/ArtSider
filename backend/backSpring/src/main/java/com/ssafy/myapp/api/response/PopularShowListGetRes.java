@@ -16,7 +16,6 @@ public class PopularShowListGetRes {
     private Integer rank;
     private String showId;
     private String sellRate;
-    private ArtCenter artCenter;
     private Show show;    // 공연정보
 
 
