@@ -1,20 +1,4 @@
 <template>
- <!-- <div style="margin-bottom:100px">
-  <div class="map_wrap">
-    <div id="map" style="width:100%;height:100%;position:relative;overflow:hidden;"></div>
-    <ul id="category">
-      <li id="CT1" data-order="0"> 
-        <a @click="changeCategory(0)" class="category_bg">문화시설</a>
-      </li>       
-      <li id="FD6" data-order="1"> 
-        <a @click="changeCategory(1)" class="category_bg">음식점</a>
-      </li>  
-      <li id="CE7" data-order="2"> 
-        <a @click="changeCategory(2)" class="category_bg">카페</a>
-      </li>  
-    </ul>
-  </div>
- </div> -->
 <div style="margin-bottom:100px">
   <div class="map_wrap">
     <div id="map" style="width:100%;height:100%;position:relative;overflow:hidden;"></div>
@@ -32,9 +16,8 @@
 export default {
   name: "KakaoMap",
   props: {
-    latitude: Number,
-    longitude: Number,
-    name: String,
+    artCenterAddress: String,
+    name: String
   },
   data() {
     return {
@@ -67,6 +50,30 @@ export default {
   },
   methods: {
     initMap() {
+  //     var geocoder = new kakao.maps.services.Geocoder();
+  //     geocoder.addressSearch('제주특별자치도 제주시 첨단로 242', function(result, status) {
+
+  //     // 정상적으로 검색이 완료됐으면 
+  //     if (status === kakao.maps.services.Status.OK) {
+
+  //         var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+  //         // 결과값으로 받은 위치를 마커로 표시합니다
+  //         var marker = new kakao.maps.Marker({
+  //             map: map,
+  //             position: coords
+  //         });
+
+  //         // 인포윈도우로 장소에 대한 설명을 표시합니다
+  //         var infowindow = new kakao.maps.InfoWindow({
+  //             content: '<div style="width:150px;text-align:center;padding:6px 0;">우리회사</div>'
+  //         });
+  //         infowindow.open(map, marker);
+
+  //         // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+  //         map.setCenter(coords);
+  //     } 
+  // });
       const mapContainer = document.getElementById("map"),
         mapOption = {
               center: new kakao.maps.LatLng(this.latitude, this.longitude), // 지도의 중심좌표
@@ -75,6 +82,8 @@ export default {
       // 지도를 생성합니다    
       this.map = new kakao.maps.Map(mapContainer, mapOption); 
       this.placeOverlay = new kakao.maps.CustomOverlay({zIndex:1})
+      
+
     
       // this.markers.forEach((marker) => marker.setMap(null));
 

@@ -2,7 +2,7 @@
   <v-parallax
     dark
     src="../../assets/hall_image.svg"
-    height="720"
+    style="height:100vh"
   >
     <v-row
       align="center"

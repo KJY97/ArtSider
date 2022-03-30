@@ -2,29 +2,6 @@
   <div style="margin-top:30px">
     <div class="d-flex align-center justify-space-between">
       <p>총 {{ showReviewsList.length }}개의 관람후기가 등록되었습니다.</p>
-      <!-- <div>
-        <v-text-field
-          solo
-          flat
-          dense
-          background-color="#FFF0E1"
-          color="black"
-          style="margin-left:200px; max-width:200px;"
-          v-model="searchTitle"
-        >
-          <v-btn
-            slot="append"
-            icon
-            @click="searchReview(searchTitle)"
-          >
-            <v-icon
-              color="gray"
-            >
-              mdi-magnify
-            </v-icon>
-          </v-btn>
-        </v-text-field>
-      </div> -->
       <v-btn color="black" style="float: right; color:white; opacity:0.8s; margin-left:25px" @click="drawUpReview">관람후기 작성</v-btn>
     </div>
     <br>
@@ -114,7 +91,7 @@ import StarRating from 'vue-star-rating'
 export default {
   name: 'ShowReviews',
   props: {
-    id: Object
+    id: Number
   },
   components: {
     StarRating
@@ -160,12 +137,13 @@ export default {
         { title: "평점낮은순"},
       ],
       searchTitle: '',
+      pageNum: 0,
     }
   },
   methods: {
     // 관람 후기 목록 조회
-    getShowReviews: function(id) {
-      this.$store.dispatch('getShowReviews', {id:id})
+    getShowReviews: function(id, num) {
+      this.$store.dispatch('getShowReviews', {id:id, num:num})
       .then(res => {
         console.log(res)
         this.showReviewsList = res.data
@@ -255,16 +233,9 @@ export default {
         })
       }
     },
-    searchReview: function(searchTitle) {
-      this.getShowReviews(this.id)
-      this.showReviewsList = this.showReviewsList.filter(post => {
-        return post.title.toLowerCase().includes(searchTitle.toLowerCase())
-      })
-    },
   },
   created: function () {
-    this.id = this.$route.params.id
-    this.getShowReviews(this.id)
+    this.getShowReviews(this.id, this.pageNum)
     this.getUserId()
   }
 }

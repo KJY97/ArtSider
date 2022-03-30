@@ -38,9 +38,9 @@ export default new Vuex.Store({
 
   actions: {
     // 관람 후기 제거
-    deleteShowReview({state}, reviewId){
+    deleteShowReview({state}, data){
       state
-      const url = `/api/show/reviews/${reviewId}`
+      const url = `/api/show/reviews/${data.reviewId}`
       return axios.delete(url, {
         headers: {
           Authorization : `Bearer ${state.token}`
@@ -70,9 +70,9 @@ export default new Vuex.Store({
       })
     },
     // 관람 후기 목록 조회
-    getShowReviews({state}, id){
+    getShowReviews({state}, data){
       state
-      const url = `/api/show/reviews/${id}`
+      const url = `/api/show/reviews/${data.id}?page=${data.num}`
       return axios.get(url)
     },
 
@@ -114,21 +114,21 @@ export default new Vuex.Store({
       })
     },
     // 기대평 목록 조회
-    getShowExpectations({state}, id){
+    getShowExpectations({state}, data){
       state
-      const url = `/api/show/expectations/${id}`
+      const url = `/api/show/expectations/${data.id}`
       return axios.get(url)
     },
     // 연관 공연 추가
-    addRelatedShow({state}, id){
+    addRelatedShow({state}, data){
       state
-      const url = `/api/${id}/hashTag`
+      const url = `/api/${data.id}/hashTag`
       return axios.get(url)
     },
     // 조회한 공연 추가
-    addLookUp({state}, id){
+    addLookUp({state}, data){
       state
-      const url = `/api/show/${id}`
+      const url = `/api/show/${data.id}`
       return axios.post(url, {
         headers: {
           Authorization : `Bearer ${state.token}`
@@ -137,9 +137,9 @@ export default new Vuex.Store({
     },
 
     // 티켓사이트 이동 & 선호 목록 추가
-    goTicketSite({state}, id){
+    goTicketSite({state}, data){
       state
-      const url = `/api/show/${id}/preference`
+      const url = `/api/show/${data.id}/preference`
       return axios.post(url, {
         headers: {
           Authorization : `Bearer ${state.token}`

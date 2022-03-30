@@ -2,10 +2,10 @@
   <div class="d-flex justify-center" style="padding-top: 100px">
     <div>
       <div class="d-flex flex-column" style="max-width:900px; min-width:900px; margin-left: 150px">
-        <h1 style="padding-left:30px">{{ showName }}</h1>
+        <h1 style="padding-left:30px">{{ showDetail.showName }}</h1>
         <div class="d-flex justify-center">
           <div class="d-flex flex-column" style="margin-right:100px">
-            <v-img :src="posterPath" style="max-width:300px; width:100%; min-width:300px; height:100%; min-height:400px; max-height:400px"></v-img>
+            <v-img :src="showDetail.posterPath" style="max-width:300px; width:100%; min-width:300px; height:100%; min-height:400px; max-height:400px"></v-img>
             <div class="d-flex flex-wrap justify-center" style="max-width:300px;">
               <span v-for="(Tag,idx) in hashTag" :key="idx" class="py-2">
                 <v-chip label color="pink" draggable text-color="white" class="mr-1"><v-icon left>mdi-label</v-icon>{{ Tag }}</v-chip>
@@ -17,37 +17,36 @@
             <li class="li-info">
               <strong class="main-label">장소</strong>
               <div class="sub-label">
-                {{ concertHall }}
+                {{ showDetail.artCenterName }}
               </div>
             </li>
             <li class="li-info">
               <strong class="main-label">공연 카테고리</strong>
               <div class="sub-label">
-                {{ category }}
+                {{ showDetail.category }}
               </div>
             </li>
             <li class="li-info">
               <strong class="main-label">공연기간</strong>
               <div class="sub-label">
-                {{ start_date }} ~ {{ end_date }}
+                {{ showDetail.startDate }} ~ {{ showDetail.endDate }}
               </div>
             </li>
             <li class="li-info">
               <strong class="main-label">공연시간</strong>
               <div class="sub-label">
-                {{ runTime }}
+                {{ showDetail.runtime }}
               </div>
             </li>
             <li class="li-info">
               <strong class="main-label">관람연령</strong>
               <div class="sub-label">
-                {{ age }}
+                {{ showDetail.age }}
               </div>
             </li>
-            <li class="li-info">
+            <li class="li-info d-flex">
               <strong class="main-label">가격</strong>
-              <div class="sub-label">
-                {{ price }}원
+              <div class="sub-label wrrap">
               </div>
             </li>
             
@@ -121,10 +120,7 @@
           <ShowInfo
             :id="id"
             v-if="number == 1"
-            :subPosterPath = subPosterPath
-            :story = story
-            :cast = cast
-            :producer = producer
+            :showDetailImg = showDetail.showDetailImg
           ></ShowInfo>
 
           <ShowReviews
@@ -138,7 +134,7 @@
           ></ShowExpectations>
 
           <ShowArtCenter
-            :ArtCenterName="this.concertHall"
+            :ArtCenterName="showDetail.artCenterName"
             v-if="number == 4"
           ></ShowArtCenter>
         </div>
@@ -176,35 +172,13 @@ export default {
 
   data: function () {
     return {
+      showDetail: [],
       id: '',
-      showName : '지킬 앤 하이드',
-      state: '공연중',
-      age: '9세 이상',
-      posterPath: '//ticketimage.interpark.com/Play/image/large/21/21007693_p.gif',
-      subPosterPath: [ '//ticketimage.interpark.com/Play/image/large/21/21007693_p.gif', '//ticketimage.interpark.com/Play/image/large/21/21007693_p.gif'],
-      category: '뮤지컬',
-      hashTag: [ '흥미진진', '존잼', '노래맛집'],
-      concertHall: 'xx문화극장(서울)',
-      runTime: '150분',
-      price: 35000,
-      start_date: '2022-01-30',
-      end_date:  '2022-03-02',
-      open_run: false,
-      story: '어쩌구 저쩌구 줄거리 소개',
-      time: '상시공연',
-      ticketingUrl: 'https://interpark.com',
-      cast: [ '배우1', '배우2', '배우3'],
-      producer: ['제작사1', '제작사2'],
-      relatedShow: [{
-        id: '1',
-        posterPath: '//ticketimage.interpark.com/Play/image/large/21/21007693_p.gif',
-      },{
-        id: '2',
-        posterPath: '//ticketimage.interpark.com/Play/image/large/21/21007693_p.gif',
-      }],
       isEnd: false,
       number: 1,
       dialog: false,
+      hashTag: '',
+
     }
   },
 
@@ -213,7 +187,17 @@ export default {
     getDetail(id) {
       this.$store.dispatch('getDetail', {id:id})
       .then(res => {
-        console.log(res)
+        console.log(res.data)
+        this.showDetail = res.data
+        this.showDetail.startDate = this.showDetail.startDate.slice(0,10)
+        this.showDetail.endDate = this.showDetail.startDate.slice(0,10)
+
+        const text = this.showDetail.price
+        const firstText = text.replaceAll('원', '원\n')
+        const newText = firstText.replaceAll('/\n/', '<br/>')
+        const p = document.querySelector('.wrrap')
+        p.innerText = newText
+        
       })
     },
     changeShow: function(number) {
@@ -246,9 +230,8 @@ export default {
   },
   created: function () {
     // this.id = this.$route.params.id
-    this.id = 1
-    this.getDetail(1)
-    
+    this.id = 4
+    this.getDetail(this.id)
   }
 }
 </script>
