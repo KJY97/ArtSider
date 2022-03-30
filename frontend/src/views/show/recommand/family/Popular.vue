@@ -1,6 +1,6 @@
 <template>
 <div class="swiper mt-6">
-  <h1 class="ml-4 mb-4">인기 순위</h1> 
+  <h1 class="ml-4 mb-4">가족/어린이 공연 인기 순위</h1> 
   <div class="swiper-wrapper">
     <div class="swiper-slide">
       <v-img

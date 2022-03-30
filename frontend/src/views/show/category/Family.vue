@@ -34,7 +34,7 @@ import FamilyPlace from '../views/show/recommand/family/Place.vue'
 
 
 export default {
-  name: 'swiperTest',
+  name: 'Main',
   data(){
     return{
       // swiper: null,

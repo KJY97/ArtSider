@@ -31,7 +31,7 @@ import MusicalPlace from '../views/show/recommand/musical/Place.vue'
 
 
 export default {
-  name: 'swiperTest',
+  name: 'Main',
   data(){
     return{
       // swiper: null,

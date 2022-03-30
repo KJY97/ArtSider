@@ -1,11 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-// import Home from '../views/home/Home.vue'
 import Intro from '../views/home/Intro.vue'
 import Home from './home'
-// import Intro from './intro'
 import Main from './main'
-import test from '../views/swiperTest.vue'
 
 // 에티켓
 import Etiquette from './etiquette'
@@ -16,12 +13,8 @@ import Opera from './etiquettes/etiquetteOpera'
 import Theatre from './etiquettes/etiquetteTheatre'
 
 /// 에티켓 디테일
-import EtiquetteDetail from './etiquettes/etiquetteDetail'
-// import Clap from './etiquetteDetail/Clap.vue'
-// import Phone from './'
-// import Talk from './'
-// import Time from './'
-// import Food from './'
+// import EtiquetteDetail from './etiquettes/etiquetteDetail'
+
 
 // 추천 목록
 
@@ -37,12 +30,6 @@ const routes = [
     name: 'Intro',
     component: Intro
   },
-  {
-    path: '/test',
-    name: 'test',
-    component: test
-  },
-  // ...Intro,
   ...Etiquette,
   ...Main,
   ...Classic,
@@ -51,12 +38,8 @@ const routes = [
   ...Opera,
   ...Theatre,
 
-  ...EtiquetteDetail,
-  // ...Clap,
-  // ...Phone,
-  // ...Talk,
-  // ...Time,
-  // ...Food,
+  // ...EtiquetteDetail,
+
   ...Home,
   ...ShowDetail,
 

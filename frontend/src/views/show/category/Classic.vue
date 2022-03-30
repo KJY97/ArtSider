@@ -34,7 +34,7 @@ import ClassicPlace from '../views/show/recommand/classic/Place.vue'
 
 
 export default {
-  name: 'swiperTest',
+  name: 'Main',
   data(){
     return{
       // swiper: null,

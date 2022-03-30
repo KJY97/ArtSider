@@ -1,7 +1,7 @@
 export default [
   {
     path: '/show-list/family',
-    name: 'family',
+    name: 'Family',
       component: () => import('@/views/show/category/Family.vue')
   }
 ]

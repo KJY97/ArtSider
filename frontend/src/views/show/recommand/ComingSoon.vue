@@ -4,7 +4,7 @@
   <div class="swiper-wrapper">
     <div class="swiper-slide">
       <v-img
-        @click="$router.push({path: `show-detail/${showId}`})"
+        @click="$router.push({ name: 'ShowDetail', params: `${showId}`})"
         :aspect-ratio="3/4"
         src="https://w.namu.la/s/1837eead0acfe94c64358c7662f75cc5af8a71765f05e2ff9f2ee8558ef463f51cac6f7b60f9d5b11461a754629d5c70c944a241ce5bf5d0b3bbb884fb06674db0e1a93c30a5f5b808cd2ba4f39943fb"    
         >
@@ -14,6 +14,7 @@
         </div>
     <div class="swiper-slide">
         <v-img
+          @click="$router.push({ name: 'ShowDetail', params: `${showId}`})"
           :aspect-ratio="3/4"
           src="https://cdn.energykorea.co.kr/news/photo/202111/44265_36074_2612.jpg"
           >
@@ -22,6 +23,7 @@
     </div>
     <div class="swiper-slide">
       <v-img
+        @click="$router.push({ name: 'ShowDetail', params: `${showId}`})"
         :aspect-ratio="3/4"
         src="https://image.yes24.com/themusical/upFiles/Themusical/Play/post_poster(s)22.jpg"
         >
@@ -30,6 +32,7 @@
         </div>
     <div class="swiper-slide">
       <v-img
+        @click="$router.push({ name: 'ShowDetail', params: `${showId}`})"
         :aspect-ratio="3/4"
         src="https://hobbyen.co.kr/news/data/20210727/p1065599709407562_865_thum.jpg"
         >
@@ -38,6 +41,7 @@
         </div>
     <div class="swiper-slide">
       <v-img
+        @click="$router.push({ name: 'ShowDetail', params: `${showId}`})"
         :aspect-ratio="3/4"
         src="https://i.pinimg.com/474x/fb/21/bf/fb21bff4095f918fdf2b771e36d8fed2.jpg"
         >
@@ -46,6 +50,7 @@
         </div>
     <div class="swiper-slide">
       <v-img
+        @click="$router.push({ name: 'ShowDetail', params: `${showId}`})"
         :aspect-ratio="3/4"
         src="https://newsimg.sedaily.com/2020/01/21/1YXQDTM7WM_1.jpg"
         >
@@ -54,6 +59,7 @@
         </div>
     <div class="swiper-slide">
       <v-img
+        @click="$router.push({ name: 'ShowDetail', params: `${showId}`})"
         :aspect-ratio="3/4"
         src="https://www.m-i.kr/news/photo/202101/784601_561474_542.jpg"
         >
@@ -62,6 +68,7 @@
         </div>
     <div class="swiper-slide">
       <v-img
+        @click="$router.push({ name: 'ShowDetail', params: `${showId}`})"
         :aspect-ratio="3/4"
         src="https://img1.yna.co.kr/etc/inner/KR/2020/01/02/AKR20200102075700005_02_i_P2.jpg"
         >
@@ -70,6 +77,7 @@
         </div>
     <div class="swiper-slide">
       <v-img
+        @click="$router.push({ name: 'ShowDetail', params: `${showId}`})"
         :aspect-ratio="3/4"
         src="https://image.ajunews.com/content/image/2018/08/03/20180803104751108116.jpg"
         >
@@ -78,6 +86,7 @@
         </div>
     <div class="swiper-slide">
       <v-img
+        @click="$router.push({ name: 'ShowDetail', params: `${showId}`})"
         :aspect-ratio="3/4"
         src="https://img.hankyung.com/photo/201906/2019061008373553224-540x763.jpg"
         >
@@ -86,6 +95,7 @@
         </div>
     <div class="swiper-slide">
       <v-img
+        @click="$router.push({ name: 'ShowDetail', params: `${showId}`})"
         :aspect-ratio="3/4"
         src="http://ojsfile.ohmynews.com/PHT_IMG_FILE/2021/0309/IE002770932_PHT.jpg"
         >
@@ -94,6 +104,7 @@
         </div>
     <div class="swiper-slide">
       <v-img
+        @click="$router.push({ name: 'ShowDetail', params: `${showId}`})"
         :aspect-ratio="3/4"
         src="https://img.hankyung.com/photo/202001/BF.21391966.1-1200x.jpg"
         >
@@ -102,6 +113,7 @@
         </div>
     <div class="swiper-slide">
       <v-img
+        @click="$router.push({ name: 'ShowDetail', params: `${showId}`})"
         :aspect-ratio="3/4"
         src="https://cdn.gukjenews.com/news/photo/202106/2235289_2227032_824.jpg"
         >
@@ -110,6 +122,7 @@
         </div>
     <div class="swiper-slide">
       <v-img
+        @click="$router.push({ name: 'ShowDetail', params: `${showId}`})"
         :aspect-ratio="3/4"
         src="https://pbs.twimg.com/media/FLxD2R0aIAQEam4?format=jpg&name=large"
         >
@@ -118,6 +131,7 @@
         </div>
     <div class="swiper-slide">
       <v-img
+        @click="$router.push({path: `show-detail/${showId}`})"
         :aspect-ratio="3/4"
         src="https://cdn.energykorea.co.kr/news/photo/202111/44265_36074_2612.jpg"
         >
@@ -137,7 +151,7 @@ import 'swiper/css/swiper.css'
 
 
 export default {
-  name: 'Popular',
+  name: 'ComingSoon',
   data(){
     return{
       swiper: null,

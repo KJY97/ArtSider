@@ -34,7 +34,7 @@ import ConcertPlace from '../views/show/recommand/concert/Place.vue'
 
 
 export default {
-  name: 'swiperTest',
+  name: 'Main',
   data(){
     return{
       // swiper: null,
