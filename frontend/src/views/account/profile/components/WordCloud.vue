@@ -10,20 +10,24 @@ const d3 = require('d3')
 
 export default {
   name: 'WordCloud',
+  props:{
+    words: Object,
+  },
+
   data(){
     return{
-      words: [
-        { text: "명배우", size: 300 },
-        { text: "존잼", size: 264 },
-        { text: "좋았다", size: 220 },
-        { text: "슬픔", size: 111 },
-        { text: "허무", size: 325 },
-        { text: "가족", size: 101 },
-        { text: '가성비', size: 50 },
-        { text: '행복', size: 78  },
-        { text: '댄스타임', size: 40 },
-        { text: '최악', size: 12 },
-      ],
+      // words: [
+        // { text: "명배우", size: 300 },
+        // { text: "존잼", size: 264 },
+        // { text: "좋았다", size: 220 },
+        // { text: "슬픔", size: 111 },
+        // { text: "허무", size: 325 },
+        // { text: "가족", size: 101 },
+        // { text: '가성비', size: 50 },
+        // { text: '행복', size: 78  },
+        // { text: '댄스타임', size: 40 },
+        // { text: '최악', size: 12 },
+      // ],
       width : 1000,
       height : 700
     }

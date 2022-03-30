@@ -20,7 +20,7 @@
           style="height: 100%;"
         >
           <v-col
-            v-for="(poster, i) in posters"
+            v-for="(poster, i) in preferencePosters"
             :key="i"
             class="col-3 py-4"
             style="height: 80%;"
@@ -49,7 +49,7 @@
           style="height: 100%;"
         >
           <v-col
-            v-for="(poster, i) in posters"
+            v-for="(poster, i) in historyPosters"
             :key="i"
             class="col-3 py-4"
             style="height: 80%; "
@@ -80,8 +80,13 @@ export default {
 
   computed:{
     preferencePosters(){
-      return this.$store.state.preferencePosters
+      return this.$store.gertters.preferencePosters
     },
+    
+    historyPosters(){
+      return this.$store.gertters.historyPosters
+    }
+
   },  
 
 

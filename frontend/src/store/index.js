@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
+import router from '@/router'
 
 Vue.use(Vuex)
 axios.defaults.baseURL = 'http://localhost:8080'
@@ -10,16 +11,55 @@ export default new Vuex.Store({
     token : '',
     myContents: [],
 
+
     preferencePosters: [],
     historyPosters : [],
 
     userInfo: {},
+    profileImg: null,
+    profileImgSrc: null,
+    userReviews: [],
+    userScores: [],
+    userTagsCloud: {}
   },
 
   getters: {
     loginStatus(state){
       return !!state.token
+    },
+
+    preferencePosters(state){
+      return state.preferencePosters
+    },
+
+    historyPosters(state){
+      return state.historyPosters
+    },
+
+    userInfo(state){
+      return state.userInfo
+    },
+
+    userImgSrc(state){
+      return state.profileImgSrc
+    },
+
+    userReviews(state){
+      return state.userReviews
+    },
+
+    userScores(state){
+      const scoreList = []
+      state.userScores.forEach((elem) => {
+        scoreList.push(elem.cnt)
+      })
+      return scoreList
+    },
+
+    userTagsCloud(state){
+      return state.userTagsCloud
     }
+
   },
 
   mutations: {
@@ -33,7 +73,32 @@ export default new Vuex.Store({
 
     SET_MY_HISTORY(state, history){
       state.historyPosters = history
-    }
+    },
+
+    SET_MY_REVIEWS(state, reviews){
+      state.userReviews = reviews
+    },
+    
+    SET_USER_INFO(state, userData){
+      state.userInfo = userData
+      state.profileImg = userData.profileImg
+    },
+
+    SET_USER_IMG_SRC(state, src){
+      state.profileImgSrc = src
+    },
+
+    SET_MY_SCORES(state, scores){
+      state.scores = scores
+    },
+
+    SET_MY_TAGS_CLOUD(state, tags){
+      state.userTagsCloud = tags
+    },
+
+  
+
+
   },
 
   actions: {
@@ -216,6 +281,7 @@ export default new Vuex.Store({
       .then((res) => {
         localStorage.setItem('accessToken', res.data.accessToken)
         commit('SET_MY_TOKEN', res.data.accessToken)
+        router.push({name: 'Main'})
       })
 
     },
@@ -235,6 +301,7 @@ export default new Vuex.Store({
       })
     },
 
+    // 내가 조회한 공연 목록 조회
     getMyHistory({commit, state}){
         const url = '/api/users/profile/watchHistory'
         axios.get(url, {
@@ -245,8 +312,101 @@ export default new Vuex.Store({
         .then((res) => {
           commit('SET_MY_HISTORY', res.data.items)
         })
+    },
+
+    // 유저 정보 얻어오기
+    getUserInfo({commit, state}){
+      const url = '/api/users/profile'
+      axios.get(url, {
+        headers: {
+          Authorization : `Bearer ${state.token}`
+        }
+      })
+      .then((res) => {
+        commit('SET_USER_INFO', res.data)
+      })
+      .catch(() => {
+        console.log('error: get profile info')
+      })
+    },
+
+    // 내가 작성한 리뷰 목록 조회
+    getUserReviews({commit, state}){
+      const url = '/api/users/profile/reviewList'
+      axios.get(url, {
+        headers: {
+          Authorization : `Bearer ${state.token}`
+        }
+      })
+      .then((res) => {
+        commit('SET_MY_REVIEWS', res.data.items)
+      })
+    },
+
+    // 유저 리뷰 평점 별 갯수
+    getUserScores({commit, state}){
+      const url = '/api/users/review/ratingStars'
+      axios.get(url, {
+        headers: {
+          Authorization : `Bearer ${state.token}`
+        }
+      })
+      .then((res) => {
+        commit('SET_MY_SCORES', res.data.items)
+      })
+    },
+    
+
+    // 유저 관심 공연들의 태그 갯수
+    getUserTags({commit, state}){
+      const url = '/api/users/show/preference/tag'
+      axios.get(url, {
+        headers: {
+          Authorization : `Bearer ${state.token}`
+        }
+      })
+      .then((res) => {
+        console.log('유저 관심 태그 워드 클라우드 response.data: ', res.data)
+        commit('SET_MY_TAGS_CLOUD', res.data)
+      })
+    },
+
+    // 프로필 이미지 등록
+    setUserImage({dispatch, state}, image){
+      const url = '/api/users/profile/photo'
+      const headers = {
+        'Content-Type': 'multipart/form-data',
+        'Authorization' : `Bearer ${state.token}`
+      }
+      
+      let formData = new FormData()
+      formData.append('multipart', image)
+      
+      axios.post(url, formData, {
+        headers: headers
+      })
+      .then(()=>{
+        // 유저 정보 갱신
+        dispatch('getUserInfo')
+      })
+    },
+
+    // 프로필 이미지 소스 얻어오기
+    getUserImage({commit, state}){
+      if(state.profileImg){
+        const url = `/api/users/profile/photo/${state.profileImg}`
+        axios.get(url, {
+          headers:{
+            Authorization : `Bearer ${state.token}`
+          }
+        })
+        .then((res) => {
+          commit('SET_USER_IMG_SRC', res.data.profileImg)
+        })
+      }
     }
 
+    
 
 
   },

@@ -14,19 +14,24 @@
             max-width="100%"
             max-height="100%"
             :aspect-ratio="1"
-            src="@/assets/profile_default.png"
+            :src="userImg"
+            @click="imageTrigger"
           >
           </v-img>
+           <input @change="uploadImage" style="display: none;" accept="image/*" ref="image" type="file">
         </v-card>
         <div class="profile-detail d-inline-block ms-5">
           <h1> 김공연 </h1>
+          <v-btn>
+            수정하기
+          </v-btn>
           <div class="profile-tag-wrapper">
             <h2> 선호 태그 </h2>
             <v-chip-group
               column
             >
               <v-chip
-                v-for="(tag, i) in userTags"
+                v-for="(tag, i) in userInfo.preferTag"
                 :key="i"
                 large
                 label
@@ -51,6 +56,8 @@
 </template>
 
 <script>
+import defaultImage from '@/assets/profile_default.png'
+
 
 export default {
   name: 'Profile',
@@ -66,12 +73,40 @@ export default {
   computed:{
     isLogin(){
       return this.$store.getters.loginStatus
+    },
+
+    userInfo(){
+      return this.$store.getters.userInfo
+    },
+
+    userImgSrc(){
+      return this.$store.getters.userImgSrc ? this.$store.getters.userImgSrc : defaultImage
+    },
+  },
+
+  methods:{
+    imageTrigger(){
+      this.$refs.image.click()
+    },
+
+    uploadImage(){
+      const image = this.$refs.image.files
+      if(image && image[0]){
+        if(image[0].size/(1024*1024) > 3){
+          this.$refs.image.value = ''
+          alert('이미지 파일은 최대 3MB까지 가능합니다.')
+        } else{
+          this.$store.dispatch('setUserImage', image[0])
+        }
+      }
     }
   },
 
   created(){
     if(this.$store.getters.loginStatus){
       this.$store.dispatch('getUserInfo')
+    } else{
+      console.log('wrong contact')
     }
   }
 
