@@ -8,13 +8,31 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.ssafy.myapp.api.request.UserRegisterPostReq;
+import com.ssafy.myapp.db.entity.Favorite;
+import com.ssafy.myapp.db.entity.Show;
 import com.ssafy.myapp.db.entity.User;
+import com.ssafy.myapp.db.entity.Viewed;
+import com.ssafy.myapp.db.mapping.ShowMapping;
+import com.ssafy.myapp.db.repository.FavoriteRepository;
+import com.ssafy.myapp.db.repository.ShowRepository;
 import com.ssafy.myapp.db.repository.UserRepository;
+import com.ssafy.myapp.db.repository.ViewedRepository;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.sql.SQLIntegrityConstraintViolationException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
@@ -28,17 +46,22 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	UserRepository userRepository;
+	
+	@Autowired
+	ShowRepository showRepository;
+	
+	@Autowired
+	ViewedRepository viewedRepository;
+	
+	@Autowired
+	FavoriteRepository favoriteRepository;
+	
 	@Autowired
 	PasswordEncoder passwordEncoder;
 
 	@Autowired
 	private JavaMailSender sender;
 
-//	@Override
-//	public User getUserById(Long id) {
-//		User user = userRepository.findUserById(id).get();
-//		return user;
-//	}
 
 	@Override
 	public User findUserByEmail(String email) {
@@ -149,7 +172,86 @@ public class UserServiceImpl implements UserService {
 			System.out.println(e.getMessage());
 			return null;
 
-		}
+		} 
+	}
+
+	@Override
+	public Favorite addFavorite(Long userId, Long showId) throws Exception {
+		// TODO Auto-generated method stub
+		Favorite favorite = new Favorite();
+		favorite.setUser(userRepository.findById(userId).get());
+		favorite.setShow(showRepository.findById(showId).get());
+		
+		
+		favorite=favoriteRepository.save(favorite);
+		return favorite;
+	}
+
+	
+	@Override
+	public List<ShowMapping> findPreferShow(User user) {
+		List<ShowMapping> favorite =favoriteRepository.findByUser(user);
+		return favorite;
+	}
+	
+	@Override
+	public Viewed addViewed(Long userId, Long showId) {
+		// TODO Auto-generated method stub
+		Viewed viewed = new Viewed();
+		viewed.setUser(userRepository.findById(userId).get());
+		viewed.setShow(showRepository.findById(showId).get());
+		
+		viewed=viewedRepository.save(viewed);
+		return viewed;
+	}
+	
+	@Override
+	public List<ShowMapping> findViewedShow(User user) {
+		List<ShowMapping> Viewed =viewedRepository.findByUser(user);
+		return Viewed;
+	}
+
+	@Override
+	public void removeFavorite(Long userId, Long showId) throws Exception {
+		// TODO Auto-generated method stub
+		Favorite favorite=null;
+		favorite= favoriteRepository.findTop1ByUserAndShow(userRepository.findById(userId).get(), showRepository.findById(showId).get());
+		
+		
+		favoriteRepository.delete(favorite);
+	}
+	
+	public String saveUploadedFiles(final MultipartFile thumbnail) throws IOException {
+		String absolutePath = new File("").getAbsolutePath() + "\\images\\";
+        File file = new File("images");
+        // 저장할 위치의 디렉토리가 존지하지 않을 경우
+        if(!file.exists()){
+            // mkdir() 함수와 다른 점은 상위 디렉토리가 존재하지 않을 때 그것까지 생성
+            file.mkdirs();
+        }
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
+        String current_date = simpleDateFormat.format(new Date());
+		final byte[] bytes = thumbnail.getBytes();
+		String newFileName=current_date+Long.toString(System.nanoTime()) +thumbnail.getOriginalFilename();
+		final Path path = Paths.get(absolutePath + newFileName);
+		Files.write(path, bytes);
+		
+		return newFileName;
+	}
+
+	@Override
+	public User modifyUserProfileImg(User user,String profileImg) {
+		User updateUser= userRepository.findById(user.getId()).get();
+		updateUser.setProfileImg(profileImg);
+		return userRepository.save(updateUser);
+	}
+
+	@Override
+	public User modifyNickname(User user, String nickname) {
+		// TODO Auto-generated method stub
+		User updateUser= userRepository.findById(user.getId()).get();
+		updateUser.setNickname(nickname);
+		return userRepository.save(updateUser);
 	}
 
 

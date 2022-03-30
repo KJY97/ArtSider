@@ -47,7 +47,7 @@ public class AuthController {
         @ApiResponse(code = 500, message = "서버 오류")
     })
 	public ResponseEntity<UserLoginPostRes> login(@RequestBody @ApiParam(value="로그인 정보", required = true) UserLoginPostReq loginInfo) {
-		System.out.println(loginInfo.toString());
+//		System.out.println(loginInfo.toString());
 		String email = loginInfo.getEmail();
 		String password = loginInfo.getPassword();
 		User user ;
