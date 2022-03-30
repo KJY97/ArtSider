@@ -1,11 +1,9 @@
 <template>
   <v-row
     class="mt-5"
-    style="height: 100%;"
   >
     <v-col
       cols="6"
-      style="height: 50%;"
     >
       <h1> 내가 작성한 리뷰</h1>
       <div class="my-reviews-box">
@@ -21,7 +19,6 @@
     </v-col>
     <v-col
       cols="6"
-      style="height: 50%;"
     >
       <h1> 별점 분포 그래프 </h1>
       <div 
@@ -32,7 +29,6 @@
     </v-col>
     <v-col
       cols="12"
-      style="height: 70%;"
     >
       <h1> 관심 공연 해쉬맵 </h1>
       <div
