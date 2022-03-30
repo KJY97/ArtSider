@@ -22,8 +22,24 @@
 </template>
 
 <script>
+import axios from 'axios'
 // import Swiper from 'swiper/js/swiper.esm.bundle'
 // import 'swiper/css/swiper.css'
+const URL = 'http://localhost:8080/api/show/popular/'
+  axios.get(URL)
+    .then(response => {
+      console.log(response)
+    })
+    .catch(error => {
+      console.log(error)
+    })
+  // 목적 어느걸 보여주기 위해 API 요청을 할 것인가
+  // 이 URL로 get 요청을 보냈을때 
+  // https:' + items[0].show.posterPath
+
+
+
+
 
 import Popular from '../views/show/recommand/Popular.vue'
 import ComingEnd from '../views/show/recommand/ComingSoon.vue'
@@ -34,7 +50,7 @@ import Place from '../views/show/recommand/Place.vue'
 
 
 export default {
-  name: 'swiperTest',
+  name: 'Main',
   data(){
     return{
       // swiper: null,

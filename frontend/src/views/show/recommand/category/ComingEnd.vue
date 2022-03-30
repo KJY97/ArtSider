@@ -1,13 +1,13 @@
 <template>
 <div class="swiper mt-6">
-  <h1 class="ml-4 mb-4">개봉 예정 공연</h1> 
+  <h1 class="ml-4 mb-4">종료 임박</h1> 
   <div class="swiper-wrapper">
-    <div v-for="(idx, comingSoon) in comingSoonList" :key="idx">
+    <div v-for="(idx, comingEnd) in comingEndList" :key="idx">
       <div class="swiper-slide">
         <v-img
-          @click="$router.push({path: `show-detail/${comingSoon.id}`})"
+          @click="$router.push({path: `show-detail/${comingEnd.id}`})"
           :aspect-ratio="3/4"
-          :src="comingSoon.posterPath"    
+          :src="comingEnd.posterPath"    
           >
           </v-img>
       </div>
@@ -23,20 +23,22 @@ import Swiper from 'swiper/js/swiper.esm.bundle'
 import 'swiper/css/swiper.css'
 
 export default {
-  name: 'ComingSoon',
+  name: 'ComingEnd',
   data(){
     return{
       swiper: null,
-      comingSoonList: [],
+      comingEndList: [],
     }
   },
-
+    props: {
+    num: Number,
+  },
   methods: {
-    getComingSoonShow: function() {
-      this.$store.dispatch('getComingSoonShow')
+    getCategoryComingEndShow: function() {
+      this.$store.dispatch('getCategoryComingEndShow')
       .then(res => {
         console.log(res.data)
-        this.comingSoonList = res.data
+        this.comingEndList = res.data
       })
     }
   },
@@ -55,7 +57,7 @@ export default {
     })
   },
   created: function() {
-    this.getComingSoonShow() 
+    this.getCategoryComingEndShow() 
   }
 }
 </script>
