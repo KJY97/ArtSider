@@ -1,15 +1,18 @@
 <template>
 <div class="swiper mt-6">
-  <h1 class="ml-4 mb-4">개봉 예정 공연</h1> 
+  <h1 class="ml-4 mb-4">{{ genre }} 인기 순위</h1> 
   <div class="swiper-wrapper">
-    <div v-for="(idx, comingSoon) in comingSoonList" :key="idx">
+    <div v-for="(idx, popular) in popularList" :key="idx">
       <div class="swiper-slide">
         <v-img
-          @click="$router.push({path: `show-detail/${comingSoon.id}`})"
+          @click="$router.push({path: `show-detail/${popular.id}`})"
           :aspect-ratio="3/4"
-          :src="comingSoon.posterPath"    
+          :src="popular.posterPath"    
           >
           </v-img>
+          <div class="rank">
+            <h1>{{ popular.rank }}</h1>  
+          </div>
       </div>
     </div>
     </div>
@@ -23,20 +26,24 @@ import Swiper from 'swiper/js/swiper.esm.bundle'
 import 'swiper/css/swiper.css'
 
 export default {
-  name: 'ComingSoon',
+  name: 'Popular',
   data(){
     return{
       swiper: null,
-      comingSoonList: [],
+      popularList: [],
     }
+  },
+  props: {
+    num: Number,
+    genre: String,
   },
 
   methods: {
-    getComingSoonShow: function() {
-      this.$store.dispatch('getComingSoonShow')
+    getCategoryPopularShow: function() {
+      this.$store.dispatch('getCategoryPopularShow', {num:this.num})
       .then(res => {
         console.log(res.data)
-        this.comingSoonList = res.data
+        this.popularList = res.data
       })
     }
   },
@@ -55,7 +62,7 @@ export default {
     })
   },
   created: function() {
-    this.getComingSoonShow() 
+    this.getCategoryPopularShow() 
   }
 }
 </script>

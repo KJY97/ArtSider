@@ -30,10 +30,13 @@ export default {
       comingSoonList: [],
     }
   },
+  props: {
+    num: Number,
+  },
 
   methods: {
-    getComingSoonShow: function() {
-      this.$store.dispatch('getComingSoonShow')
+    getCategoryComingSoonShow: function() {
+      this.$store.dispatch('getCategoryComingSoonShow')
       .then(res => {
         console.log(res.data)
         this.comingSoonList = res.data
@@ -55,7 +58,7 @@ export default {
     })
   },
   created: function() {
-    this.getComingSoonShow() 
+    this.getCategoryComingSoonShow() 
   }
 }
 </script>
