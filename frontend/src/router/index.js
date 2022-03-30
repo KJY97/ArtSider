@@ -5,7 +5,7 @@ import Home from './home'
 import Main from './main'
 
 // 에티켓
-import Etiquette from './etiquette'
+// import Etiquette from './etiquette'
 // import Classic from './etiquettes/etiquetteClassic'
 // import KTraditionalMusic from './etiquettes/etiquetteKTraditionalMusic'
 // import Musical from './etiquettes/etiquetteMusical'
