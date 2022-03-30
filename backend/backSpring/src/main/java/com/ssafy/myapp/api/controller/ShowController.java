@@ -91,10 +91,10 @@ public class ShowController {
     public ResponseEntity<Map<String , List<ShowListGetRes>>> showCategoryStartList(@PathVariable String category) throws ParseException {
         Map<String, List<ShowListGetRes>> resultMap = new HashMap<>();
         try {
-            resultMap.put("items", showService.findShowCategoryStartList(category));
+            resultMap.put("items", showService.findShowCategoryStartList(map.get(category)));
             return new ResponseEntity<Map<String, List<ShowListGetRes>>>(resultMap, HttpStatus.OK);
         } catch (ParseException e) {
-            resultMap.put("items", showService.findShowCategoryStartList(category));
+            resultMap.put("items", showService.findShowCategoryStartList(map.get(category)));
             return new ResponseEntity<Map<String, List<ShowListGetRes>>>(resultMap, HttpStatus.BAD_REQUEST);
         }
     }
