@@ -1,5 +1,6 @@
 package com.ssafy.myapp.db.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ssafy.myapp.api.request.ReviewRegisterReq;
 import lombok.*;
@@ -31,13 +32,13 @@ public class Review {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    @JsonIgnore // 순환참조 방지
+    @JsonBackReference  // 순환참조 방지
     private User user;
 
     // show 테이블의 기본키와 연결
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "show_id") // 공연 테이블의 pk
-    @JsonIgnore // 순환참조 방지
+    @JsonBackReference  // 순환참조 방지
     private Show show;
 
     // === 연관관계 메소드 ===

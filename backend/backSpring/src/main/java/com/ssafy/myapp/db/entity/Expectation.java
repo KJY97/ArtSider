@@ -1,5 +1,6 @@
 package com.ssafy.myapp.db.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ssafy.myapp.api.request.ReviewRegisterReq;
 import lombok.Getter;
@@ -11,7 +12,6 @@ import java.time.LocalDateTime;
 
 @Entity
 @Setter @Getter
-@ToString
 public class Expectation {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,12 +29,12 @@ public class Expectation {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "User_Id")
-    @JsonIgnore // 순환참조 방지
+    @JsonBackReference  // 순환참조 방지
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "show_id")
-    @JsonIgnore // 순환참조 방지
+    @JsonBackReference  // 순환참조 방지
     private Show show;
 
     // === 연관관계 메소드 ===
