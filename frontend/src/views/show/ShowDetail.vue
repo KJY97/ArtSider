@@ -159,7 +159,6 @@
 </template>
 
 <script>
-import axios from'axios'
 import ShowArtCenter from'./ShowArtCenter.vue'
 import ShowExpectations from './ShowExpectations.vue'
 import ShowInfo from './ShowInfo.vue'
@@ -210,19 +209,9 @@ export default {
   },
 
   methods: {
-    setToken: function(){
-      const token = localStorage.getItem('accessToken')
-
-      const config = {
-        Authorization: `Bearer ${token}`
-      }
-      return config
-    },
+    // 공연 상세 정보 불러오기
     getDetail(id) {
-      axios({
-        method: 'get',
-        url: `http://127.0.0.1:8000/api/show/${id}`,
-      })
+      this.$store.dispatch('getDetail', {id:id})
       .then(res => {
         console.log(res)
       })
@@ -233,32 +222,18 @@ export default {
     // 티켓사이트 이동 & 선호 목록 추가
     goTicketSite: function(number) {
       if (number == 1) {
-        axios({
-          method: 'post',
-          url: `http://127.0.0.1:8000/api/show/${this.id}/preference`,
-          headers: this.setToken(),
-          data: {
-            userId: ''
-          }
-        })
+        this.$store.dispatch('getDetailgoTicketSite', {id:this.id})
       }
       // 예매사이트로 가게 하기
       window.location.href=`https://interpark.com/${this.showId}`
     },
     // 조회한 공연 추가
     addLookUp: function () {
-      axios({
-        method: 'post',
-        url: `http://127.0.0.1:8000/api/show/${this.id}`,
-        headers: this.setToken(),
-      })
+      this.$store.dispatch('addLookUp', {id:this.id})
     },
     // 연관 공연 추가
     addRelatedShow: function () {
-      axios({
-        method: 'get',
-        url: `http://127.0.0.1:8000/api/${this.id}/hashTag`,
-      })
+      this.$store.dispatch('addRelatedShow', {id:this.id})
       .then((res) => {
         console.log(res)
         // this.relatedShow = res.data
@@ -270,8 +245,9 @@ export default {
     }
   },
   created: function () {
-    this.id = this.$route.params.id
-    this.getDetail(this.id)
+    // this.id = this.$route.params.id
+    this.id = 1
+    this.getDetail(1)
     
   }
 }

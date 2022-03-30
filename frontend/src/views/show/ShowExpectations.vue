@@ -104,7 +104,6 @@
 </template>
 
 <script>
-import axios from'axios'
 
 export default {
   name: 'ShowExpectations',
@@ -165,54 +164,36 @@ export default {
     },
     // 기대평 목록 조회
     getShowExpectations: function(id) {
-      axios({
-        method: 'get',
-        url: `http://127.0.0.1:8000/api/show/expectations/${id}`,
-      })
+      this.$store.dispatch('getShowExpectations', {id:id})
       .then(res => {
         console.log(res)
       })
     },
     // 기대평 생성
     createShowExpectations: function(id) {
-      axios({
-        method: 'post',
-        url: `http://127.0.0.1:8000/api/show/expectations/${id}`,
-        headers: this.setToken(),
-        data: {
-          
-        },
-      })
+      this.$store.dispatch('createShowExpectations', {id:id, title: this.title, contents: this.contents})
       .then(res => {
         console.log(res)
         this.getShowExpectations(id)
       })
     },
     // 기대평 수정
-    putShowInfo: function (expectationId) {
-      axios({
-        method: 'put',
-        url: `http://127.0.0.1:8000/api/show/expectations/${expectationId}`,
-        headers: this.setToken(),
-        data: {
-          title : this.editTitle,
-          contents : this.editContents,
-        }
-      })
+    putShowExpectations: function (expectationId) {
+      this.$store.dispatch('putShowExpectations', {expectationId:expectationId, title : this.editTitle, contents : this.editContents})
       .then(() => {
         console.log('수정 성공')
       })
     },
     // 기대평 제거
     deleteShowExpectations: function(expectationId) {
-      axios({ 
-        method: 'post',
-        url: `http://127.0.0.1:8000/api/show/expectations/${expectationId}`,
-        headers: this.setToken()
-      })
+      this.$store.dispatch('deleteShowExpectations', {expectationId:expectationId})
       .then(() => {
         console.log('삭제 성공')
       })
+    },
+    // 유저 아이디 불러오기
+    getUserId: function () {
+      this.checkId = this.$store.dispatch('getUserId')
     },
 
     drawUpExpectation: function() {
@@ -262,7 +243,7 @@ export default {
   created: function () {
     this.id = this.$route.params.id
     this.getShowExpectations(this.id)
-    this.checkId = localStorage.getItem('userId')
+    this.getUserId()
   }
 }
 </script>
