@@ -109,7 +109,6 @@
 </template>
 
 <script>
-import axios from'axios'
 import StarRating from 'vue-star-rating'
 
 export default {
@@ -164,20 +163,9 @@ export default {
     }
   },
   methods: {
-    setToken: function(){
-      const token = localStorage.getItem('accessToken')
-
-      const config = {
-        Authorization: `Bearer ${token}`
-      }
-      return config
-    },
     // 관람 후기 목록 조회
     getShowReviews: function(id) {
-      axios({
-        method: 'get',
-        url: `http://127.0.0.1:8000/api/show/reviews/${id}`,
-      })
+      this.$store.dispatch('getShowReviews', {id:id})
       .then(res => {
         console.log(res)
         this.showReviewsList = res.data
@@ -185,48 +173,31 @@ export default {
     },
     // 관람 후기 생성
     createShowReview: function(id) {
-      axios({
-        method: 'post',
-        url: `http://127.0.0.1:8000/api/show/reviews/${id}`,
-        headers: this.setToken(),
-        data: {
-          title : this.title,
-          contents : this.contents,
-          rating : this.rating * 2
-        },
-      })
+      this.$store.dispatch('createShowReview', {id:id, title : this.title, contents : this.contents, rating : this.rating * 2})
       .then(() => {
         console.log('성공')
         this.getShowReviews(id)
       })
     },
     // 관람 후기 수정
-    putShowInfo: function (reviewId) {
-      axios({
-        method: 'put',
-        url: `http://127.0.0.1:8000/api/show/reviews/${reviewId}`,
-        headers: this.setToken(),
-        data: {
-          title : this.editTitle,
-          contents : this.editContents,
-          rating : this.editRating * 2
-        }
-      })
+    putShowReview: function (reviewId) {
+      this.$store.dispatch('putShowReview', {reviewId:reviewId, title : this.editTitle,contents : this.editContents, rating : this.editRating * 2})
       .then(() => {
         console.log('수정 성공')
       })
     },
     // 관람 후기 제거
     deleteShowReview: function(reviewId) {
-      axios({
-        method: 'post',
-        url: `http://127.0.0.1:8000/api/show/reviews/${reviewId}`,
-        headers: this.setToken()
-      })
+      this.$store.dispatch('deleteShowReview', {reviewId:reviewId})
       .then(() => {
         console.log('삭제 성공')
       })
     },
+    // 유저 아이디 불러오기
+    getUserId: function () {
+      this.checkId = this.$store.dispatch('getUserId')
+    },
+
     drawUpReview: function() {
       this.isDrawUp = !this.isDrawUp
     },
@@ -294,7 +265,7 @@ export default {
   created: function () {
     this.id = this.$route.params.id
     this.getShowReviews(this.id)
-    this.checkId = localStorage.getItem('userId')
+    this.getUserId()
   }
 }
 </script>

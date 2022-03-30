@@ -25,7 +25,7 @@ export default [
         component: () => import('@/views/show/etiquette/etiquetteDetail/Talk.vue')
     },
     {
-        path: '/etiquette/Time',
+        path: '/etiquette/time',
         name: 'time',
         component: () => import('@/views/show/etiquette/etiquetteDetail/Time.vue')
     },

@@ -49,9 +49,10 @@ export default {
 .carousel-wrapper{
   position: relative;
   width: 100%;
-  height: 90%;
+  height: 70vh;
   perspective: 1300px;
   overflow: hidden;
+  background-color: black;
 }
 .carousel-wrapper #circle{
   position: absolute;  

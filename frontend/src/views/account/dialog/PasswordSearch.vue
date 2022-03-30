@@ -20,21 +20,23 @@
             label="이메일"
             required
           >
-            <v-btn
-              slot="append-outer"
-              outlined
-              @click="getNewPassword"
-            >
-              임시 비밀번호 발급
-            </v-btn>
           
           </v-text-field>
         </v-form>
-        <v-btn
-          @click="() => { userEmail='', $emit('close-password-search') }"
-        >
-          닫기
-        </v-btn>
+
+
+        <v-row class="mt-5 px-3 justify-space-between">
+          <v-btn
+            @click="() => { userEmail='', $emit('close-password-search') }"
+          >
+            닫기
+          </v-btn>
+          <v-btn
+            @click="getNewPassword"
+          >
+            임시 비밀번호 발급
+          </v-btn>
+        </v-row>
       </v-container>
     </v-card>
   </v-dialog>

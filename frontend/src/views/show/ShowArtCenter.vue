@@ -17,7 +17,6 @@
 </template>
 
 <script>
-import axios from'axios'
 import KakaoMap from "./KakaoMap";
 
 export default {
@@ -49,10 +48,7 @@ export default {
   },
   methods: {
     getshowArtCenter: function (ArtCenterName) {
-      axios({
-        method: 'get',
-        url: `http://127.0.0.1:8000/api/show/${ArtCenterName}/artcenter`,
-      })
+      this.$store.dispatch('getshowArtCenter', {ArtCenterName:ArtCenterName})
       .then(res => {
         console.log(res)
         this.showArtCenterList = res.data.items[0]

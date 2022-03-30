@@ -1,10 +1,8 @@
 <template>
-<!-- 로그인이 안되있을때 메인페이지 -->
-<!-- navguard로 막는다 -->
   <v-parallax
     dark
     src="../../assets/hall_image.svg"
-    height="970"
+    height="720"
   >
     <v-row
       align="center"
@@ -18,24 +16,27 @@
           ARTSIDER를 이용하시려면 로그인이 필요합니다
         </h1>
       <v-btn
-        color="error"
+        color="red"
         dark
-        :loading="loading"
+        @click="() => { loginDialog = true }"
       >
         로그인 하러 가기
-        <!-- a태그나 @click달아서 로그인페이지로 날려주기 -->
-        <!-- 로그인 버튼 크기 카카오 로그인 버튼 크기랑 맞춰주기 -->
       </v-btn>
       <br>
       <br>
-        <h4 class="subheading">
-          회원이 아니신가요 ? <a href="">가입하기</a>
-           <!-- 여기는 a태그로 해놨네 가입하기 페이지로 날려주기  -->
+        <h4 class="sub-heading">
+          회원이 아니신가요 ? 
+          <v-btn
+            class="font-weight-bold text-decoration-underline"
+            text
+            color="blue"
+            plain
+            @click="() => { signUpDialog = true }"            
+          > 가입하기 </v-btn>
         </h4>
         <br>
         <hr style="width:400px" class="mx-auto">
         <br>
-        <!-- v-img가 중앙 정렬 안되서 겁나 해멨는데 class="mx-auto" 주니까 해결 S -->
         <v-img
           class="mx-auto" 
           height="45px"
@@ -45,14 +46,37 @@
         ></v-img>
       </v-col>
     </v-row>
+
+    <Login 
+      :open="loginDialog"
+      @close-login="() => { loginDialog = false }" 
+    />
+
+    <SignUp
+      :open="signUpDialog"
+      @close-sign-up="() => { signUpDialog = false }"
+    />
   </v-parallax>
 </template>
 
 <script>
+import Login from '@/views/account/dialog/Login'
+import SignUp from '@/views/account/dialog/SignUp'
+
 export default {
   name: 'Intro',
   components: {
-  }
+    Login,
+    SignUp
+  },
+
+  data(){
+    return{
+      loginDialog: false,
+      signUpDialog: false
+    }
+  },
+
 }
 </script>
 

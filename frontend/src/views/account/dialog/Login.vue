@@ -37,13 +37,7 @@
             @click="passwordSearchDialog = true"
           >
            비밀번호 찾기 </p>
-          <v-spacer></v-spacer>
-          <p 
-            class="option" 
-            @click="signUpDialog = true"
-          > 
-            회원가입 
-          </p>
+
         </div>
         <v-card-actions
         class="px-0"
@@ -59,11 +53,6 @@
       </v-container>
     </v-card>
 
-    <SignUp 
-      :open="signUpDialog"
-      @close-sign-up="() => { signUpDialog = false }"
-    />
-
     <PasswordSearch 
       :open="passwordSearchDialog"
       @close-password-search="() => { passwordSearchDialog = false }"
@@ -73,7 +62,6 @@
 </template>
 
 <script>
-import SignUp from './SignUp'
 import PasswordSearch from './PasswordSearch'
 
 export default { 
@@ -82,7 +70,6 @@ export default {
     open : Boolean
   },
   components:{
-    SignUp,
     PasswordSearch
   },
 
@@ -98,8 +85,8 @@ export default {
   },
 
   methods:{
-    login(){
-        this.$store.dispatch()
+    getToken(){
+        this.$store.dispatch('getToken', {userEmail: this.userEmail, password: this.userPassword})
     }
   },
 
