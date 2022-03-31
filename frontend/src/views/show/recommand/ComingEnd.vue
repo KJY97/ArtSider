@@ -40,13 +40,14 @@ export default {
       })
     }
   },
-  mounted(){
+   mounted(){
     this.swiper = new Swiper('.swiper', {
       observer : true,
       observerParents : true,
-      slidesPerView: 7,
+      slidesPerView: 5,
       slidePerGroup: 5,
       spaceBetween : 30,
+      touchRatio: 0,
       direction: 'horizontal',
       navigation: {
         nextEl: '.swiper-button-next',
