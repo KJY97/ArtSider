@@ -46,6 +46,7 @@ public class KakaoAuthController {
         String token=kakaoAuthService.getKakaoAccessToken(code);
         System.out.println("tocken: "+ token);
         kakaoAuthService.createKakaoUser(token);
+        // user 존재하는지 확인-> email로 확인
     }
    
 }

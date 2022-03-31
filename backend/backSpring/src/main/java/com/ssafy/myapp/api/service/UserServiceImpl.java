@@ -12,12 +12,16 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.ssafy.myapp.api.request.UserRegisterPostReq;
 import com.ssafy.myapp.db.entity.Favorite;
+import com.ssafy.myapp.db.entity.Review;
 import com.ssafy.myapp.db.entity.Show;
 import com.ssafy.myapp.db.entity.User;
 import com.ssafy.myapp.db.entity.Viewed;
 import com.ssafy.myapp.db.mapping.ShowMapping;
+import com.ssafy.myapp.db.mapping.UserReviewMapping;
 import com.ssafy.myapp.db.repository.FavoriteRepository;
+import com.ssafy.myapp.db.repository.ReviewRepository;
 import com.ssafy.myapp.db.repository.ShowRepository;
+import com.ssafy.myapp.db.repository.ShowTagRepository;
 import com.ssafy.myapp.db.repository.UserRepository;
 import com.ssafy.myapp.db.repository.ViewedRepository;
 
@@ -46,6 +50,12 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	UserRepository userRepository;
+	
+	@Autowired
+	ReviewRepository reviewRepository;
+	
+	@Autowired
+	ShowTagRepository showTagRepository;
 	
 	@Autowired
 	ShowRepository showRepository;
@@ -79,10 +89,10 @@ public class UserServiceImpl implements UserService {
 	public User addUser(UserRegisterPostReq userRegisterInfo) {
 		User user = new User();
 
-		user.setEmail(userRegisterInfo.getEmail());
+		user.setEmail(userRegisterInfo.getUserEmail());
 		user.setPassword(passwordEncoder.encode(userRegisterInfo.getPassword()));
-		user.setNickname(userRegisterInfo.getNickname());
-		user.setTelNum(userRegisterInfo.getTelNum());
+		user.setNickname(userRegisterInfo.getUserName());
+		user.setTelNum(userRegisterInfo.getTelnum());
 		user.setCreateDate(LocalDateTime.now());
 
 		return userRepository.save(user);
@@ -252,6 +262,26 @@ public class UserServiceImpl implements UserService {
 		User updateUser= userRepository.findById(user.getId()).get();
 		updateUser.setNickname(nickname);
 		return userRepository.save(updateUser);
+	}
+
+	@Override
+	public List<UserReviewMapping> findUserReview(User user) {
+		List<UserReviewMapping> reviews=reviewRepository.findByUser(user);
+		return reviews;
+	}
+
+	@Override
+	public List<?> findUserReviewRatingCnt(User user) {
+		List<?> result=reviewRepository.findReviewRatingCnt(user.getId());
+		
+		return result;
+	}
+
+	@Override
+	public List<?> findFavoriteShowTagCnt(User user) {
+		List<?> result=showTagRepository.findFavoriteShowTagCnt(user.getId());
+		
+		return result;
 	}
 
 

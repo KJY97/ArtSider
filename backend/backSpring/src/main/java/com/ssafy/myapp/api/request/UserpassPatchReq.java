@@ -7,6 +7,6 @@ import lombok.Setter;
 @Setter
 public class UserpassPatchReq {
 
-	String currentPass;
-	String newPass;
+	String currentPassWord;
+	String newPassWord;
 }
