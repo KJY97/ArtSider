@@ -6,9 +6,11 @@ import com.ssafy.myapp.api.response.PopularShowListGetRes;
 import com.ssafy.myapp.api.response.ShowDetailsGetRes;
 import com.ssafy.myapp.api.response.ShowListGetRes;
 import com.ssafy.myapp.db.entity.*;
+import com.ssafy.myapp.db.mapping.ShowListMapping;
 import com.ssafy.myapp.db.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -27,19 +29,29 @@ public class ShowServiceImpl implements ShowService{
     private final ShowDetailImgRepository showDetailImgRepository;
 
 
-    // 전체 공연 목록 조회
+    // 검색 기능(제목)
     @Override
-    public List<ShowListGetRes> findShowAllList() {
-        return showRepository.findAll().stream().map(ShowListGetRes::new).collect(Collectors.toList());
+    @Transactional
+    public List<ShowListGetRes> findShowName(String keyword) {
+        List<ShowListMapping> shows = showRepository.findByShowNameContaining(keyword);
+        List<ShowListGetRes> showList = new ArrayList<>();
+
+        if (shows.isEmpty()) return showList;
+
+        for (ShowListMapping show : shows) {
+            ShowListGetRes showInfo = new ShowListGetRes(show);
+            showList.add(showInfo);
+        }
+        return showList;
     }
 
     // 카테고리별 전체 공연 목록 조회
     @Override
     public List<ShowListGetRes> findShowCategoryAllList(String category) {
         List<ShowListGetRes> showCategoryAllList = new ArrayList<ShowListGetRes>();
-        List<Show> showAllList = showRepository.findAll();
+        List<ShowListMapping> showAllList = showRepository.findAllBy();
 
-        for (Show show : showAllList) {
+        for (ShowListMapping show : showAllList) {
             if (show.getCategory().equals(category)) {
                 ShowListGetRes showInfo = new ShowListGetRes(show);
                 showCategoryAllList.add(showInfo);
@@ -48,12 +60,11 @@ public class ShowServiceImpl implements ShowService{
         return showCategoryAllList;
     }
 
-
     // 개막 예정 공연 목록
     @Override
     public List<ShowListGetRes> findShowStartList() throws ParseException {
         List<ShowListGetRes> showStartList = new ArrayList<ShowListGetRes>();
-        List<Show> showAllList = showRepository.findAll();
+        List<ShowListMapping> showAllList = showRepository.findAllBy();
 
         Date today = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd",  Locale.KOREA );
@@ -61,7 +72,7 @@ public class ShowServiceImpl implements ShowService{
         Date now = new Date(dateFormat.parse(dateNow).getTime());
 
         // 오늘 날짜 기준으로 걸러내고 추가하기
-        for (Show show : showAllList) {
+        for (ShowListMapping show : showAllList) {
             Date startDate = new Date(dateFormat.parse(show.getStartDate()).getTime());
 
             int compare = startDate.compareTo(now);
@@ -75,12 +86,11 @@ public class ShowServiceImpl implements ShowService{
         return showStartList;
     }
 
-
     // 카테고리별 개막 예정 목록
     @Override
     public List<ShowListGetRes> findShowCategoryStartList(String category) throws ParseException {
         List<ShowListGetRes> showCategoryStartList = new ArrayList<ShowListGetRes>();
-        List<Show> showAllList = showRepository.findAll();
+        List<ShowListMapping> showAllList = showRepository.findAllBy();
 
         Date today = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd",  Locale.KOREA );
@@ -88,7 +98,7 @@ public class ShowServiceImpl implements ShowService{
         Date now = new Date(dateFormat.parse(dateNow).getTime());
 
         // 오늘 날짜 기준으로 걸러내고 추가하기
-        for (Show show : showAllList) {
+        for (ShowListMapping show : showAllList) {
             if (show.getCategory().equals(category)) {
                 Date startDate = new Date(dateFormat.parse(show.getStartDate()).getTime());
 
@@ -108,14 +118,14 @@ public class ShowServiceImpl implements ShowService{
     @Override
     public List<ShowListGetRes> findShowEndList() throws ParseException {
         List<ShowListGetRes> showEndList = new ArrayList<ShowListGetRes>();
-        List<Show> showAllList = showRepository.findAll();
-        // 오늘 날짜 HH:mm:ss
+        List<ShowListMapping> showAllList = showRepository.findAllBy();
+        // 오늘 날짜
         Date today = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd",  Locale.KOREA );
         String dateNow = dateFormat.format(today);
         Date now = new Date(dateFormat.parse(dateNow).getTime());
 
-        for (Show show : showAllList) {
+        for (ShowListMapping show : showAllList) {
             if (show.getEndDate() != null) {
                 Date endDate = new Date(dateFormat.parse(show.getEndDate()).getTime());
 
@@ -135,14 +145,14 @@ public class ShowServiceImpl implements ShowService{
     @Override
     public List<ShowListGetRes> findShowCategoryEndList(String category) throws ParseException {
         List<ShowListGetRes> showCategoryEndList = new ArrayList<ShowListGetRes>();
-        List<Show> showAllList = showRepository.findAll();
-        // 오늘 날짜 HH:mm:ss
+        List<ShowListMapping> showAllList = showRepository.findAllBy();
+        // 오늘 날짜
         Date today = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd",  Locale.KOREA );
         String dateNow = dateFormat.format(today);
         Date now = new Date(dateFormat.parse(dateNow).getTime());
 
-        for (Show show : showAllList) {
+        for (ShowListMapping show : showAllList) {
             if (show.getCategory().equals(category) && show.getEndDate() != null) {
                 Date endDate = new Date(dateFormat.parse(show.getEndDate()).getTime());
 
@@ -168,9 +178,16 @@ public class ShowServiceImpl implements ShowService{
 
         for (PopularShow popularShow : popularShowList) {
             if (popularShow.getRank() < 5) {
-                Show showInfo = showRepository.findByShowId(popularShow.getShowId());
+                ShowListMapping showInfo = showRepository.findByShowId(popularShow.getShowId());
                 PopularShowListGetRes popularShowInfo = new PopularShowListGetRes(popularShow);
-                popularShowInfo.setShow(showInfo);
+
+                popularShowInfo.setId(showInfo.getId());
+                popularShowInfo.setShowName(showInfo.getShowName());
+                popularShowInfo.setPosterPath(showInfo.getPosterPath());
+                popularShowInfo.setCategory(showInfo.getCategory());
+                popularShowInfo.setStartDate(showInfo.getStartDate());
+                popularShowInfo.setEndDate(showInfo.getEndDate());
+                popularShowInfo.setArtCenterName(showInfo.getArtCenterName());
 
                 popularShowAllList.add(popularShowInfo);
             }
@@ -182,7 +199,7 @@ public class ShowServiceImpl implements ShowService{
         return popularShowAllList;
     }
 
-    // 카테고리별 인기 공연 목록()
+    // 카테고리별 인기 공연 목록
     @Override
     public List<PopularShowListGetRes> findPopularShowCategoryList(String category) {
 
@@ -190,15 +207,19 @@ public class ShowServiceImpl implements ShowService{
         List<PopularShow> popularShowCategoryList = popularShowRepository.findAll();
 
         for (PopularShow popularShow : popularShowCategoryList) {
-            Show showInfo = showRepository.findByShowId(popularShow.getShowId());
+            ShowListMapping showInfo = showRepository.findByShowId(popularShow.getShowId());
             if (showInfo.getCategory().equals(category)) {
-
-                ArtCenter artCenter = artCenterRepository.findByArtCenterName(showInfo.getShowId());
 
                 PopularShowListGetRes popularShowInfo = new PopularShowListGetRes(popularShow);
 
-                popularShowInfo.setArtCenter(artCenter);
-                popularShowInfo.setShow(showInfo);
+                popularShowInfo.setId(showInfo.getId());
+                popularShowInfo.setShowName(showInfo.getShowName());
+                popularShowInfo.setPosterPath(showInfo.getPosterPath());
+                popularShowInfo.setCategory(showInfo.getCategory());
+                popularShowInfo.setStartDate(showInfo.getStartDate());
+                popularShowInfo.setEndDate(showInfo.getEndDate());
+                popularShowInfo.setArtCenterName(showInfo.getArtCenterName());
+
                 popularShowCategoryAllList.add(popularShowInfo);
             }
         }
@@ -209,7 +230,7 @@ public class ShowServiceImpl implements ShowService{
 
     // 공연 상세 조회
     @Override
-    public ShowDetailsGetRes findShowDetails(Long id) throws NoSuchElementException {
+    public List<ShowDetailsGetRes> findShowDetails(Long id) throws NoSuchElementException {
 
         Show show = showRepository.findById(id).get();
         ArtCenter artCenter = artCenterRepository.findByArtCenterName(show.getArtCenterName());
@@ -217,6 +238,7 @@ public class ShowServiceImpl implements ShowService{
         List<NoticeImg> notice = noticeImgRepository.findByShowId(show.getShowId());
         List<ShowDetailImg> showDetail = showDetailImgRepository.findByShowId(show.getShowId());
 
+        List<ShowDetailsGetRes> showList = new ArrayList<>();
         ShowDetailsGetRes showInfo = new ShowDetailsGetRes();
 
         showInfo.setId(show.getId());
@@ -239,12 +261,15 @@ public class ShowServiceImpl implements ShowService{
         showInfo.setNoticeImg(notice);
         showInfo.setShowDetailImg(showDetail);
         showInfo.setArtCenter(artCenter);
-        return showInfo;
+
+        showList.add(showInfo);
+        return showList;
     }
 
     // 공연장 시설 조회
     @Override
-    public ArtCenterDetailsGetRes findArtCenterDetails(String artCenterName) throws NoSuchElementException {
+    public List<ArtCenterDetailsGetRes> findArtCenterDetails(String artCenterName) throws NoSuchElementException {
+        List<ArtCenterDetailsGetRes> artCenterList = new ArrayList<>();
 
         ArtCenter artCenter = artCenterRepository.findByArtCenterName(artCenterName);
         ArtCenterDetailsGetRes artCenterInfo = new ArtCenterDetailsGetRes();
@@ -255,7 +280,8 @@ public class ShowServiceImpl implements ShowService{
         artCenterInfo.setArtCenterTel(artCenter.getArtCenterTel());
         artCenterInfo.setArtCenterWeb(artCenter.getArtCenterWeb());
 
-        return artCenterInfo;
+        artCenterList.add(artCenterInfo);
+        return artCenterList;
     }
 
 }

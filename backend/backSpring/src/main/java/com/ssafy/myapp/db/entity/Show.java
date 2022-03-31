@@ -75,20 +75,15 @@ public class Show {
     @OneToMany(mappedBy = "show")
     private List<Expectation> expectations = new ArrayList<>();
 
-//    @OneToMany(mappedBy = "show")
-//    private List<CastingList> castingLists = new ArrayList<CastingList>();
-//
-//    public void addCasting(CastingList castingList) {
-//        castingList.setShow(this);
-//        getCastingLists().add(castingList);
-//    }
+    @OneToMany(mappedBy = "show")
+    private List<ShowTag> showTags = new ArrayList<>();
 
-    
+
     @OneToMany(mappedBy = "show")
     @LazyCollection(LazyCollectionOption.FALSE)
     @JsonBackReference //추가
     private List<Favorite> favorite = new ArrayList<>();
-    
+
     @OneToMany(mappedBy = "show")//뒤의 fetch 안했을 시에 에러나서 추가해줌
     @LazyCollection(LazyCollectionOption.FALSE)
     @JsonBackReference //추가

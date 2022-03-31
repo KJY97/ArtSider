@@ -23,17 +23,4 @@ public class CastingList {
     @Column(nullable = false)
     private String name;
 
-//    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//    @JoinColumn(name = "showId", insertable = false, updatable = false)
-//    @JsonIgnore
-//    private Show show;
-//
-//    public void setShow(Show show) {
-//        if (this.show != null) {
-//            this.show.getCastingLists().remove(this);
-//        }
-//        this.show = show;
-//        show.getCastingLists().add(this);
-//    }
-
 }
