@@ -404,11 +404,167 @@ export default new Vuex.Store({
           commit('SET_USER_IMG_SRC', res.data.profileImg)
         })
       }
-    }
-
+    },
+        // 인기 공연 불러오기
+        getPopularShow({ state }){
+          state
+          const url = '/api/show/popular/'
+          // const userdata = data
+          return axios.get(url)
+          
+        },
+        // 카테고리 별 인기공연
+        getCategoryPopularShow({ state }, data){
+          state
+          const url = ''
+          if ( data.num == 1) {
+            this.url = '/api/show/CL/popular'
+          } else if ( data.num == 2) {
+            this.url = '/api/show/CO/popular'
+          } else if ( data.num == 3) {
+            this.url = '/api/show/FA/popular'
+          } else if ( data.num == 4) {
+            this.url = '/api/show/MU/popular'
+          } else if ( data.num == 5) {
+            this.url = '/api/show/DR/popular'
+          }
     
-
-
+          // 카테고리
+          // -MU :뮤지컬
+          // -CL: 클래식/오페라
+            // -DA: 무용/전통예술
+            // -FA: 아동/가족
+            // -DR: 연극
+            // -CO: 콘서트
+          // const userdata = data
+          return axios.get(url)
+        },
+        // 곧 개봉하는 공연 불러오기
+        getComingSoonShow({ state }){
+          state
+          const url = '/api/show/startDate/'
+          return axios.get(url)
+        },
+    
+        getCategoryComingSoonShow({ state }, data){
+          state
+          const url = ''
+          if ( data.num == 1) {
+            this.url = '/api/show/CL/startDate'
+          } else if ( data.num == 2) {
+            this.url = '/api/show/CO/startDate'
+          } else if ( data.num == 3) {
+            this.url = '/api/show/FA/startDate'
+          } else if ( data.num == 4) {
+            this.url = '/api/show/MU/startDate'
+          } else if ( data.num == 5) {
+            this.url = '/api/show/DR/startDate'
+          }
+    
+          // 카테고리
+          // -MU :뮤지컬
+          // -CL: 클래식/오페라
+            // -DA: 무용/전통예술
+            // -FA: 아동/가족
+            // -DR: 연극
+            // -CO: 콘서트
+          // const userdata = data
+          return axios.get(url)
+        },
+    
+        // 곧 끝나는 공연 불러오기
+        getComingEndShow({ state }){
+          state
+          const url ='/api/show/endDate/'
+          return axios.get(url)
+        },
+    
+        getCategoryComingEndShow({ state }, data){
+          state
+          const url = ''
+          if ( data.num == 1) {
+            this.url = '/api/show/CL/endDate'
+          } else if ( data.num == 2) {
+            this.url = '/api/show/CO/endDate'
+          } else if ( data.num == 3) {
+            this.url = '/api/show/FA/endDate'
+          } else if ( data.num == 4) {
+            this.url = '/api/show/MU/endDate'
+          } else if ( data.num == 5) {
+            this.url = '/api/show/DR/endDate'
+          }
+    
+          // 카테고리
+          // -MU :뮤지컬
+          // -CL: 클래식/오페라
+            // -DA: 무용/전통예술
+            // -FA: 아동/가족
+            // -DR: 연극
+            // -CO: 콘서트
+          // const userdata = data
+          return axios.get(url)
+        },
+    
+        // 선호 태그 별 공연 불러오기
+        // getPreferenceTagShow({commit, }){
+        //   const url = '/api/show/preferenceTag'
+        //   // const userdata = data
+        //   axios.get(url)
+        //     .then(res => {
+        //       commit(res.data)
+        //     })
+        //     .catch(err => {
+        //       console.log(err)
+        //     })
+        // },
+    
+    
+        // getSimilarShow({commit, }){
+        //   const url = '/api/show/similar'
+        //   // const userdata = data
+        //   axios.get(url)
+        //     .then(res => {
+        //       commit(res.data)
+        //     })
+        //     .catch(err => {
+        //       console.log(err)
+        //     })
+        // },
+        // getCategorySimilarShow({commit, }){
+        //   const url = '/api/show/similar/{category}'
+        //   // const userdata = data
+        //   axios.get(url)
+        //     .then(res => {
+        //       commit(res.data)
+        //     })
+        //     .catch(err => {
+        //       console.log(err)
+        //     })
+        // },
+    
+        // getNearShow({commit, }){
+        //   const url = '/api/show/popular/{category}'
+        //   // const userdata = data
+        //   axios.get(url)
+        //     .then(res => {
+        //       commit(res.data)
+        //     })
+        //     .catch(err => {
+        //       console.log(err)
+        //     })
+        // },
+    
+        // getCategoryNearShow({commit, }){
+        //   const url = '/api/show/popular/{category}'
+        //   // const userdata = data
+        //   axios.get(url)
+        //     .then(res => {
+        //       commit(res.data)
+        //     })
+        //     .catch(err => {
+        //       console.log(err)
+        //     })
+        // },
   },
   modules: {
   }
