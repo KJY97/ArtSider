@@ -2,13 +2,13 @@
   <v-app 
     app
     id="inspire"
-    style="background-color: #FEFEF4">
+    style="background-color: #FEFEF4;">
     <NavBar />
-    <v-sheet max-height="100vh" id="main" style="overflow: auto">
-      <v-main style="height: 100vh; overflow-y:auto;" >
+
+      <v-main id="main" style="overflow:auto; height:100vh;" >
         <router-view/>
       </v-main>
-    </v-sheet>
+   
   </v-app>
 </template>
 
@@ -27,11 +27,17 @@ export default {
     }
   },
 
+  computed:{
+    lsLogin(){
+      return this.$store.getters.loginStatus
+    }
+  },
+
   created(){
-    // const token = localStorage.getItem('accessToken')
-    // if(token){
-    //   this.$store.dispatch('setToken', token)
-    // } 
+    const token = localStorage.getItem('accessToken')
+    if(token){
+      this.$store.dispatch('setToken', token)
+    } 
   }
 }
 </script>
@@ -40,6 +46,5 @@ export default {
 html{
   overflow-y: auto !important;
 }
-
 
 </style>

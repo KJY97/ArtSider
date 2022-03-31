@@ -30,6 +30,7 @@
                 v-model="userEmail"
                 :rules="userEmailRules"
                 label="이메일"
+                ref="emailForm"
                 required
               >
                 <v-btn
@@ -163,10 +164,9 @@ export default {
         v => /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/.test(v) || '휴대폰 번호만 입력해주세요'
       ],
 
-      confirmationNumber: '123',
       inputNumber: '',
 
-      IsMultiEmail : false,
+      isMultiEmail : true,
 
       timerCount: 180,
       minutes: 3,
@@ -190,13 +190,21 @@ export default {
   },
 
   methods:{
-    checkMultiEmail(inputEmail){
-      return this.$store.dispatch('checkMultiEmail', inputEmail)
+    checkMultiEmail(){
+      const emailValidate = this.$refs.emailForm.validate()
+      if(emailValidate){
+        console.log('이메일 유효성 검사 통과')
+        this.$store.dispatch('checkMultiEmail', this.userEmail)
+      } 
     },
 
     checkSignUpForm(){
       const validate =  this.$refs.form.validate()
-      if (validate && this.checkMultiEmail(this.userEmail)){
+      if (validate){
+        if(this.$store.state.isMultiEmail){
+          alert('이메일 중복 검사를 통과해야 합니다.')
+          return false
+        }
         // 유호성 통과
         this.userData = {
           userName : this.userName,
@@ -214,16 +222,12 @@ export default {
       if(this.step === 1){
         const checkResult = this.checkSignUpForm()
         if(checkResult){
+          this.$store.dispatch('getUserConfirmNumber', this.userEmail)
           this.step += 1
         }
       } else if(this.step === 2){
-        if(this.inputNumber === this.confirmationNumber){
+        if(this.inputNumber === this.$store.state.emailConfirmNumber){
           this.$store.dispatch('createUser', {userData: this.userData, this: this})
-          alert('회원가입 성공!')
-          // this.confirmationNumber = ''
-          // this.inputNumber = ''
-          // this.step = 1
-          // this.$emit('close-sign-up')
         } else{
           alert('이메일 인증 실패')
           this.confirmationNumber = ''

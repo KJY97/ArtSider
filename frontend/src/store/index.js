@@ -10,7 +10,8 @@ export default new Vuex.Store({
   state: {
     token : '',
     myContents: [],
-
+    isMultiEmail: true,
+    emailConfirmNumber: null,
 
     preferencePosters: [],
     historyPosters : [],
@@ -26,10 +27,6 @@ export default new Vuex.Store({
   getters: {
     loginStatus(state){
       return !!state.token
-    },
-
-    preferencePosters(state){
-      return state.preferencePosters
     },
 
     historyPosters(state){
@@ -230,21 +227,21 @@ export default new Vuex.Store({
 
     // 이메일 체크
     checkMultiEmail({state}, inputEmail){
-      state
       const url = `/api/users/${inputEmail}`
       axios.get(url)
       .then((res) => {
         if(res.data.emailCheck){
+          console.log(res.data.emailCheck)
           alert('이메일 중복검사 통과')
-          return true
+          state.isMultiEmail = false
         } else{
-          alert('이메일 중복검사 실패')
-          return false
+          alert('이미 가입한 이메일입니다.')
+          state.isMultiEmail = true
         }
       })
       .catch(() => {
-        alert('이메일 중복검사 실패')
-        return false
+        alert('이메일을 다시 확인해주세요.')
+        state.isMultiEmail = true
       })
     },
 
@@ -254,22 +251,37 @@ export default new Vuex.Store({
       const url = '/api/users'
       axios.post(url, {...userData})
       .then(() => {
-        dispatch('getToken', {userEmail: userData.userEmail, password: userData.password})
-      })
-      .then(() => {
         alert('회원가입 성공!')
         signUpVue.confirmationNumber = ''
         signUpVue.inputNumber = ''
         signUpVue.step = 1
         signUpVue.$emit('close-sign-up')
       })
+      .then(() => {
+        dispatch('getToken', {userEmail: userData.userEmail, password: userData.password})
+      })
       .catch(()=>{
-        alert('이메일 인증 실패')
+        alert('회원가입 실패')
         signUpVue.confirmationNumber = ''
         signUpVue.inputNumber = ''
         signUpVue.step = 1
       })
     },
+
+    // 이메일 본인 인증 번호 보내기
+    getUserConfirmNumber({state}, userEmail){
+      const url = `/api/users/${userEmail}`
+      axios.post(url)
+      .then((res)=>{
+        console.log(res.data.emailNumber)
+        state.emailConfirmNumber = res.data.emailNumber
+      })
+      .catch(()=>{
+        alert('인증번호 발송 실패')
+      })
+
+    },
+
 
     setToken({commit}, token){
       commit('SET_MY_TOKEN', token)
@@ -286,47 +298,36 @@ export default new Vuex.Store({
 
     },
 
+
+    // 관심 공연 목록 조회
     getMyPreference({commit, state}){
+      commit
       const url = '/api/users/profile/preference'
-      axios.get(url, {
+      return axios.get(url, {
         headers: {
           Authorization : `Bearer ${state.token}`
         }
-      })
-      .then((res) => {
-        commit('SET_MY_PREFERENCE', res.data.items)
-      })
-      .catch((err) => {
-        console.log(err)
       })
     },
 
     // 내가 조회한 공연 목록 조회
     getMyHistory({commit, state}){
-        const url = '/api/users/profile/watchHistory'
-        axios.get(url, {
+      commit  
+      const url = '/api/users/profile/watchHistory'
+        return axios.get(url, {
           headers: {
             Authorization : `Bearer ${state.token}`
           }
         })
-        .then((res) => {
-          commit('SET_MY_HISTORY', res.data.items)
-        })
     },
 
     // 유저 정보 얻어오기
-    getUserInfo({commit, state}){
+    getUserInfo({state}){
       const url = '/api/users/profile'
-      axios.get(url, {
+      return axios.get(url, {
         headers: {
           Authorization : `Bearer ${state.token}`
         }
-      })
-      .then((res) => {
-        commit('SET_USER_INFO', res.data)
-      })
-      .catch(() => {
-        console.log('error: get profile info')
       })
     },
 
@@ -372,7 +373,7 @@ export default new Vuex.Store({
     },
 
     // 프로필 이미지 등록
-    setUserImage({dispatch, state}, image){
+    setUserImage({state}, image){
       const url = '/api/users/profile/photo'
       const headers = {
         'Content-Type': 'multipart/form-data',
@@ -380,28 +381,21 @@ export default new Vuex.Store({
       }
       
       let formData = new FormData()
-      formData.append('multipart', image)
+      formData.append('file', image)
       
-      axios.post(url, formData, {
-        headers: headers
-      })
-      .then(()=>{
-        // 유저 정보 갱신
-        dispatch('getUserInfo')
-      })
+      return axios.post(url, formData, {
+          headers: headers
+        })
     },
 
     // 프로필 이미지 소스 얻어오기
-    getUserImage({commit, state}){
-      if(state.profileImg){
-        const url = `/api/users/profile/photo/${state.profileImg}`
-        axios.get(url, {
+    getUserImageSrc({state}, profileImg){
+      if(profileImg){
+        const url = `/api/users/profile/photo/${profileImg}`
+        return axios.get(url, {
           headers:{
             Authorization : `Bearer ${state.token}`
           }
-        })
-        .then((res) => {
-          commit('SET_USER_IMG_SRC', res.data.profileImg)
         })
       }
     },

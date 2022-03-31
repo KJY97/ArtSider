@@ -14,7 +14,7 @@
             max-width="100%"
             max-height="100%"
             :aspect-ratio="1"
-            :src="userImg"
+            :src="userImgSrc"
             @click="imageTrigger"
           >
           </v-img>
@@ -67,20 +67,15 @@ export default {
     return{
       userName: '김공연',
       userTags: ['좋아요', '명배우', '웃겨요'],
+      userInfo: {},
+      userImgName: null,
+      userImgSrc : defaultImage,
     }
   },
 
   computed:{
     isLogin(){
       return this.$store.getters.loginStatus
-    },
-
-    userInfo(){
-      return this.$store.getters.userInfo
-    },
-
-    userImgSrc(){
-      return this.$store.getters.userImgSrc ? this.$store.getters.userImgSrc : defaultImage
     },
   },
 
@@ -97,17 +92,44 @@ export default {
           alert('이미지 파일은 최대 3MB까지 가능합니다.')
         } else{
           this.$store.dispatch('setUserImage', image[0])
+          .then((res) => {
+            // 이미지 이름 갱신
+            this.userImgName = res.data.profileImg
+            this.userInfo.profileImg = res.data.profileImg
+          })
         }
       }
-    }
+    },
+
+
   },
 
   created(){
     if(this.$store.getters.loginStatus){
       this.$store.dispatch('getUserInfo')
+      .then((res) => {
+        this.userInfo = res.data
+        this.userImgName = res.data.profileImg
+      })
+      .catch(() => {
+        console.log('error: get profile info')
+      })
     } else{
       console.log('wrong contact')
     }
+  },
+
+  watch: {
+    userImgName: function(){
+      if(this.userImgName){
+        this.$store.dispatch('getUserImageSrc', this.userImgName)
+        .then((res) => {
+          // console.log('이미지 조회: ', res.config.baseURL + res.config.url)
+          this.userImgSrc = res.config.baseURL + res.config.url
+        })
+      }
+    },
+
   }
 
 }
@@ -117,7 +139,6 @@ export default {
 #profile{
   width: 100%;
   height: 100%;
-  overflow-y: auto;
 
 }
 

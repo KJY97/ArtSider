@@ -33,8 +33,6 @@
             >
             </v-card>
           </v-col>
-
-
         </v-row>
       </v-container>
     </div>
@@ -75,24 +73,26 @@ export default {
   name: 'ProfileDefault',
   data(){
     return{
+      preferencePosters : [],
+      historyPosters : [],
     }
   },
 
-  computed:{
-    preferencePosters(){
-      return this.$store.gertters.preferencePosters
-    },
-    
-    historyPosters(){
-      return this.$store.gertters.historyPosters
-    }
-
-  },  
-
-
   created(){
     this.$store.dispatch('getMyPreference')
+    .then((res) => {
+        this.preferencePosters = res.data.items
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+
+
+
     this.$store.dispatch('getMyHistory')
+    .then((res) => {
+      this.historyPosters = res.data.items
+    })
   }
 }
 </script>

@@ -45,7 +45,7 @@
           <v-btn
             outlined
             width="100%"
-            @click="login"
+            @click="getToken"
           >
             로그인
           </v-btn>
