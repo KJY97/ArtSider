@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -82,8 +81,11 @@ public class ShowServiceImpl implements ShowService{
                 showStartList.add(showInfo);
             }
         }
-        showStartList.sort(Comparator.comparing(ShowListGetRes::getStartDate));
-        return showStartList;
+        // 공연 시작 날짜 정렬 -> 같은 날짜는 종료날짜로 다시 정렬, null값은 오픈런
+        showStartList.sort(Comparator.comparing(ShowListGetRes::getStartDate).thenComparing(ShowListGetRes::getEndDate, Comparator.nullsFirst(Comparator.naturalOrder())));
+
+        List<ShowListGetRes> showList = showStartList.subList(0, 20);
+        return showList;
     }
 
     // 카테고리별 개막 예정 목록
@@ -110,8 +112,9 @@ public class ShowServiceImpl implements ShowService{
                 }
             }
         }
-        showCategoryStartList.sort(Comparator.comparing(ShowListGetRes::getStartDate));
-        return showCategoryStartList;
+        showCategoryStartList.sort(Comparator.comparing(ShowListGetRes::getStartDate).thenComparing(ShowListGetRes::getEndDate, Comparator.nullsLast(Comparator.naturalOrder())));
+        List<ShowListGetRes> showList = showCategoryStartList.subList(0, 20);
+        return showList;
     }
 
     // 종료 임박 공연 목록
@@ -137,8 +140,9 @@ public class ShowServiceImpl implements ShowService{
                 }
             }
         }
-        showEndList.sort(Comparator.comparing(ShowListGetRes::getEndDate));
-        return showEndList;
+        showEndList.sort(Comparator.comparing(ShowListGetRes::getEndDate).thenComparing(ShowListGetRes::getStartDate));
+        List<ShowListGetRes> showList = showEndList.subList(0, 20);
+        return showList;
     }
 
     // 카테고리별 종료 임박 공연 목록
@@ -165,8 +169,9 @@ public class ShowServiceImpl implements ShowService{
                 }
             }
         }
-        showCategoryEndList.sort(Comparator.comparing(ShowListGetRes::getEndDate));
-        return showCategoryEndList;
+        showCategoryEndList.sort(Comparator.comparing(ShowListGetRes::getEndDate).thenComparing(ShowListGetRes::getStartDate));
+        List<ShowListGetRes> showList = showCategoryEndList.subList(0, 20);
+        return showList;
     }
 
     // 전체 인기 공연 목록
