@@ -48,17 +48,17 @@ public class User {
 
     private String profileImg;
     
-    @OneToMany(mappedBy = "user")//뒤의 fetch 안했을 시에 에러나서 추가해줌
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)//뒤의 fetch 안했을 시에 에러나서 추가해줌
     @LazyCollection(LazyCollectionOption.FALSE)
     @JsonBackReference 
     private List<Favorite> favorite = new ArrayList<>();
     
-    @OneToMany(mappedBy = "user")//뒤의 fetch 안했을 시에 에러나서 추가해줌
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)//뒤의 fetch 안했을 시에 에러나서 추가해줌
     @LazyCollection(LazyCollectionOption.FALSE)
     @JsonBackReference 
     private List<Viewed> viewed = new ArrayList<>();
     
-    @OneToMany(mappedBy = "user")//뒤의 fetch 안했을 시에 에러나서 추가해줌
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)//뒤의 fetch 안했을 시에 에러나서 추가해줌
     @LazyCollection(LazyCollectionOption.FALSE)
     @JsonBackReference //무한 호출 방지
     private List<UserTag> userTag = new ArrayList<>();
@@ -66,10 +66,10 @@ public class User {
  
     private LocalDateTime createDate;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     private List<Review> reviews = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     private List<Expectation> expectations = new ArrayList<>();
 
 }

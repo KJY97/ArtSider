@@ -40,6 +40,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -369,7 +370,7 @@ public class UserController {
         }
     
     
-    @DeleteMapping("/profile")
+    @PatchMapping("/profile")
     @ApiOperation(value = "프로필 정보 수정", notes = "유저의 프로필 정보를 수정한다. ")
     @ApiResponses({
             @ApiResponse(code = 200, message = "유저 정보 수정 성공"),

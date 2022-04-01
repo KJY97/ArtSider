@@ -7,7 +7,7 @@ import com.ssafy.myapp.common.auth.SsafyUserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -58,6 +58,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilter(new JwtAuthenticationFilter(authenticationManager(), userService))
                 .authorizeRequests()
                 .antMatchers("/api/users/password").authenticated()
+                .antMatchers(HttpMethod.DELETE,"/api/users/{userEmail}").authenticated()
+                .antMatchers("/api/users/profile").authenticated()
+                .antMatchers("/api/users/profile/photo").authenticated()
+                .antMatchers("/api/users/profile/preference").authenticated()
+                .antMatchers("/api/users/profile/watchHistory").authenticated()
+                .antMatchers("/api/users/profile/reviewList").authenticated()
+                .antMatchers("/api/users/show/{id}/preference").authenticated()
+                .antMatchers("/api/users/show/{id}").authenticated()
+                .antMatchers("/api/users/review/ratingStars").authenticated()
+                .antMatchers("/api/users/show/preference/tag").authenticated()
+                .antMatchers("/api/show/reviews/{reviewId}").authenticated()
+                .antMatchers(HttpMethod.POST,"/api/show/reviews/{id}").authenticated()
+                .antMatchers(HttpMethod.POST,"/api/show/expectations/{id}").authenticated()
+                .antMatchers("/api/show/expectations/{expectationId}").authenticated()
                 .and().cors();
     }
 }
