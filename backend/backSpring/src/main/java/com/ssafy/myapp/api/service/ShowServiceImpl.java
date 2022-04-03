@@ -24,6 +24,7 @@ public class ShowServiceImpl implements ShowService{
     private final CastingListRepository castingListRepository;
     private final NoticeImgRepository noticeImgRepository;
     private final PopularShowRepository popularShowRepository;
+    private final RecommendationRepository recommendationRepository;
     private final ShowRepository showRepository;
     private final ShowDetailImgRepository showDetailImgRepository;
 
@@ -172,6 +173,22 @@ public class ShowServiceImpl implements ShowService{
         showCategoryEndList.sort(Comparator.comparing(ShowListGetRes::getEndDate).thenComparing(ShowListGetRes::getStartDate));
         List<ShowListGetRes> showList = showCategoryEndList.subList(0, 20);
         return showList;
+    }
+
+    // 공연 추천(사용자간의 유사도 추천)
+    @Override
+    public List<ShowListGetRes> findShowRecommendationList(Long userId) {
+
+        List<ShowListGetRes> showRecommendationList = new ArrayList<>();
+        List<Recommendation> recommendationList = recommendationRepository.findByUserId(userId);
+
+        for (Recommendation recommendation : recommendationList) {
+            ShowListMapping show = showRepository.findByIdEquals(recommendation.getShowId());
+            ShowListGetRes recommendationShowInfo = new ShowListGetRes(show);
+            showRecommendationList.add(recommendationShowInfo);
+
+        }
+        return showRecommendationList;
     }
 
     // 전체 인기 공연 목록

@@ -135,6 +135,19 @@ public class ShowController {
         }
     }
 
+    // 공연 추천(사용자간의 유사도 추천)
+    @GetMapping("/{userId}/recommendation")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "추천 목록 조회 성공"),
+            @ApiResponse(code = 401, message = "추천록 조회 실패"),
+            @ApiResponse(code = 500, message = "서버 에러")
+    })
+    public ResponseEntity<Map<String, List<ShowListGetRes>>> showRecommendationList(@PathVariable Long userId) {
+        Map<String, List<ShowListGetRes>> resultMap = new HashMap<>();
+        resultMap.put("items", showService.findShowRecommendationList(userId));
+        return new ResponseEntity<Map<String, List<ShowListGetRes>>>(resultMap, HttpStatus.OK);
+    }
+
     // 전체 인기 공연 목록
     @GetMapping("/popular")
     @ApiResponses({

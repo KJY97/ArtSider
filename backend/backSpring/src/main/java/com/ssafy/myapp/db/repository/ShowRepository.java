@@ -9,6 +9,7 @@ import java.util.List;
 
 @Repository
 public interface ShowRepository extends JpaRepository<Show, Long> {
+    ShowListMapping findByIdEquals(Long id);
     ShowListMapping findByShowId(String showId);
     List<ShowListMapping> findByShowNameContaining(String keyword);
     List<ShowListMapping> findAllBy();

@@ -17,6 +17,7 @@ public interface ShowService {
     List<ShowListGetRes> findShowCategoryStartList(String category) throws ParseException;
     List<ShowListGetRes> findShowEndList() throws ParseException;
     List<ShowListGetRes> findShowCategoryEndList(String category) throws ParseException;
+    List<ShowListGetRes> findShowRecommendationList(Long userId);
     List<PopularShowListGetRes> findPopularShowList();
     List<PopularShowListGetRes> findPopularShowCategoryList(String category);
     List<ShowDetailsGetRes> findShowDetails(Long id) throws NoSuchElementException;
