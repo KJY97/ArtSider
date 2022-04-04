@@ -239,14 +239,6 @@ export default {
       // 예매사이트로 가게 하기
       window.location.href=`https://tickets.interpark.com/goods/${this.showDetail.showId}`
     },
-    // 연관 공연 추가
-    addRelatedShow: function () {
-      this.$store.dispatch('addRelatedShow', {id:this.id})
-      .then((res) => {
-        console.log(res)
-        // this.relatedShow = res.data
-      })
-    },
     // 연관 공연 상세보기 페이지로 이동
     moveToShow: function(id) {
       this.$router.push({name: 'ShowDetail', params: {id : id}})

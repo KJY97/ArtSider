@@ -2,14 +2,25 @@
 <div class="swiper mt-6">
   <h1 class="ml-4 mb-4">인기 순위</h1> 
   <div class="swiper-wrapper">
+    <div class="swiper-slide" v-for="popular in popularList" :key="popular.id">
       <v-img
         @click="addInquire(popular.id)"
         :aspect-ratio="3/4"
         :src="popular.posterPath"
         style="width:50%;height:50%;"
         >
-        </v-img>
+      </v-img>
     </div>
+  </div>
+  <div class="swiper-button-next"></div>
+  <div class="swiper-button-prev"></div>
+</div>
+</template>
+
+<script>
+import Swiper from 'swiper/js/swiper.esm.bundle'
+import 'swiper/css/swiper.css'
+
 export default {
   name: 'Popular',
   data(){

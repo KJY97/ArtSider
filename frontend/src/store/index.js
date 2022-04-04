@@ -223,12 +223,58 @@ export default new Vuex.Store({
       }
       return axios.get(url)
     },
-    // 연관 공연 추가
-    addRelatedShow({state}, data){
+    // 유저 선호 태그 별 추천 공연 조회
+    getRelatedTagShow({state}, data){
       state
-      const url = `/api/${data.id}/hashTag`
-      return axios.get(url)
+      const url = `/api/show/recommand/user/tag`
+      return axios.get(url,{
+        headers: {
+          Authorization : `Bearer ${state.token}`
+        },
+        userTag: data.userTag
+      })
     },
+    // 공연의 연관 공연 조회
+    getRelatedShow: function ({state}, data) {
+      state
+      const url = `/api/show/recommand/${data.showId}/relatedShow`
+      return axios.get(url,{
+        headers: {
+          Authorization : `Bearer ${state.token}`
+        },
+        userTag: data.showTag
+      })
+    },
+    // 유저가 좋아할 확률 업데이트
+    updateUserExpectation: function ({state},data) {
+      const url = `/api/show/recommand/${data.showId}/probability`
+      return axios.post(url,{
+        headers: {
+          Authorization : `Bearer ${state.token}`
+        },
+      })
+    },
+    // 사용자간의 유사도 추천 서비스
+    getSimilarityShow: function ({state}) {
+      const url = `/api/show/recommend/similarity`
+      return axios.get(url,{
+        headers: {
+          Authorization : `Bearer ${state.token}`
+        },
+      })
+    },
+    // 유저가 좋아할 확률 조회
+    getUserExpectation: function ({state},data) {
+      const url = `/api/show/recommand/${data.showId}/probability`
+      return axios.post(url,{
+        headers: {
+          Authorization : `Bearer ${state.token}`
+        },
+      })
+    },
+
+    
+    
 
     // 티켓사이트 이동 & 선호 목록 추가
     goTicketSite({state}, data){
