@@ -14,8 +14,11 @@ export default {
       popularList: [],
     }
   },
+  props: {
+    num: Number
+  },
   created: function () {
-    this.$store.dispatch('getPopularShow')
+    this.$store.dispatch('getCategoryPopularShow', this.num)
     .then((res) => {
       this.popularList = res.data.items.slice(0,6)
       for (let show of this.popularList) {

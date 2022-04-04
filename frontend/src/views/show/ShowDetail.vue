@@ -217,7 +217,6 @@ export default {
     getDetail(id) {
       this.$store.dispatch('getDetail', {id:id})
       .then(res => {
-        console.log('데이터', res.data)
         this.showDetail = res.data.items[0]
         this.showDetail.startDate = this.showDetail.startDate.slice(0,10)
         const today = new Date()
@@ -238,7 +237,6 @@ export default {
           const firstText = text.replaceAll('원', '원\n')
           const newText = firstText.replaceAll('/\n/', '<br/>')
           const p = document.querySelector('.price')
-          console.log(newText)
           p.innerText = newText
         }
       })

@@ -1,6 +1,7 @@
 <template>
 <div>
-  <h1 class="ml-4 mb-4">인기 순위</h1> 
+  <h1 class="ml-4 mb-4" v-if="genre != 0">{{ genre }} 인기 순위</h1> 
+  <h1 class="ml-4 mb-4" v-if="genre == 0">인기 순위</h1> 
   <swiper class="swiper" 
     :options="swiperOption">
   <swiper-slide
@@ -19,23 +20,6 @@
   <div class="swiper-button-next" slot="button-next"></div>
 </swiper>
 </div>
-
-<!-- <div class="swiper mt-6">
-  <h1 class="ml-4 mb-4">인기 순위</h1> 
-  <div class="swiper-wrapper">
-    <div class="swiper-slide" v-for="popular in popularList" :key="popular.id">
-      <v-img
-        @click="addInquire(popular.id)"
-        :aspect-ratio="3/4"
-        :src="popular.posterPath"
-        style="width:50%;height:50%;"
-        >
-      </v-img>
-    </div>
-  </div>
-  <div class="swiper-button-next"></div>
-  <div class="swiper-button-prev"></div>
-</div> -->
 </template>
 
 <script>
@@ -51,7 +35,9 @@ export default {
   },
 
   props:{
-    swiperOption: Object
+    swiperOption: Object,
+    num: Number,
+    genre: String 
   },
 
   components:{
@@ -60,11 +46,10 @@ export default {
   },
 
   methods: {
-    getPopularShow: function() {
-      this.$store.dispatch('getPopularShow')
+    getCategoryPopularShow: function(num) {
+      this.$store.dispatch('getCategoryPopularShow', num)
       .then(res => {
         this.popularList = res.data.items
-        console.log(this.popularList)
       })
     },
     addInquire: function (id) {
@@ -77,14 +62,12 @@ export default {
   created: function() {
     // 새로 시작할 때 발생하는 이벤트
     // 페이지 처음 들어올때 수행하는 이벤트
-    this.getPopularShow() 
+    this.getCategoryPopularShow(this.num) 
   }
 }
 </script>
 
 <style>
-
-
 .rank {
   color: #000;
   -webkit-text-stroke: 1px #fff;

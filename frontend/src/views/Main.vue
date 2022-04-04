@@ -2,6 +2,16 @@
 <div>
   <Popular 
     :swiperOption="swiperOption"
+    :num = 0
+    :genre = 0
+  />
+  <ComingSoon
+    :swiperOption="swiperOption"
+    :num = 0
+  />
+  <ComingEnd 
+    :swiperOption="swiperOption"
+    :num = 0
   />
 </div>
 
@@ -40,14 +50,12 @@
 
 <script>
 import Popular from '../views/show/recommand/Popular.vue'
-// import ComingEnd from '../views/show/recommand/ComingSoon.vue'
-// import ComingSoon from '../views/show/recommand/ComingEnd.vue'
+import ComingEnd from '../views/show/recommand/ComingSoon.vue'
+import ComingSoon from '../views/show/recommand/ComingEnd.vue'
 // import PreferenceTag from '../views/show/recommand/PreferenceTag.vue'
 // import Similar from '../views/show/recommand/Similar.vue'
 // import Place from '../views/show/recommand/Place.vue'
 
-
-import 'swiper/css/swiper.css'
 
 export default {
   name: 'Main',
@@ -66,8 +74,8 @@ export default {
 
   components: {
     Popular,
-    // ComingEnd,
-    // ComingSoon,
+    ComingEnd,
+    ComingSoon,
     // PreferenceTag,
     // Similar,
     // Place,

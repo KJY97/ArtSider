@@ -492,31 +492,23 @@ export default new Vuex.Store({
         })
       }
     },
-    // 인기 공연 불러오기
-    getPopularShow({ state }){
-      state
-      const url = '/api/show/popular/'
-      // const userdata = data
-      console.log('인기공연')
-      return axios.get(url)
-      
-    },
     // 카테고리 별 인기공연
     getCategoryPopularShow({ state }, data){
       state
-      const url = ''
-      if ( data.num == 1) {
-        this.url = '/api/show/CL/popular'
-      } else if ( data.num == 2) {
-        this.url = '/api/show/CO/popular'
-      } else if ( data.num == 3) {
-        this.url = '/api/show/FA/popular'
-      } else if ( data.num == 4) {
-        this.url = '/api/show/MU/popular'
-      } else if ( data.num == 5) {
-        this.url = '/api/show/DR/popular'
+      var url = ''
+      if (data == 0) {
+        url = '/api/show/popular/'
+      } else if ( data == 1) {
+        url = '/api/show/CL/popular'
+      } else if ( data == 2) {
+        url = '/api/show/CO/popular'
+      } else if ( data == 3) {
+        url = '/api/show/FA/popular'
+      } else if ( data == 4) {
+        url = '/api/show/MU/popular'
+      } else if ( data == 5) {
+        url = '/api/show/DR/popular'
       }
-
       // 카테고리
       // -MU :뮤지컬
       // -CL: 클래식/오페라
@@ -527,26 +519,22 @@ export default new Vuex.Store({
       // const userdata = data
       return axios.get(url)
     },
-    // 곧 개봉하는 공연 불러오기
-    getComingSoonShow({ state }){
-      state
-      const url = '/api/show/startDate/'
-      return axios.get(url)
-    },
-
+    // 카테고리별 곧 개봉 공연
     getCategoryComingSoonShow({ state }, data){
       state
-      const url = ''
-      if ( data.num == 1) {
-        this.url = '/api/show/CL/startDate'
+      var url = ''
+      if (data.num == 0) {
+        url = '/api/show/startDate/'
+      } else if ( data.num == 1) {
+        url = '/api/show/CL/startDate'
       } else if ( data.num == 2) {
-        this.url = '/api/show/CO/startDate'
+        url = '/api/show/CO/startDate'
       } else if ( data.num == 3) {
-        this.url = '/api/show/FA/startDate'
+        url = '/api/show/FA/startDate'
       } else if ( data.num == 4) {
-        this.url = '/api/show/MU/startDate'
+        url = '/api/show/MU/startDate'
       } else if ( data.num == 5) {
-        this.url = '/api/show/DR/startDate'
+        url = '/api/show/DR/startDate'
       }
 
       // 카테고리
@@ -560,26 +548,22 @@ export default new Vuex.Store({
       return axios.get(url)
     },
 
-    // 곧 끝나는 공연 불러오기
-    getComingEndShow({ state }){
-      state
-      const url ='/api/show/endDate/'
-      return axios.get(url)
-    },
-
+    // 카테고리별 곧 끝나는 공연 불러오기
     getCategoryComingEndShow({ state }, data){
       state
-      const url = ''
-      if ( data.num == 1) {
-        this.url = '/api/show/CL/endDate'
+      var url = ''
+      if (data.num == 0) {
+        url = '/api/show/endDate/'
+      } else if ( data.num == 1) {
+        url = '/api/show/CL/endDate'
       } else if ( data.num == 2) {
-        this.url = '/api/show/CO/endDate'
+        url = '/api/show/CO/endDate'
       } else if ( data.num == 3) {
-        this.url = '/api/show/FA/endDate'
+        url = '/api/show/FA/endDate'
       } else if ( data.num == 4) {
-        this.url = '/api/show/MU/endDate'
+        url = '/api/show/MU/endDate'
       } else if ( data.num == 5) {
-        this.url = '/api/show/DR/endDate'
+        url = '/api/show/DR/endDate'
       }
 
       // 카테고리

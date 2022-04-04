@@ -1,21 +1,18 @@
 <template>
 <div>
-  <div class=recommand-list>
   <Popular 
+  :swiperOption="swiperOption"
   :num = num
   :genre = genre
   />
-  </div>
-  <div class=recommand-list>
-  <ComingEnd 
-  :num = num
-  />
-  </div>
-  <div class=recommand-list>
   <ComingSoon 
+  :swiperOption="swiperOption"
   :num = num
   />
-  </div>
+  <ComingEnd 
+  :swiperOption="swiperOption"
+  :num = num
+  />
   <!-- <div class=recommand-list>
   <MusicalPreferenceTag />
   </div>
@@ -29,9 +26,9 @@
 </template>
 
 <script>
-import Popular from '../views/show/recommand/category/Popular.vue'
-import ComingEnd from '../views/show/recommand/category/ComingSoon.vue'
-import ComingSoon from '../views/show/recommand/category/ComingEnd.vue'
+import Popular from '../recommand/Popular.vue'
+import ComingEnd from '../recommand/ComingSoon.vue'
+import ComingSoon from '../recommand/ComingEnd.vue'
 // import MusicalPreferenceTag from '../views/show/recommand/musical/PreferenceTag.vue'
 // import MusicalSimilar from '../views/show/recommand/musical/Similar.vue'
 // import MusicalPlace from '../views/show/recommand/musical/Place.vue'
@@ -42,8 +39,15 @@ export default {
   data(){
     return{
       num: 4,
-      genre: '뮤지컬'
-      // swiper: null,
+      genre: '뮤지컬',
+      swiperOption: {
+        slidesPerView: 5,
+        spaceBetween: 30,
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev'
+        }
+      }
     }
   },
 
@@ -58,4 +62,30 @@ export default {
 }
 </script>
 <style>
+.swiper {
+  position: relative;
+  width: 100%;
+  height: 40%;
+  
+}
+
+.swiper-slide {
+  text-align: center;
+  font-size: 18px;
+  background: gray;
+
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+  cursor: pointer;
+}
 </style>

@@ -1,6 +1,8 @@
 <template>
   <div class="home">
-    <HomeCarousel />
+    <HomeCarousel 
+    :num=0
+    />
     <v-container>
       <p class="text-center">
         <span class="text-h2"> Poster </span>
@@ -59,8 +61,8 @@ export default {
   },
 
   methods: {
-    getPopularShow: function() {
-      this.$store.dispatch('getPopularShow')
+    getCategoryPopularShow: function(num) {
+      this.$store.dispatch('getCategoryPopularShow', num)
       .then(res => {
         this.popularList = res.data.items.slice(0,6)
       })
@@ -71,7 +73,7 @@ export default {
   },
   created: function () {
     console.log('생성')
-    this.getPopularShow()
+    this.getCategoryPopularShow(0)
   }
 }
 </script>

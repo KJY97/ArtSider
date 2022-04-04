@@ -12,6 +12,14 @@ import Etiquette from './etiquette'
 import ShowDetail from './showDetail'
 import Profile from './profile'
 
+// 카테고리별
+import Classic from './category/Classic'
+import Concert from './category/Concert'
+import Family from './category/Family'
+import Musical from './category/Musical'
+import Theatre from './category/Theatre'
+
+
 
 Vue.use(VueRouter)
 
@@ -26,8 +34,13 @@ const routes = [
   ...Home,
   ...ShowDetail,
   //profile
-  ...Profile
-  
+  ...Profile,
+  //category
+  ...Classic,
+  ...Concert,
+  ...Family,
+  ...Musical,
+  ...Theatre,
 ]
 
 
