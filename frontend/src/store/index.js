@@ -103,48 +103,52 @@ export default new Vuex.Store({
     addInquire({state}, data){
       state
       const url = `/api/users/show/${data.id}`
-      return axios.post(url, {
-        headers: {
-          Authorization : `Bearer ${state.token}`
-        },
+      return axios({
+        method: 'post',
+        url: url,
+        headers: { Authorization : `Bearer ${state.token}`}
       })
     },
     // 관람 후기 제거
     deleteShowReview({state}, data){
       state
       const url = `/api/show/reviews/${data.reviewId}`
-      return axios.delete(url, {
-        headers: {
-          Authorization : `Bearer ${state.token}`
-        },
+      return axios({
+        method: 'delete',
+        url: url,
+        headers: { Authorization : `Bearer ${state.token}`},
       })
     },
     // 관람 후기 수정
     putShowReview({state}, data){
       state
       const url = `/api/show/reviews/${data.reviewId}`
-      return axios.put(url, {
-        headers: {
-          Authorization : `Bearer ${state.token}`
-        },
-        userId: data.userId,
-        title: data.title,
-        contents: data.contents,
-        rating: data.rating,
+      return axios({
+        method: 'put',
+        url: url,
+        headers: { Authorization : `Bearer ${state.token}`},
+        data: {
+          userId: data.userId,
+          title: data.title,
+          contents: data.contents,
+          rating: data.rating,
+        }
       })
     },
     // 관람 후기 생성
     createShowReview({state}, data){
       state
       const url = `/api/show/reviews/${data.id}`
-      return axios.post(url, {
-        headers: {
-          Authorization : `Bearer ${state.token}`
-        },
-        userId: data.userId,
-        title: data.title,
-        contents: data.contents,
-        rating: data.rating,
+      return axios({
+        method: 'post',
+        url: url,
+        headers: { Authorization : `Bearer ${state.token}`},
+        data: {
+          userId: data.userId,
+          title: data.title,
+          contents: data.contents,
+          rating: data.rating,
+        }
       })
     },
     // 관람 후기 목록 조회
@@ -172,10 +176,10 @@ export default new Vuex.Store({
     // 기대평 제거
     deleteShowExpectations({state},data){
       const url = `/api/show/expectations/${data.expectationId}`
-      return axios.delete(url, { 
-        headers: {
-          Authorization : `Bearer ${state.token}`
-        },
+      return axios({
+        method: 'delete',
+        url: url,
+        headers: { Authorization : `Bearer ${state.token}`},
       })
     },
     // 기대평 수정
@@ -183,13 +187,15 @@ export default new Vuex.Store({
       state
       console.log(data)
       const url = `/api/show/expectations/${data.expectationId}`
-      return axios.put(url, {
-        headers: {
-          Authorization : `Bearer ${state.token}`
-        },
-        userId: data.userId,
-        title: data.title,
-        contents: data.contents,
+      return axios({
+        method: 'put',
+        url: url,
+        headers: { Authorization : `Bearer ${state.token}`},
+        data: {
+          userId: data.userId,
+          title: data.title,
+          contents: data.contents,
+        }
       })
     },
 
@@ -197,13 +203,15 @@ export default new Vuex.Store({
     createShowExpectations({state}, data){
       state
       const url = `/api/show/expectations/${data.id}`
-      return axios.post(url, {
-        headers: {
-          Authorization : `Bearer ${state.token}`
-        },
-        userId: data.userId,
-        title: data.title,
-        contents: data.contents,
+      return axios({
+        method: 'post',
+        url: url,
+        headers: { Authorization : `Bearer ${state.token}`},
+        data: {
+          userId: data.userId,
+          title: data.title,
+          contents: data.contents,
+        }
       })
     },
     // 기대평 목록 조회
@@ -227,66 +235,54 @@ export default new Vuex.Store({
     getRelatedTagShow({state}, data){
       state
       const url = `/api/show/recommand/user/tag`
-      return axios.get(url,{
-        headers: {
-          Authorization : `Bearer ${state.token}`
-        },
-        userTag: data.userTag
+      return axios({
+        method: 'get',
+        url: url,
+        headers: { Authorization : `Bearer ${state.token}`},
+        data: {
+          userTag: data.userTag
+        }
       })
+      
     },
     // 공연의 연관 공연 조회
     getRelatedShow: function ({state}, data) {
       state
       const url = `/api/show/recommand/${data.showId}/relatedShow`
-      return axios.get(url,{
-        headers: {
-          Authorization : `Bearer ${state.token}`
-        },
-        userTag: data.showTag
+      return axios({
+        method: 'get',
+        url: url,
+        headers: { Authorization : `Bearer ${state.token}`},
+        data: {
+          userTag: data.showTag
+        }
       })
     },
     // 유저가 좋아할 확률 업데이트
     updateUserExpectation: function ({state},data) {
       const url = `/api/show/recommand/${data.showId}/probability`
-      return axios.post(url,{
-        headers: {
-          Authorization : `Bearer ${state.token}`
-        },
+      return axios({
+        method: 'post',
+        url: url,
+        headers: { Authorization : `Bearer ${state.token}`}
       })
     },
     // 사용자간의 유사도 추천 서비스
     getSimilarityShow: function ({state}) {
       const url = `/api/show/recommend/similarity`
-      return axios.get(url,{
-        headers: {
-          Authorization : `Bearer ${state.token}`
-        },
+      return axios({
+        method: 'get',
+        url: url,
+        headers: { Authorization : `Bearer ${state.token}`}
       })
     },
     // 유저가 좋아할 확률 조회
     getUserExpectation: function ({state},data) {
       const url = `/api/show/recommand/${data.showId}/probability`
-      return axios.post(url,{
-        headers: {
-          Authorization : `Bearer ${state.token}`
-        },
-      })
-    },
-
-    
-    
-
-    // 티켓사이트 이동 & 선호 목록 추가
-    goTicketSite({state}, data){
-      state
-      const url = `/api/show/${data.id}/preference`
-      return axios.post(url, {
-        headers: {
-          Authorization : `Bearer ${state.token}`
-        },
-        data: {
-          userId: state.userInfo.userId,
-        }
+      return axios({
+        method: 'post',
+        url: url,
+        headers: { Authorization : `Bearer ${state.token}`}
       })
     },
     // 공연 상세 정보 불러오기
@@ -379,20 +375,20 @@ export default new Vuex.Store({
     addPreference({state}, data) {
       state
       const url = `/api/users/show/${data.id}/preference`
-      return axios.post(url, {
-        headers: {
-          Authorization : `Bearer ${state.token}`
-        },
+      return axios({
+        method: 'post',
+        url: url,
+        headers: { Authorization : `Bearer ${state.token}`}
       })
     },
     // 선호 목록 제거
     deletePreference({state}, data) {
       state
       const url = `/api/users/show/${data.id}/preference`
-      return axios.delete(url, {
-        headers: {
-          Authorization : `Bearer ${state.token}`
-        },
+      return axios({
+        method: 'delete',
+        url: url,
+        headers: { Authorization : `Bearer ${state.token}`}
       })
     },
 

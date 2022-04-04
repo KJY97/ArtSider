@@ -6,6 +6,26 @@
         <div class="d-flex justify-center">
           <div class="d-flex flex-column" style="margin-right:100px">
             <v-img :src="showDetail.posterPath" style="max-width:300px; width:100%; min-width:300px; height:100%; min-height:400px; max-height:400px"></v-img>
+            <div class="d-flex justify-center" style="max-width:300px;">
+              <v-btn
+              v-if="isPreference"
+              icon
+              color="deep-orange"
+              @click="changePreference()"
+            >
+              <v-icon>mdi-star</v-icon>
+              선호 목록 제거
+            </v-btn>
+            <v-btn
+              v-if="!isPreference"
+              icon
+              color="grey"
+              @click="changePreference()"
+            >
+              <v-icon>mdi-star</v-icon>
+              선호 목록 추가
+            </v-btn>
+            </div>
             <div class="d-flex flex-wrap justify-center" style="max-width:300px;">
               <span v-for="(Tag,idx) in hashTag" :key="idx" class="py-2">
                 <v-chip label color="pink" draggable text-color="white" class="mr-1"><v-icon left>mdi-label</v-icon>{{ Tag }}</v-chip>
@@ -188,7 +208,7 @@ export default {
       dialog: false,
       hashTag: '',
       userId: '',
-
+      isPreference: false,
     }
   },
 
@@ -197,7 +217,7 @@ export default {
     getDetail(id) {
       this.$store.dispatch('getDetail', {id:id})
       .then(res => {
-        console.log(res.data)
+        console.log('데이터', res.data)
         this.showDetail = res.data.items[0]
         this.showDetail.startDate = this.showDetail.startDate.slice(0,10)
         const today = new Date()
@@ -205,7 +225,9 @@ export default {
         const month = ('0' + (today.getMonth() + 1)).slice(-2);
         const day = ('0' + today.getDate()).slice(-2);
         const dateString = year + '-' + month  + '-' + day;
-        this.showDetail.endDate = this.showDetail.endDate.slice(0,10)
+        if (this.showDetail.endDate) {
+          this.showDetail.endDate = this.showDetail.endDate.slice(0,10)
+        }
         if (this.showDetail.endDate < dateString) {
           this.isEnd = true
         }
@@ -216,6 +238,7 @@ export default {
           const firstText = text.replaceAll('원', '원\n')
           const newText = firstText.replaceAll('/\n/', '<br/>')
           const p = document.querySelector('.price')
+          console.log(newText)
           p.innerText = newText
         }
       })
@@ -249,6 +272,14 @@ export default {
       .then((res) => {
         this.userId = res.data.userId
       })
+    },
+    changePreference: function() {
+      if (this.isPreference == false) {
+        this.addPreference()
+      } else {
+        this.deletePreference()
+      }
+      this.isPreference = !this.isPreference
     }
   },
   created: function () {

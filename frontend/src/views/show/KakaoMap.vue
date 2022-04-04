@@ -38,7 +38,11 @@ export default {
   mounted() {
     this.$nextTick(function() {
       if (window.kakao && window.kakao.maps) {
-        this.initMap();
+        const script = document.createElement("script");
+        script.onload = () => kakao.maps.load(this.initMap);
+        script.src =
+          "//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=c5c67b82497fef1c4c464ebe107de3ea&libraries=services";
+        document.head.appendChild(script);
       } else {
         const script = document.createElement("script");
         /* global kakao */
@@ -53,6 +57,8 @@ export default {
     initMap() {
       const address = this.artCenterAddress
       const name = this.name
+      console.log('주소', address)
+      console.log('이름', name)
       const mapContainer = document.getElementById("map"),
         mapOption = {
               center: new kakao.maps.LatLng(127.298, 36.354), // 지도의 중심좌표
