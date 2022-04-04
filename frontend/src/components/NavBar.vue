@@ -1,8 +1,7 @@
 <template>
-  <v-app-bar 
+  <v-app-bar
   app
   scroll-target="#main"
-  absolute
   flat
   inverted-scroll
   style="background-color: rgba(233,30,99,0.9)"
@@ -98,15 +97,17 @@ export default {
         { title: "콘서트"},
         { title: "클래식/오페라/무용"},
         { title: "아동/키즈"}
-      ]
+      ],
     }
   },
+
 
 
 }
 </script>
 
 <style>
+
 .v-text-field.v-text-field--enclosed .v-text-field__details{
   display: none;
 }

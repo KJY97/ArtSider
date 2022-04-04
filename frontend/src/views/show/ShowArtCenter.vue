@@ -1,18 +1,15 @@
 <template>
   <div>
-    <p>공연장 위치</p>
-    <p>{{ showArtCenterList.name }}</p>
-    <p>{{ showArtCenterList.address }}</p>
-    <p>{{ showArtCenterList.infor.seat_count }}</p>
-    <p>{{ showArtCenterList.infor.tel_num }}</p>
-    <p>{{ showArtCenterList.infor.url }}</p>
-    <p>{{ showArtCenterList.infor.specificity }}</p>
+    <div class="d-flex justify-center flex-column align-center mt-5">
+      <h3>공연장 및 주변시설</h3>
+      <p v-if="showArtCenterList.artCenterTel">공연장 전화 번호 : {{ showArtCenterList.artCenterTel }}</p>
+    </div>
+    <br>
     <KakaoMap 
-      :latitude= showArtCenterList.latitude
-      :longitude= showArtCenterList.longitude
-      :name= showArtCenterList.name
+      :artCenterAddress= showArtCenterList.artCenterAddress
+      :name= showArtCenterList.artCenterName
     />
-    
+    <br>
   </div>
 </template>
 
@@ -22,41 +19,25 @@ import KakaoMap from "./KakaoMap";
 export default {
   name: 'ShowArtCenter',
   props: {
-    ArtCenterName: Object
+    ArtCenterName: String,
   },
   components: {
     KakaoMap
   },
   data: function() {
     return{
-      showArtCenterList: {
-        concertId: 1,
-        area: "경기",
-        name: "문화누리공연장",
-        latitude: 37.53,
-        longitude: 127.5,
-        address: "경기 고양시 덕양구 ??로 ??번길",
-        infor: {
-          open_year : 2001,
-          seat_count: 300,
-          tel_num: "031-854-1222",
-          url: "https://munhwacity.go.kr",
-          specificity : "주차시설 협소",
-        }
-      },
+      showArtCenterList: [],
     }
   },
   methods: {
-    getshowArtCenter: function (ArtCenterName) {
+    getShowArtCenter: function (ArtCenterName) {
       this.$store.dispatch('getshowArtCenter', {ArtCenterName:ArtCenterName})
       .then(res => {
-        console.log(res)
         this.showArtCenterList = res.data.items[0]
       })
     },
   },
   created: function () {
-    this.id = this.$route.params.id
     this.getShowArtCenter(this.ArtCenterName)
   },
 

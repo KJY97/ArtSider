@@ -11,7 +11,7 @@
       </v-card-title>
 
       <v-container>
-        <v-form>
+        <v-form @submit="(e) => { e.preventDefault, getToken()}">
           <v-text-field
             v-model="userEmail"
             label="이메일"
@@ -28,28 +28,25 @@
             required
             @click:append="passwordShow = !passwordShow"
           ></v-text-field>
-        </v-form>
-        <div
-          class="other-options-wrapper"
-        >
-          <p 
-            class="option"
-            @click="passwordSearchDialog = true"
+          <div
+            class="other-options-wrapper"
           >
-           비밀번호 찾기 </p>
+            <p 
+              class="option"
+              @click="passwordSearchDialog = true"
+            >
+            비밀번호 찾기 </p>
 
-        </div>
-        <v-card-actions
-        class="px-0"
-        >
+          </div>
           <v-btn
             outlined
             width="100%"
-            @click="login"
+            type="submit"
+            @click="getToken"
           >
             로그인
           </v-btn>
-        </v-card-actions>
+        </v-form>
       </v-container>
     </v-card>
 
@@ -87,7 +84,8 @@ export default {
   methods:{
     getToken(){
         this.$store.dispatch('getToken', {userEmail: this.userEmail, password: this.userPassword})
-    }
+    },
+
   },
 
   computed:{

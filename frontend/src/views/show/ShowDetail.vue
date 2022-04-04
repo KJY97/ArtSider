@@ -2,10 +2,30 @@
   <div class="d-flex justify-center" style="padding-top: 100px">
     <div>
       <div class="d-flex flex-column" style="max-width:900px; min-width:900px; margin-left: 150px">
-        <h1 style="padding-left:30px">{{ showName }}</h1>
+        <h1 style="padding-left:30px">{{ showDetail.showName }}</h1>
         <div class="d-flex justify-center">
           <div class="d-flex flex-column" style="margin-right:100px">
-            <v-img :src="posterPath" style="max-width:300px; width:100%; min-width:300px; height:100%; min-height:400px; max-height:400px"></v-img>
+            <v-img :src="showDetail.posterPath" style="max-width:300px; width:100%; min-width:300px; height:100%; min-height:400px; max-height:400px"></v-img>
+            <div class="d-flex justify-center" style="max-width:300px;">
+              <v-btn
+              v-if="isPreference"
+              icon
+              color="deep-orange"
+              @click="changePreference()"
+            >
+              <v-icon>mdi-star</v-icon>
+              선호 목록 제거
+            </v-btn>
+            <v-btn
+              v-if="!isPreference"
+              icon
+              color="grey"
+              @click="changePreference()"
+            >
+              <v-icon>mdi-star</v-icon>
+              선호 목록 추가
+            </v-btn>
+            </div>
             <div class="d-flex flex-wrap justify-center" style="max-width:300px;">
               <span v-for="(Tag,idx) in hashTag" :key="idx" class="py-2">
                 <v-chip label color="pink" draggable text-color="white" class="mr-1"><v-icon left>mdi-label</v-icon>{{ Tag }}</v-chip>
@@ -17,39 +37,45 @@
             <li class="li-info">
               <strong class="main-label">장소</strong>
               <div class="sub-label">
-                {{ concertHall }}
+                {{ showDetail.artCenterName }}
               </div>
             </li>
             <li class="li-info">
               <strong class="main-label">공연 카테고리</strong>
               <div class="sub-label">
-                {{ category }}
+                {{ showDetail.category }}
               </div>
             </li>
             <li class="li-info">
               <strong class="main-label">공연기간</strong>
               <div class="sub-label">
-                {{ start_date }} ~ {{ end_date }}
+                {{ showDetail.startDate }} ~ {{ showDetail.endDate }}
+              </div>
+            </li>
+            <li class="li-info" v-if="!showDetail.endDate">
+              <strong class="main-label">오픈런 여부</strong>
+              <div class="sub-label">
+                Y
               </div>
             </li>
             <li class="li-info">
               <strong class="main-label">공연시간</strong>
               <div class="sub-label">
-                {{ runTime }}
+                {{ showDetail.runtime }}
               </div>
             </li>
             <li class="li-info">
               <strong class="main-label">관람연령</strong>
               <div class="sub-label">
-                {{ age }}
+                {{ showDetail.age }}
               </div>
             </li>
-            <li class="li-info">
+            <li class="li-info d-flex" v-if="showDetail.price">
               <strong class="main-label">가격</strong>
-              <div class="sub-label">
-                {{ price }}원
+              <div class="sub-label price">
               </div>
             </li>
+            <br>
             
             <div class="mt-auto">
               <v-dialog
@@ -70,7 +96,6 @@
                   >
                     예매하러가기
                   </v-btn>
-                  <v-btn rounded large disabled v-if="isEnd" style="width:340px;">종료 된 공연입니다</v-btn>
                 </template>
                 <v-card>
                   <v-card-title class="text-h5">
@@ -98,6 +123,7 @@
                   </v-card-actions>
                 </v-card>
               </v-dialog>
+              <v-btn rounded large disabled v-if="isEnd" style="width:340px;">종료 된 공연입니다</v-btn>
               <!-- disable 줄것 -->
             </div>
           </ul>
@@ -121,24 +147,23 @@
           <ShowInfo
             :id="id"
             v-if="number == 1"
-            :subPosterPath = subPosterPath
-            :story = story
-            :cast = cast
-            :producer = producer
+            :showDetailImg = showDetail.showDetailImg
           ></ShowInfo>
 
           <ShowReviews
             :id="id"
             v-if="number == 2"
+            :userId="userId"
           ></ShowReviews>
 
           <ShowExpectations
             :id="id"
             v-if="number == 3"
+            :userId="userId"
           ></ShowExpectations>
 
           <ShowArtCenter
-            :ArtCenterName="this.concertHall"
+            :ArtCenterName="showDetail.artCenterName"
             v-if="number == 4"
           ></ShowArtCenter>
         </div>
@@ -176,35 +201,14 @@ export default {
 
   data: function () {
     return {
+      showDetail: [],
       id: '',
-      showName : '지킬 앤 하이드',
-      state: '공연중',
-      age: '9세 이상',
-      posterPath: '//ticketimage.interpark.com/Play/image/large/21/21007693_p.gif',
-      subPosterPath: [ '//ticketimage.interpark.com/Play/image/large/21/21007693_p.gif', '//ticketimage.interpark.com/Play/image/large/21/21007693_p.gif'],
-      category: '뮤지컬',
-      hashTag: [ '흥미진진', '존잼', '노래맛집'],
-      concertHall: 'xx문화극장(서울)',
-      runTime: '150분',
-      price: 35000,
-      start_date: '2022-01-30',
-      end_date:  '2022-03-02',
-      open_run: false,
-      story: '어쩌구 저쩌구 줄거리 소개',
-      time: '상시공연',
-      ticketingUrl: 'https://interpark.com',
-      cast: [ '배우1', '배우2', '배우3'],
-      producer: ['제작사1', '제작사2'],
-      relatedShow: [{
-        id: '1',
-        posterPath: '//ticketimage.interpark.com/Play/image/large/21/21007693_p.gif',
-      },{
-        id: '2',
-        posterPath: '//ticketimage.interpark.com/Play/image/large/21/21007693_p.gif',
-      }],
       isEnd: false,
       number: 1,
       dialog: false,
+      hashTag: '',
+      userId: '',
+      isPreference: false,
     }
   },
 
@@ -213,42 +217,79 @@ export default {
     getDetail(id) {
       this.$store.dispatch('getDetail', {id:id})
       .then(res => {
-        console.log(res)
+        this.showDetail = res.data.items[0]
+        this.showDetail.startDate = this.showDetail.startDate.slice(0,10)
+        const today = new Date()
+        const year = today.getFullYear();
+        const month = ('0' + (today.getMonth() + 1)).slice(-2);
+        const day = ('0' + today.getDate()).slice(-2);
+        const dateString = year + '-' + month  + '-' + day;
+        if (this.showDetail.endDate) {
+          this.showDetail.endDate = this.showDetail.endDate.slice(0,10)
+        }
+        if (this.showDetail.endDate < dateString) {
+          this.isEnd = true
+        }
+      })
+      .then(() => {
+        if (this.showDetail.price) {
+          const text = this.showDetail.price
+          const firstText = text.replaceAll('원', '원\n')
+          const newText = firstText.replaceAll('/\n/', '<br/>')
+          const p = document.querySelector('.price')
+          p.innerText = newText
+        }
       })
     },
     changeShow: function(number) {
       this.number = number
     },
+    // 선호목록 추가
+    addPreference: function() {
+      this.$store.dispatch('addPreference', {id:this.id})
+      .then(() => {
+        this.isPreference = !this.isPreference
+      })
+    },
+    // 선호목록 제거
+    deletePreference: function() {
+      this.$store.dispatch('deletePreference', {id:this.id})
+      .then(() => {
+        this.isPreference = !this.isPreference
+      })
+    },
     // 티켓사이트 이동 & 선호 목록 추가
     goTicketSite: function(number) {
       if (number == 1) {
-        this.$store.dispatch('getDetailgoTicketSite', {id:this.id})
+        this.addPreference()
       }
       // 예매사이트로 가게 하기
-      window.location.href=`https://interpark.com/${this.showId}`
-    },
-    // 조회한 공연 추가
-    addLookUp: function () {
-      this.$store.dispatch('addLookUp', {id:this.id})
-    },
-    // 연관 공연 추가
-    addRelatedShow: function () {
-      this.$store.dispatch('addRelatedShow', {id:this.id})
-      .then((res) => {
-        console.log(res)
-        // this.relatedShow = res.data
-      })
+      window.location.href=`https://tickets.interpark.com/goods/${this.showDetail.showId}`
     },
     // 연관 공연 상세보기 페이지로 이동
     moveToShow: function(id) {
       this.$router.push({name: 'ShowDetail', params: {id : id}})
+    },
+    // 유저 정보 가져오기
+    getUserInfo: function() {
+      this.$store.dispatch('getUserInfo')
+      .then((res) => {
+        this.userId = res.data.userId
+      })
+    },
+    changePreference: function() {
+      if (this.isPreference == false) {
+        this.addPreference()
+      } else {
+        this.deletePreference()
+      }
     }
   },
   created: function () {
-    // this.id = this.$route.params.id
-    this.id = 1
-    this.getDetail(1)
-    
+    this.id = this.$route.params.showId
+    // this.id = 4
+    this.getDetail(this.id)
+    this.getUserInfo()
   }
 }
 </script>

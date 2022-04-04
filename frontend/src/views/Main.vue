@@ -1,15 +1,42 @@
 <template>
 <div>
-  <div class=recommand-list>
-  <Popular />
-  </div>
-  <div class=recommand-list>
+  <Popular 
+    :swiperOption="swiperOption"
+    :num = 0
+    :genre = 0
+  />
+  <ComingSoon
+    :swiperOption="swiperOption"
+    :num = 0
+  />
+  <ComingEnd 
+    :swiperOption="swiperOption"
+    :num = 0
+  />
+</div>
+
+
+
+<!-- <swiper class="swiper" 
+:options="swiperOption">
+  <swiper-slide
+   v-for="(test, i) in tests"
+    :key="i"
+  > 
+    {{ i }}
+  </swiper-slide>
+  <div class="swiper-button-prev" slot="button-prev"></div> 
+  <div class="swiper-button-next" slot="button-next"></div> -->
+  <!-- <div class=recommand-list>
+    <Popular />
+  </div> -->
+  <!-- <div class=recommand-list>
   <ComingEnd />
   </div>
   <div class=recommand-list>
   <ComingSoon />
-  </div>
-  <div class=recommand-list>
+  </div> -->
+  <!-- <div class=recommand-list>
   <PreferenceTag />
   </div>
   <div class=recommand-list>
@@ -17,27 +44,31 @@
   </div>
   <div class=recommand-list>
   <Place />
-  </div>
-</div>
+  </div> -->
+<!-- </swiper> -->
 </template>
 
 <script>
-// import Swiper from 'swiper/js/swiper.esm.bundle'
-// import 'swiper/css/swiper.css'
-
 import Popular from '../views/show/recommand/Popular.vue'
 import ComingEnd from '../views/show/recommand/ComingSoon.vue'
 import ComingSoon from '../views/show/recommand/ComingEnd.vue'
-import PreferenceTag from '../views/show/recommand/PreferenceTag.vue'
-import Similar from '../views/show/recommand/Similar.vue'
-import Place from '../views/show/recommand/Place.vue'
+// import PreferenceTag from '../views/show/recommand/PreferenceTag.vue'
+// import Similar from '../views/show/recommand/Similar.vue'
+// import Place from '../views/show/recommand/Place.vue'
 
 
 export default {
-  name: 'swiperTest',
+  name: 'Main',
   data(){
     return{
-      // swiper: null,
+      swiperOption: {
+        slidesPerView: 5,
+        spaceBetween: 30,
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev'
+        }
+      }
     }
   },
 
@@ -45,33 +76,34 @@ export default {
     Popular,
     ComingEnd,
     ComingSoon,
-    PreferenceTag,
-    Similar,
-    Place,
+    // PreferenceTag,
+    // Similar,
+    // Place,
   },
-  // axios 로직 
-  // 클릭했을때 상세정보로 이동
-  // 카테고리별 일반추천 항목
-  // 카테고리 별 메인화면 컴포넌트
-  // 카테고리 별 createHook 포스터 정보 받아오게
-  // 일단 에티켓 쳐내고 
-  // 
+
   // mounted(){
   //   this.swiper = new Swiper('.swiper', {
-  //     slidesPerView: 9,
-  //     slidePerGroup: 6,
+  //     observer : true,
+  //     observerParents : true,
+  //     initialSlide: 1,
+  //     loop: true,
+  //     slidesPerView: 5,
+  //     slidePerGroup: 5,
+  //     spaceBetween : 30,
+  //     touchRatio: 0,
   //     direction: 'horizontal',
   //     navigation: {
   //       nextEl: '.swiper-button-next',
   //       prevEl: '.swiper-button-prev'
   //     },
-  //   })
-  // }
+  //   });
+  // },
+  
 }
 </script>
 <style>
 
-/* .swiper {
+.swiper {
   position: relative;
   width: 100%;
   height: 40%;
@@ -95,17 +127,9 @@ export default {
   -ms-flex-align: center;
   -webkit-align-items: center;
   align-items: center;
+  cursor: pointer;
 }
 
-.rank {
-  color: #000;
-  -webkit-text-stroke: 1px #fff;
-  position: absolute;
-  font-size: 4rem;
-}
 
-.recommand-list {
-  margin-bottom: 4rem;
-} */
 
 </style>

@@ -1,30 +1,7 @@
 <template>
   <div style="margin-top:30px">
     <div class="d-flex align-center justify-space-between">
-      <p>총 {{ showReviewsList.length }}개의 관람후기가 등록되었습니다.</p>
-      <!-- <div>
-        <v-text-field
-          solo
-          flat
-          dense
-          background-color="#FFF0E1"
-          color="black"
-          style="margin-left:200px; max-width:200px;"
-          v-model="searchTitle"
-        >
-          <v-btn
-            slot="append"
-            icon
-            @click="searchReview(searchTitle)"
-          >
-            <v-icon
-              color="gray"
-            >
-              mdi-magnify
-            </v-icon>
-          </v-btn>
-        </v-text-field>
-      </div> -->
+      <p>총 {{ reviewLength }}개의 관람후기가 등록되었습니다.</p>
       <v-btn color="black" style="float: right; color:white; opacity:0.8s; margin-left:25px" @click="drawUpReview">관람후기 작성</v-btn>
     </div>
     <br>
@@ -36,7 +13,7 @@
         <v-text-field v-model.trim="title" label="제목(30자 이내로 작성해주세요)" :rules="titleRule"></v-text-field>
         <v-textarea v-model.trim="contents" label="내용(100자 이내로 작성해주세요)" rows="4" :rules="contentsRule"></v-textarea>
       </div>
-      <v-btn @click="createShowReview" style="width:500px; color:white;" color="black">등록</v-btn>
+      <v-btn @click="createShowReview(userId)" style="width:500px; color:white;" color="black">등록</v-btn>
       <br>
     </div>
 
@@ -71,8 +48,8 @@
         </v-list>
       </v-menu>
     </div>
-    <div v-if="showReviewsList.length == 0" >
-      리뷰가 없네요.
+    <div v-if="showReviewsList.length == 0">
+      <h2 class="d-flex justify-center" style="margin: 150px 0px; ">리뷰가 없습니다.</h2> 
     </div>
     <div v-else v-for="(showReview, idx) in showReviewsList" :key="idx" style="margin-top:50px;">
       <div class="container" style="border: 1px solid rgba(0, 0, 0, .3); border-radius:20px;">
@@ -82,8 +59,8 @@
         <div>
           <br>
           <strong>{{showReview.title}}</strong>
-          <v-btn style="float: right;" v-if="checkId == showReview.userId" text @click="deleteShowInfo(showReview.reviewId)">삭제</v-btn>
-          <v-btn style="float: right;" v-if="checkId == showReview.userId" text @click="openUpdate(showReview)">수정</v-btn>
+          <v-btn style="float: right;" v-if="userId == showReview.userId" text @click="deleteShowReview(showReview.reviewId)">삭제</v-btn>
+          <v-btn style="float: right;" v-if="userId == showReview.userId" text @click="openUpdate(showReview)">수정</v-btn>
         </div>
         <br>
         <!-- <span>{{$moment(showReview.created_date).format('YYYY-MM-DD hh:mm:ss')}}</span> -->
@@ -98,12 +75,13 @@
             <v-textarea v-model.trim="editContents" rows="4" :rules="contentsRule"></v-textarea>
           </div>
           <div>
-            <v-btn style="width:150px; color:white;" color="primary" @click="putShowInfo(showReview.reviewId)">수정완료</v-btn>
+            <v-btn style="width:150px; color:white;" color="primary" @click="putShowReview(showReview.reviewId)">수정완료</v-btn>
             <v-btn style="width:150px; color:white;" color="red" @click="openUpdate(showReview)">취소</v-btn>
           </div>
         </div>
       </div>
     </div>
+    <v-btn style="float:right" text @click="goNextPage" v-if="!hide">더보기</v-btn>
     
   </div>
 </template>
@@ -114,30 +92,15 @@ import StarRating from 'vue-star-rating'
 export default {
   name: 'ShowReviews',
   props: {
-    id: Object
+    id: String,
+    userId: Number
   },
   components: {
     StarRating
   },
   data: function() {
     return{
-      showReviewsList: [{  
-              reviewId : 1,
-              userId: 2,
-              userName: "LOVE천사",
-              title: "꼭 보세요.",
-              contents: "정말 재미있는 공연이었...",
-              rating: 6,
-              created_date: '2022-03-12',
-        },{  
-              reviewId : 2,
-              userId: 3,
-              userName: "LOVE천사",
-              title: "내맘대로",
-              contents: "정말 재미있는 공연이었...",
-              rating: 9,
-              created_date: '2022-03-14',
-        }],
+      showReviewsList: [],
       title: '',
       contents: '',
       rating: 0,
@@ -159,43 +122,61 @@ export default {
         { title: "평점높은순"},
         { title: "평점낮은순"},
       ],
-      searchTitle: '',
+      pageNum: 0,
+      categoryNum: 0,
+      reviewLength: 0,
+      hide: false,
     }
   },
   methods: {
     // 관람 후기 목록 조회
-    getShowReviews: function(id) {
-      this.$store.dispatch('getShowReviews', {id:id})
+    getShowReviews: function(id, num, categoryNum) {
+      this.$store.dispatch('getShowReviews', {id:id, num:num, categoryNum: categoryNum})
       .then(res => {
-        console.log(res)
-        this.showReviewsList = res.data
+        this.reviewLength = res.data.length 
+        for (let data of res.data.items) {
+          this.showReviewsList.push(data)
+        }
+      })
+      .then(() => {
+        if (this.showReviewsList.length == this.reviewLength) {
+          this.hide = true
+        } else {
+          this.hide = false
+        }
       })
     },
     // 관람 후기 생성
-    createShowReview: function(id) {
-      this.$store.dispatch('createShowReview', {id:id, title : this.title, contents : this.contents, rating : this.rating * 2})
+    createShowReview: function(userId) {
+      this.$store.dispatch('createShowReview', {id:this.id, title : this.title, contents : this.contents, rating : this.rating * 2, userId:userId})
       .then(() => {
-        console.log('성공')
-        this.getShowReviews(id)
+        this.pageNum = 0
+        this.showReviewsList = []
+        this.getShowReviews(this.id, this.pageNum, this.categoryNum)
+        this.title = ''
+        this.contents = ''
+        this.rating = 0
+        this.reviewNum = 0
       })
     },
     // 관람 후기 수정
     putShowReview: function (reviewId) {
-      this.$store.dispatch('putShowReview', {reviewId:reviewId, title : this.editTitle,contents : this.editContents, rating : this.editRating * 2})
+      this.$store.dispatch('putShowReview', {reviewId:reviewId, title : this.editTitle,contents : this.editContents, rating : this.editRating * 2, userId:this.userId})
       .then(() => {
-        console.log('수정 성공')
+        this.pageNum = 0
+        this.showReviewsList = []
+        this.reviewNum = 0
+        this.getShowReviews(this.id, this.pageNum, this.categoryNum)
       })
     },
     // 관람 후기 제거
     deleteShowReview: function(reviewId) {
       this.$store.dispatch('deleteShowReview', {reviewId:reviewId})
       .then(() => {
-        console.log('삭제 성공')
+        this.pageNum = 0
+        this.showReviewsList = []
+        this.getShowReviews(this.id, this.pageNum, this.categoryNum)
       })
-    },
-    // 유저 아이디 불러오기
-    getUserId: function () {
-      this.checkId = this.$store.dispatch('getUserId')
     },
 
     drawUpReview: function() {
@@ -212,61 +193,36 @@ export default {
       }
 
     },
+    goNextPage: function() {
+      this.pageNum += 1
+      this.getShowReviews(this.id, this.pageNum, this.categoryNum)
+    },
+    
+    // 정렬
     sortReviewList: function(category) {
       if (category == '최신순') {
-        this.showReviewsList = this.showReviewsList.sort(function(a,b){
-          if(a.created_date > b.created_date) {
-            return 1;
-          }else if (a.created_date < b.created_date) {
-            return -1;
-          } else {
-            return 0;
-          }
-        })
+        this.categoryNum = 2
       } else if (category == '오래된순') {
-        this.showReviewsList = this.showReviewsList.sort(function(a,b){
-          if(a.created_date < b.created_date){
-            return 1;
-          }else if (a.created_date > b.created_date) {
-            return -1;
-          } else {
-            return 0;
-          }
-        })
+        this.categoryNum = 1
       } else if (category == '평점높은순') {
-        this.showReviewsList = this.showReviewsList.sort(function(a,b){
-          if(a.rating < b.rating){
-            return 1;
-          }else if (a.rating > b.rating) {
-            return -1;
-          } else {
-            return 0;
-          }
-        })
+        this.categoryNum = 4
       } else if (category == '평점낮은순') {
-        this.showReviewsList = this.showReviewsList.sort(function(a,b){
-          if(a.rating > b.rating){
-            return 1;
-          }else if (a.rating < b.rating) {
-            return -1;
-          } else {
-            return 0;
-          }
-        })
+        this.categoryNum = 3
       }
-    },
-    searchReview: function(searchTitle) {
-      this.getShowReviews(this.id)
-      this.showReviewsList = this.showReviewsList.filter(post => {
-        return post.title.toLowerCase().includes(searchTitle.toLowerCase())
-      })
     },
   },
   created: function () {
-    this.id = this.$route.params.id
-    this.getShowReviews(this.id)
-    this.getUserId()
+    this.getShowReviews(this.id, this.pageNum, this.categoryNum)
+  },
+  watch: {
+    categoryNum: function () {
+      this.showReviewsList = []
+      this.pageNum = 0
+      this.getShowReviews(this.id, this.pageNum, this.categoryNum)
+      
+    },
   }
+  
 }
 </script>
 

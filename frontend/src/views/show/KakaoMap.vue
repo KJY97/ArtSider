@@ -1,20 +1,4 @@
 <template>
- <!-- <div style="margin-bottom:100px">
-  <div class="map_wrap">
-    <div id="map" style="width:100%;height:100%;position:relative;overflow:hidden;"></div>
-    <ul id="category">
-      <li id="CT1" data-order="0"> 
-        <a @click="changeCategory(0)" class="category_bg">문화시설</a>
-      </li>       
-      <li id="FD6" data-order="1"> 
-        <a @click="changeCategory(1)" class="category_bg">음식점</a>
-      </li>  
-      <li id="CE7" data-order="2"> 
-        <a @click="changeCategory(2)" class="category_bg">카페</a>
-      </li>  
-    </ul>
-  </div>
- </div> -->
 <div style="margin-bottom:100px">
   <div class="map_wrap">
     <div id="map" style="width:100%;height:100%;position:relative;overflow:hidden;"></div>
@@ -32,15 +16,13 @@
 export default {
   name: "KakaoMap",
   props: {
-    latitude: Number,
-    longitude: Number,
-    name: String,
+    artCenterAddress: String,
+    name: String
   },
   data() {
     return {
       markers: [], // 마커를 담을 배열입니다
       infowindow: null,
-      markerPositions: [[this.latitude,this.longitude]],
       ps: '',
       placeOverlay: '',
       contentNode: '', // 커스텀 오버레이의 컨텐츠 엘리먼트 입니다 
@@ -54,54 +36,70 @@ export default {
     };
   },
   mounted() {
-    if (window.kakao && window.kakao.maps) {
-      this.initMap();
-    } else {
-      const script = document.createElement("script");
-      /* global kakao */
-      script.onload = () => kakao.maps.load(this.initMap);
-      script.src =
-        "//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=c5c67b82497fef1c4c464ebe107de3ea&libraries=services";
-      document.head.appendChild(script);
-    }
+    this.$nextTick(function() {
+      if (window.kakao && window.kakao.maps) {
+        const script = document.createElement("script");
+        script.onload = () => kakao.maps.load(this.initMap);
+        script.src =
+          "//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=c5c67b82497fef1c4c464ebe107de3ea&libraries=services";
+        document.head.appendChild(script);
+      } else {
+        const script = document.createElement("script");
+        /* global kakao */
+        script.onload = () => kakao.maps.load(this.initMap);
+        script.src =
+          "//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=c5c67b82497fef1c4c464ebe107de3ea&libraries=services";
+        document.head.appendChild(script);
+      }
+    })
   },
   methods: {
     initMap() {
+      const address = this.artCenterAddress
+      const name = this.name
+      console.log('주소', address)
+      console.log('이름', name)
       const mapContainer = document.getElementById("map"),
         mapOption = {
-              center: new kakao.maps.LatLng(this.latitude, this.longitude), // 지도의 중심좌표
+              center: new kakao.maps.LatLng(127.298, 36.354), // 지도의 중심좌표
               level: 5 // 지도의 확대 레벨
-          };  
-      // 지도를 생성합니다    
-      this.map = new kakao.maps.Map(mapContainer, mapOption); 
-      this.placeOverlay = new kakao.maps.CustomOverlay({zIndex:1})
-    
-      // this.markers.forEach((marker) => marker.setMap(null));
+          };
+      console.log(address)
+      var map = new kakao.maps.Map(mapContainer, mapOption); 
+      var geocoder = new kakao.maps.services.Geocoder();
+      geocoder.addressSearch(address, function(result, status) {
+        console.log(address)
+      // 정상적으로 검색이 완료됐으면 
+      if (status === kakao.maps.services.Status.OK) {
+        var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+        console.log('진행')
+        
 
-      // // 마커 생성 및 맵에 적용
-      // const positions = this.markerPositions.map(
-      //   (position) => new kakao.maps.LatLng(...position)
-      // );
-      // if (positions.length > 0) {
-      //   this.markers = positions.map(
-      //     (position) =>
-      //       new kakao.maps.Marker({
-      //         map: this.map,
-      //         position,
-      //       })
-      //   );
-      //   const bounds = positions.reduce(
-      //     (bounds, latlng) => bounds.extend(latlng),
-      //     new kakao.maps.LatLngBounds()
-      //   );
+        // 결과값으로 받은 위치를 마커로 표시합니다
+        var marker = new kakao.maps.Marker({
+            map: map,
+            position: coords,
+        });
+        marker.setMap(map);
+        var infowindow = new kakao.maps.InfoWindow({
+          content: '<div style="width:150px;text-align:center;padding:6px 0;">' + name + '</div>',
+        });
+        kakao.maps.event.addListener(marker, 'mouseover', function() {
+          // 마커 위에 인포윈도우를 표시합니다
+          infowindow.open(map, marker);  
+        });
+        kakao.maps.event.addListener(marker, 'mouseout', function() {
+          // 마커 위에 인포윈도우를 표시합니다
+          setTimeout(() => {
+            infowindow.close()
+          }, 1500);  
+        });
 
-      //   this.map.setBounds(bounds)
-      // }
-      var markerPosition  = new kakao.maps.LatLng(this.latitude, this.longitude); 
-      var marker = new kakao.maps.Marker({
-          position: markerPosition
-      });
-      marker.setMap(this.map);
+        // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+        map.setCenter(coords);
+      }
+    })
+    this.map = map
     },
     changeCategory: function (num) {
       // 커스텀 오버레이를 숨깁니다 
@@ -113,12 +111,10 @@ export default {
       } else {
         this.cg = "CE7"
       }
-      // 커스텀 오버레이를 숨깁니다 
-      this.placeOverlay.setMap(null);
       // 지도에 표시되고 있는 마커를 제거합니다
-      this.removeMarker(); 
+      this.removeMarker(this.markers)
       var places = new kakao.maps.services.Places(this.map);
-
+    
       
       // 공공기관 코드 검색
       places.categorySearch(this.cg, this.placesSearchCB, {useMapBounds:true});
@@ -138,18 +134,30 @@ export default {
     displayPlaces: function (places) {
 
         for ( var i=0; i<places.length; i++ ) {
-
+              
           // 마커를 생성하고 지도에 표시합니다
-          var marker = this.addMarker(new kakao.maps.LatLng(places[i].y, places[i].x));
+          const marker = this.addMarker(new kakao.maps.LatLng(places[i].y, places[i].x));
           // 마커와 검색결과 항목을 클릭 했을 때
           // 장소정보를 표출하도록 클릭 이벤트를 등록합니다
-          var placeOverlay = new kakao.maps.CustomOverlay({zIndex:1})
-          kakao.maps.event.addListener(marker, 'click', this.displayPlaceInfo(places[i], placeOverlay))
+          const place = places[i]
+          const infowindow = new kakao.maps.InfoWindow({
+            });
+          kakao.maps.event.addListener(marker, 'mouseover', () => {
+            const content ='<button style="color:red; width:200px; height: 30px;" onclick="location.href=' + "'" + place.place_url + "'" +  '">' + place.place_name + '</button><br>';
+            infowindow.setContent(content)
+            infowindow.setPosition(new kakao.maps.LatLng(place.y, place.x))
+            infowindow.open(this.map, marker);
+          })
+          kakao.maps.event.addListener(marker, 'mouseout', () => {
+            setTimeout(() => {
+              infowindow.close()
+            }, 1500);
+          })
         }
     },
  
     // 마커를 생성하고 지도 위에 마커를 표시하는 함수입니다
-    addMarker: function (position, ) {
+    addMarker: function (position) {
       // console.log('마커를 생성')!
       var marker = new kakao.maps.Marker({
         position: position
@@ -162,17 +170,17 @@ export default {
     },
 
     // 지도 위에 표시되고 있는 마커를 모두 제거합니다
-    removeMarker: function () {
+    removeMarker: function (markers) {
 
-        for ( var i = 0; i < this.markers.length; i++ ) {
-            this.markers[i].setMap(null);
-        }   
+        markers.forEach((item) => {
+          item.setMap(null);
+        })
         this.markers = [];
     },
 
     // 클릭한 마커에 대한 장소 상세정보를 커스텀 오버레이로 표시하는 함수입니다
-    displayPlaceInfo: function (place, placeOverlay) {
-      placeOverlay.setMap(null);
+    displayPlaceInfo: function (place) {  
+        var placeOverlay = new kakao.maps.CustomOverlay({zIndex:1})
         var content = '<div class="placeinfo">' +
                         '   <a class="title" href="' + place.place_url + '" target="_blank" title="' + place.place_name + '">' + place.place_name + '</a><br>';   
 
@@ -196,7 +204,7 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style lang="scss" scoped >
 #map {
   width: 500px;
   height: 500px;
@@ -205,13 +213,4 @@ export default {
 .map_wrap {position:relative;width:100%;height:350px;}
 #category {position:absolute;top:10px;left:10px;border-radius: 5px; border:1px solid #909090;box-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);background: #fff;overflow: hidden;z-index: 2;}
 
-.placeinfo {position:relative;width:100%;border-radius:6px;border: 1px solid #ccc;border-bottom:2px solid #ddd;padding-bottom: 10px;background-color: #fff;}
-.placeinfo:nth-of-type(n) {border:0; box-shadow:0px 1px 2px #888;}
-.placeinfo_wrap .after {content:'';position:relative;margin-left:-12px;left:50%;width:22px;height:12px;background:url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')}
-.placeinfo a, .placeinfo a:hover, .placeinfo a:active{color:#fff;text-decoration: none;}
-.placeinfo a, .placeinfo span {display: block;text-overflow: ellipsis;overflow: hidden;white-space: nowrap;}
-.placeinfo span {margin:5px 5px 0 5px;cursor: default;font-size:13px;}
-.placeinfo .title {font-weight: bold; font-size:14px;border-radius: 6px 6px 0 0;margin: -1px -1px 0 -1px;padding:10px; color: #fff;background: #d95050;background: #d95050 url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/arrow_white.png) no-repeat right 14px center;}
-.placeinfo .tel {color:#0f7833;}
-.placeinfo .jibun {color:#999;font-size:11px;margin-top:0;}
 </style>

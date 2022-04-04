@@ -4,6 +4,9 @@ import {Bar} from 'vue-chartjs'
 //Exporting this so it can be used in other components
 export default {
   extends: Bar,
+  props:{
+    scoreList: Array,
+  },
   data() {
     return {
       datacollection: {
@@ -17,7 +20,8 @@ export default {
             borderWidth: 1,
             pointBorderColor: '#249EBF',
             //Data to be represented on y-axis
-            data: [4, 2, 3, 5, 3, 1, 2, 4, 5, 7]
+            // data: [4, 2, 3, 5, 3, 1, 2, 4, 5, 7]
+            data: this.scoreList
           }
         ]
       },

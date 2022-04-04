@@ -10,17 +10,43 @@ export default {
   name: 'HomeCarousel',
   data(){
     return{
-      posters: ['poster1', 'poster2', 'poster3', 'poster4', 'poster5', 'poster6']
+      posters: [],
+      popularList: [],
     }
   },
-
-  mounted(){
-    if(this.posters){
+  props: {
+    num: Number
+  },
+  created: function () {
+    this.$store.dispatch('getCategoryPopularShow', this.num)
+    .then((res) => {
+      this.popularList = res.data.items.slice(0,6)
+      for (let show of this.popularList) {
+      this.posters.push(show.posterPath)
+      }
+    })
+  },
+  watch: {
+    posters: function () {
+      if(this.posters){
       const circle = document.querySelector('#circle')
+      window.addEventListener('resize', () => {
+        const articles = circle.childNodes
+        articles.forEach((article)=>{
+        const articleWidth = article.clientWidth
+        const zDistance = parseInt(((articleWidth * 6) / 3.141592) / 2) * 1.5
+
+        article.style.transform = `rotateY(${yDeg}deg) translateZ(-${zDistance}px)`
+        yDeg += 60
+        })
+      })
       let yDeg = 0
       this.posters.forEach((poster) => {
         const article = document.createElement('article')
-        article.innerText = poster
+        var img = document.createElement("IMG");
+        img.setAttribute("src", poster);
+        img.style = "width: 100%; height: 100%;"
+        article.appendChild(img)
         circle.appendChild(article)
       })
 
@@ -28,15 +54,15 @@ export default {
 
       articles.forEach((article)=>{
         const articleWidth = article.clientWidth
-        const zDistance = parseInt(((articleWidth * 6) / 3.14) / 2) + 130
+        const zDistance = parseInt(((articleWidth * 6) / 3.141592) / 2) * 1.5
         console.log('zDistance', zDistance)
 
         article.style.transform = `rotateY(${yDeg}deg) translateZ(-${zDistance}px)`
         yDeg += 60
       })
-    }
-  }
-
+      }
+    },
+  },
 }
 </script>
 
@@ -57,7 +83,7 @@ export default {
 .carousel-wrapper #circle{
   position: absolute;  
   width: 40%;
-  height: 80%;
+  height: 90%;
   top: 10%;
   left: 30%;
   transform-style: preserve-3d;

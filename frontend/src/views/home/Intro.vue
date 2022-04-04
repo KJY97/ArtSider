@@ -2,7 +2,7 @@
   <v-parallax
     dark
     src="../../assets/hall_image.svg"
-    height="720"
+    style="height:100vh"
   >
     <v-row
       align="center"
@@ -43,6 +43,7 @@
           width="183px"
           position="center center"
           src="https://developers.kakao.com/tool/resource/static/img/button/login/full/ko/kakao_login_medium_narrow.png"
+          @click="kakaoLoginBtn"
         ></v-img>
       </v-col>
     </v-row>
@@ -76,7 +77,45 @@ export default {
       signUpDialog: false
     }
   },
+  methods: {
+    kakaoLoginBtn: function() {
+      window.Kakao.init('193bfca2b0be2c8fecd92926dbcc7a1f') // Kakao Developers에서 요약 정보 -> JavaScript 키
 
+      if (window.Kakao.Auth.getAccessToken()) {
+        window.Kakao.API.request({
+          url: '/v1/user/unlink',
+          success: function (response) {
+            console.log(response)
+          },
+          fail: function (error) {
+            console.log(error)
+          },
+        })
+        window.Kakao.Auth.setAccessToken(undefined)
+      }
+
+
+      window.Kakao.Auth.login({
+        success: function () {
+          window.Kakao.API.request({
+            url: '/v2/user/me',
+            data: {
+              property_keys: ["kakao_account.email"]
+            },
+            success: async function (response) {
+              console.log(response);
+            },
+            fail: function (error) {
+              console.log(error)
+            },
+          })
+        },
+        fail: function (error) {
+          console.log(error)
+        },
+      })
+    }
+  }
 }
 </script>
 
