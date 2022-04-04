@@ -5,6 +5,10 @@ import com.ssafy.myapp.api.response.ArtCenterDetailsGetRes;
 import com.ssafy.myapp.api.response.PopularShowListGetRes;
 import com.ssafy.myapp.api.response.ShowDetailsGetRes;
 import com.ssafy.myapp.api.response.ShowListGetRes;
+import com.ssafy.myapp.db.entity.ExpectRating;
+import com.ssafy.myapp.db.entity.Show;
+import com.ssafy.myapp.db.entity.User;
+import com.ssafy.myapp.db.mapping.ExpectRatingMapping;
 
 import java.text.ParseException;
 import java.util.List;
@@ -17,8 +21,10 @@ public interface ShowService {
     List<ShowListGetRes> findShowCategoryStartList(String category) throws ParseException;
     List<ShowListGetRes> findShowEndList() throws ParseException;
     List<ShowListGetRes> findShowCategoryEndList(String category) throws ParseException;
+    List<ShowListGetRes> findShowRecommendationList(Long userId);
     List<PopularShowListGetRes> findPopularShowList();
     List<PopularShowListGetRes> findPopularShowCategoryList(String category);
     List<ShowDetailsGetRes> findShowDetails(Long id) throws NoSuchElementException;
     List<ArtCenterDetailsGetRes> findArtCenterDetails(String artCenterName) throws NoSuchElementException;
+    ExpectRatingMapping findExpectRating(Long userId,Long showId);
 }

@@ -9,6 +9,6 @@ import lombok.Setter;
 @Setter
 public class UserLoginPostReq {
 
-	String email;
+	String userEmail;
 	String password;
 }

@@ -1,6 +1,7 @@
 package com.ssafy.myapp.api.service;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.json.simple.JSONObject;
 
@@ -8,11 +9,12 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
+import com.ssafy.myapp.db.repository.UserRepository;
 
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -20,7 +22,11 @@ import java.util.Map;
 @Service
 public class KakaoAuthService {
 	
+	@Autowired
+	UserRepository userRepository;
+	
 	public String getKakaoAccessToken (String code) {
+		System.out.println("인가코드 : "+code);
         String access_Token = "";
         String refresh_Token = "";
         String reqURL = "https://kauth.kakao.com/oauth/token";
@@ -58,7 +64,6 @@ public class KakaoAuthService {
             System.out.println("response body : " + result);
             
             ObjectMapper mapper = new ObjectMapper(); 
-//            String json = "{\"name\":\"mkyong\", \"age\":\"37\"}"; 
             
             try 
             { // convert JSON string to Map 
@@ -79,13 +84,13 @@ public class KakaoAuthService {
         return access_Token;
     }
 	
-	public void createKakaoUser(String token) {
+	public Map<String, String> createKakaoUser(String token) {
 		
-
-//		token="pmRxFg6AYF5uVnhc56egQUOcibM_ShYFLqkUjAo9c5oAAAF_15xYvg";
 		
 		System.out.println(token);
 		String reqURL = "https://kapi.kakao.com/v2/user/me";
+		
+		Map<String, String> userInfo = new HashMap<>();
 
 	    //access_token을 이용하여 사용자 정보 조회
 	    try {
@@ -111,14 +116,24 @@ public class KakaoAuthService {
 	       System.out.println("response body : " + result);
 	       
 	       ObjectMapper mapper = new ObjectMapper(); 
+	       String nickname=null;
+	       String email=null;
 
 	       try { // convert JSON string to Map 
-	    	   Map<String, String> map = mapper.readValue(result, Map.class); // it works  
-	    	   System.out.println(map);
-	    	  
+	    	   Map<String, Object> map = mapper.readValue(result, Map.class); // it works  
+	    	   Map<String,Object> kakao_account=(Map<String,Object>) map.get("kakao_account");
+	    	   Map<String,Object> profile=(Map<String,Object>) kakao_account.get("profile");
+	    	   nickname=(String) profile.get("nickname");
+	    	   email=(String) kakao_account.get("email");
+	    	   
 	       } catch (IOException e) {
 	    	   e.printStackTrace(); 
+	    	   return null;
 	       }
+	       
+	       userInfo.put("nickname", nickname);
+	       userInfo.put("email",email);
+	      
 //	       //Gson 라이브러리로 JSON파싱
 //	       JsonParser parser = new JsonParser();
 //	       JsonElement element = parser.parse(result);
@@ -137,6 +152,8 @@ public class KakaoAuthService {
 
 	       } catch (IOException e) {
 	            e.printStackTrace();
+	            return null;
 	       }
+	    return userInfo;
 	 }
 }

@@ -48,7 +48,7 @@ public class AuthController {
     })
 	public ResponseEntity<UserLoginPostRes> login(@RequestBody @ApiParam(value="로그인 정보", required = true) UserLoginPostReq loginInfo) {
 //		System.out.println(loginInfo.toString());
-		String email = loginInfo.getEmail();
+		String email = loginInfo.getUserEmail();
 		String password = loginInfo.getPassword();
 		User user ;
 		try {

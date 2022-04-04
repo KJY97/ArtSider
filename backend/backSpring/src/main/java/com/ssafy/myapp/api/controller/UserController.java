@@ -12,10 +12,12 @@ import com.ssafy.myapp.api.request.UserpassPatchReq;
 import com.ssafy.myapp.api.service.UserService;
 import com.ssafy.myapp.common.auth.SsafyUserDetails;
 import com.ssafy.myapp.db.entity.Favorite;
+import com.ssafy.myapp.db.entity.Review;
 import com.ssafy.myapp.db.entity.Show;
 import com.ssafy.myapp.db.entity.User;
 import com.ssafy.myapp.db.entity.Viewed;
 import com.ssafy.myapp.db.mapping.ShowMapping;
+import com.ssafy.myapp.db.mapping.UserReviewMapping;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -38,6 +40,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -68,7 +71,7 @@ public class UserController {
     public ResponseEntity<Map<String, Object>> userAdd(
             @RequestBody @ApiParam(value = "회원가입 정보", required = true) UserRegisterPostReq registerInfo) {
 
-        String userEmail = registerInfo.getEmail();
+        String userEmail = registerInfo.getUserEmail();
         Map<String, Object> resultMap = new HashMap<>();
         
         if(userService.chkDplByEmail(userEmail)) {
@@ -193,9 +196,9 @@ public class UserController {
         User user =userDetails.getUser();
 
         // 비밀번호 변경 요청한 유저로부터 입력된 패스워드 와 디비에 저장된 유저의 암호화된 패스워드가 같은지 확인.(유효한 패스워드인지 여부 확인)
-        if(passwordEncoder.matches(userpassPatchReq.getCurrentPass(), user.getPassword())) {
+        if(passwordEncoder.matches(userpassPatchReq.getCurrentPassWord(), user.getPassword())) {
             // 유효한 패스워드가 맞는 경우
-            userService.modifyPassword(user.getEmail(), userpassPatchReq.getNewPass());
+            userService.modifyPassword(user.getEmail(), userpassPatchReq.getNewPassWord());
             resultMap.put("message", "success");
             return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
         }
@@ -325,14 +328,37 @@ public class UserController {
         User user =userDetails.getUser();
         
         Favorite favorite=null;
+        System.out.println(user.getId()+"   "+ showId);
         try {
 			userService.removeFavorite(user.getId(), showId);
 		} catch (Exception e) {
+			e.printStackTrace();
 			resultMap.put("message", "fail");
             return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.BAD_REQUEST);
 		}
        
         resultMap.put("message", "success");
+        return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
+
+    }
+    
+    @GetMapping("/show/{id}/preference")
+    @ApiOperation(value = "회원 관심목록 여부 확인 ", notes = "회원이 해당하는 공연을 관심표시했는지 아닌지 여부를 확인한다.  ")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "여부확인 성공  "),
+            @ApiResponse(code = 400, message = "여부확인 실패"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<Map<String, Object>> FavoriteGet(@ApiIgnore Authentication authentication,@PathVariable("id") Long showId) {
+
+    	Map<String, Object> resultMap = new HashMap<>();
+    	
+        SsafyUserDetails userDetails = (SsafyUserDetails) authentication.getDetails();
+        User user =userDetails.getUser();
+        
+        boolean result=userService.findFavoriteByShowAndUser(user.getId(), showId);
+        resultMap.put("message", "success");
+		resultMap.put("isFavorite", result);
         return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
 
     }
@@ -367,7 +393,7 @@ public class UserController {
         }
     
     
-    @DeleteMapping("/profile")
+    @PatchMapping("/profile")
     @ApiOperation(value = "프로필 정보 수정", notes = "유저의 프로필 정보를 수정한다. ")
     @ApiResponses({
             @ApiResponse(code = 200, message = "유저 정보 수정 성공"),
@@ -375,7 +401,7 @@ public class UserController {
             @ApiResponse(code = 500, message = "서버 오류")
     })
     public ResponseEntity<Map<String, Object>> userModify(@ApiIgnore Authentication authentication,
-    		@RequestBody @ApiParam(value = "비밀번호 정보", required = true) UserModifyProfilReq userModifyProfilReq) {
+    		@RequestBody @ApiParam(value = "수정할 닉네임 정보", required = true) UserModifyProfilReq userModifyProfilReq) {
     	Map<String, Object> resultMap = new HashMap<>();
     	
     	SsafyUserDetails userDetails = (SsafyUserDetails) authentication.getDetails();
@@ -383,7 +409,7 @@ public class UserController {
         
         user=userService.findUserByEmail(user.getEmail());
         
-        user=userService.modifyNickname(user, userModifyProfilReq.getNickname());
+        user=userService.modifyNickname(user, userModifyProfilReq.getNewNickname());
         if(user==null) {
         	resultMap.put("message", "fail");
             return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.BAD_REQUEST);
@@ -394,6 +420,72 @@ public class UserController {
 
     }
     
+    
+    @GetMapping("/profile/reviewList")
+    @ApiOperation(value = "유저 리뷰 조회", notes = "유저가 작성한 리뷰를 수정한다. ")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "유저 정보 수정 성공"),
+            @ApiResponse(code = 401, message = "유저 정보 수정 실패"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<Map<String, Object>> userReiviewList(@ApiIgnore Authentication authentication) {
+    	Map<String, Object> resultMap = new HashMap<>();
+    	
+    	SsafyUserDetails userDetails = (SsafyUserDetails) authentication.getDetails();
+        User user =userDetails.getUser();
+        
+        user=userService.findUserByEmail(user.getEmail());
+        
+        List<UserReviewMapping> reviews=userService.findUserReview(user);
+        resultMap.put("message", "success");
+        resultMap.put("items",reviews);
+        return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
+
+    }
+    
+    @GetMapping("/review/ratingStars")
+    @ApiOperation(value = "유저 리뷰 별점대 별 개수 목록 조회 ", notes = "유저가 작성한 리뷰의 평점별 개수를 조회한다.  ")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "조회 성공"),
+            @ApiResponse(code = 401, message = "조회 실패"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<Map<String, Object>> userReviewRatingCntList(@ApiIgnore Authentication authentication) {
+    	Map<String, Object> resultMap = new HashMap<>();
+    	
+    	SsafyUserDetails userDetails = (SsafyUserDetails) authentication.getDetails();
+        User user =userDetails.getUser();
+        
+        user=userService.findUserByEmail(user.getEmail());
+        
+        List<?> result=userService.findUserReviewRatingCnt(user);
+        resultMap.put("message", "success");
+        resultMap.put("items",result);
+        return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
+
+    }
+    
+    @GetMapping("/show/preference/tag")
+    @ApiOperation(value = "관심 공연 태그별 개수 목록 조회 ", notes = "유저의 관심공연의 태그별 개수를 조회한다.  ")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "조회 성공"),
+            @ApiResponse(code = 401, message = "조회 실패"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<Map<String, Object>> userFavoriteShowTagList(@ApiIgnore Authentication authentication) {
+    	Map<String, Object> resultMap = new HashMap<>();
+    	
+    	SsafyUserDetails userDetails = (SsafyUserDetails) authentication.getDetails();
+        User user =userDetails.getUser();
+        
+        user=userService.findUserByEmail(user.getEmail());
+        
+        List<?> result=userService.findFavoriteShowTagCnt(user);
+        resultMap.put("message", "success");
+        resultMap.put("items",result);
+        return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
+
+    }
     
     
     

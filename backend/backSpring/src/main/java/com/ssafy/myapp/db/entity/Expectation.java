@@ -21,7 +21,7 @@ public class Expectation {
     @Column(length = 100, nullable = false)
     private String title;
 
-//    @Column(columnDefinition = "TEXT", length = 500, nullable = false)
+    @Column(columnDefinition = "TEXT", length = 500, nullable = false)
     private String contents;
 
     @Column(nullable = false)

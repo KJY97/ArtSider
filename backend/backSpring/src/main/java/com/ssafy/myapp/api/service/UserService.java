@@ -8,10 +8,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.ssafy.myapp.api.request.UserRegisterPostReq;
 import com.ssafy.myapp.db.entity.Favorite;
+import com.ssafy.myapp.db.entity.Review;
 import com.ssafy.myapp.db.entity.Show;
 import com.ssafy.myapp.db.entity.User;
 import com.ssafy.myapp.db.entity.Viewed;
 import com.ssafy.myapp.db.mapping.ShowMapping;
+import com.ssafy.myapp.db.mapping.UserReviewMapping;
 
 
 public interface UserService {
@@ -31,4 +33,9 @@ public interface UserService {
 	List<ShowMapping> findViewedShow(User user);
 	String saveUploadedFiles(final MultipartFile thumbnail) throws IOException;
 	User modifyUserProfileImg(User user,String profileImg);
+	List<UserReviewMapping> findUserReview(User user);
+	List<?> findUserReviewRatingCnt(User user);
+	List<?> findFavoriteShowTagCnt(User user);
+	boolean findFavoriteByShowAndUser(Long userId, Long showId);
+	
 }

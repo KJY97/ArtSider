@@ -6,6 +6,7 @@ import com.ssafy.myapp.api.response.PopularShowListGetRes;
 import com.ssafy.myapp.api.response.ShowDetailsGetRes;
 import com.ssafy.myapp.api.response.ShowListGetRes;
 import com.ssafy.myapp.db.entity.*;
+import com.ssafy.myapp.db.mapping.ExpectRatingMapping;
 import com.ssafy.myapp.db.mapping.ShowListMapping;
 import com.ssafy.myapp.db.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -25,8 +25,11 @@ public class ShowServiceImpl implements ShowService{
     private final CastingListRepository castingListRepository;
     private final NoticeImgRepository noticeImgRepository;
     private final PopularShowRepository popularShowRepository;
+    private final RecommendationRepository recommendationRepository;
     private final ShowRepository showRepository;
     private final ShowDetailImgRepository showDetailImgRepository;
+    private final ExpectRatingRepository expectRatingRepository;
+    private final UserRepository userRepository;
 
 
     // 검색 기능(제목)
@@ -82,8 +85,11 @@ public class ShowServiceImpl implements ShowService{
                 showStartList.add(showInfo);
             }
         }
-        showStartList.sort(Comparator.comparing(ShowListGetRes::getStartDate));
-        return showStartList;
+        // 공연 시작 날짜 정렬 -> 같은 날짜는 종료날짜로 다시 정렬, null값은 오픈런
+        showStartList.sort(Comparator.comparing(ShowListGetRes::getStartDate).thenComparing(ShowListGetRes::getEndDate, Comparator.nullsFirst(Comparator.naturalOrder())));
+
+        List<ShowListGetRes> showList = showStartList.subList(0, 20);
+        return showList;
     }
 
     // 카테고리별 개막 예정 목록
@@ -110,8 +116,9 @@ public class ShowServiceImpl implements ShowService{
                 }
             }
         }
-        showCategoryStartList.sort(Comparator.comparing(ShowListGetRes::getStartDate));
-        return showCategoryStartList;
+        showCategoryStartList.sort(Comparator.comparing(ShowListGetRes::getStartDate).thenComparing(ShowListGetRes::getEndDate, Comparator.nullsLast(Comparator.naturalOrder())));
+        List<ShowListGetRes> showList = showCategoryStartList.subList(0, 20);
+        return showList;
     }
 
     // 종료 임박 공연 목록
@@ -137,8 +144,9 @@ public class ShowServiceImpl implements ShowService{
                 }
             }
         }
-        showEndList.sort(Comparator.comparing(ShowListGetRes::getEndDate));
-        return showEndList;
+        showEndList.sort(Comparator.comparing(ShowListGetRes::getEndDate).thenComparing(ShowListGetRes::getStartDate));
+        List<ShowListGetRes> showList = showEndList.subList(0, 20);
+        return showList;
     }
 
     // 카테고리별 종료 임박 공연 목록
@@ -165,8 +173,25 @@ public class ShowServiceImpl implements ShowService{
                 }
             }
         }
-        showCategoryEndList.sort(Comparator.comparing(ShowListGetRes::getEndDate));
-        return showCategoryEndList;
+        showCategoryEndList.sort(Comparator.comparing(ShowListGetRes::getEndDate).thenComparing(ShowListGetRes::getStartDate));
+        List<ShowListGetRes> showList = showCategoryEndList.subList(0, 20);
+        return showList;
+    }
+
+    // 공연 추천(사용자간의 유사도 추천)
+    @Override
+    public List<ShowListGetRes> findShowRecommendationList(Long userId) {
+
+        List<ShowListGetRes> showRecommendationList = new ArrayList<>();
+        List<Recommendation> recommendationList = recommendationRepository.findByUserId(userId);
+
+        for (Recommendation recommendation : recommendationList) {
+            ShowListMapping show = showRepository.findByIdEquals(recommendation.getShowId());
+            ShowListGetRes recommendationShowInfo = new ShowListGetRes(show);
+            showRecommendationList.add(recommendationShowInfo);
+
+        }
+        return showRecommendationList;
     }
 
     // 전체 인기 공연 목록
@@ -283,5 +308,13 @@ public class ShowServiceImpl implements ShowService{
         artCenterList.add(artCenterInfo);
         return artCenterList;
     }
+
+	@Override
+	public ExpectRatingMapping findExpectRating(Long userId, Long showId) {
+		
+		ExpectRatingMapping rating=expectRatingRepository.findByUserAndShow(userRepository.findById(userId).get(), showRepository.findById(showId).get());
+		
+		return rating;
+	}
 
 }

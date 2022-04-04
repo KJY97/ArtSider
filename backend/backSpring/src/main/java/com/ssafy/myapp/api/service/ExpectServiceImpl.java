@@ -63,7 +63,7 @@ public class ExpectServiceImpl implements ExpectService {
 
         Expectation expectation = oExpect.get();
 
-        if(expectation.getUser().getId() != expectInfo.getUserId()) return false;
+        if(!expectation.getUser().getId().equals(expectInfo.getUserId())) return false;
 
         expectation.setTitle(expectInfo.getTitle());
         expectation.setContents(expectInfo.getContents());

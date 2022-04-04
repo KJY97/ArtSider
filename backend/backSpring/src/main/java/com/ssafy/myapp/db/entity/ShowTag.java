@@ -3,7 +3,6 @@ package com.ssafy.myapp.db.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-;
 
 import javax.persistence.*;
 
