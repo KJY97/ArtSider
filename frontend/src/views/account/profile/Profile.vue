@@ -46,7 +46,7 @@
       <div>
         <router-link :to="{name: 'ProfileDefault'}"> 공연 보관함 </router-link>
         <router-link :to="{name: 'ProfileMyReviews'}"> 리뷰 보관함 </router-link> 
-        <router-link :to="{name: 'ProfileCalendar'}"> 캘린더 </router-link>  
+        <!-- <router-link :to="{name: 'ProfileCalendar'}"> 캘린더 </router-link>   -->
       </div>
 
       <hr/>

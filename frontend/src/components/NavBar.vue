@@ -1,9 +1,10 @@
 <template>
   <v-app-bar
+  v-if="!!$store.state.token"
   app
   scroll-target="#main"
   flat
-  inverted-scroll
+  collapse-on-scroll
   style="background-color: rgba(233,30,99,0.9)"
   >
   <v-toolbar-title class="text-uppercase">
@@ -32,12 +33,30 @@
       </template>
 
       <v-list>
-        <v-list-item
-          v-for="(category, i) in categories"
-          :key="i"
-        >
+        <v-list-item>
+          <v-btn
+            text style="width:100%;">
+            <v-list-item-title> 뮤지컬 </v-list-item-title>
+          </v-btn>
+        </v-list-item>
+        <v-list-item>
           <v-btn text style="width:100%;">
-            <v-list-item-title> {{ category.title }} </v-list-item-title>
+            <v-list-item-title> 연극 </v-list-item-title>
+          </v-btn>
+        </v-list-item>
+        <v-list-item>
+          <v-btn text style="width:100%;">
+            <v-list-item-title> 콘서트 </v-list-item-title>
+          </v-btn>
+        </v-list-item>
+        <v-list-item>
+          <v-btn text style="width:100%;">
+            <v-list-item-title> 클래식/오페라/무용 </v-list-item-title>
+          </v-btn>
+        </v-list-item>
+        <v-list-item>
+          <v-btn text style="width:100%;">
+            <v-list-item-title> 아동/키즈 </v-list-item-title>
           </v-btn>
         </v-list-item>
       </v-list>
@@ -74,11 +93,11 @@
       <span  style="color: rgb(246,247,235);"> 공연 에티켓 </span>
     </v-btn>
 
-    <v-btn text color="gray">
+    <v-btn text color="gray" @click="deleteToken">
       <span  style="color: rgb(246,247,235);">로그아웃</span>
     </v-btn>
 
-      <v-btn text color="gray">
+      <v-btn text color="gray" @click="$router.push({name: 'Profile'})">
       <span  style="color: rgb(246,247,235);">마이페이지</span>
     </v-btn>
 
@@ -101,8 +120,13 @@ export default {
     }
   },
 
-
-
+  methods:{
+    deleteToken(){
+      localStorage.removeItem('accessToken')
+      this.$store.dispatch('deleteToken')
+      this.$router.push({name: 'Intro'})
+    }
+  },
 }
 </script>
 

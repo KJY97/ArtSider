@@ -8,15 +8,16 @@
       <h1> 내가 작성한 리뷰</h1>
       <div class="my-reviews-box">
         <div class="my-review"
-          v-for="(review, i) in userReviews"
+          v-for="(review, i) in myReviews"
           :key="i"
         >
           <p>
-            {{ review }}
+            {{ review.contents }}
           </p>
         </div>
       </div>
     </v-col>
+
     <v-col
       cols="6"
     >
@@ -24,7 +25,7 @@
       <div 
         class="chart-box"
       >
-        <BarChart :score-list="userScores" />
+        <BarChart v-if="chartRender" :score-list="myScores" />
       </div>
     </v-col>
     <v-col
@@ -53,21 +54,18 @@ export default {
   },
   data(){
     return{
+      myReviews : [],
+      myScores: [],
+      myTags : [],
+
+      chartRender : false
     }
   },
 
   computed:{
-    userReviews(){
-      return this.$store.getters.userReviews
-    },
-
-    userScores(){
-      return this.$store.getters.userScores
-    },
-
     userTagsCloud(){
       const newWords = []
-      const wordsObject = this.$store.getters.userTagsCloud
+      const wordsObject = this.myTags
       const keysList = Object.keys(wordsObject)
       for(let i = 0; i < keysList.length; i++){
         const key = keysList[i]
@@ -80,11 +78,40 @@ export default {
 
   },
 
+  watch:{
+    myScores: function(){
+      this.chartRender = true
+    }
+  },
+
+  methods:{
+    getData(scoreList){
+      const scoresData = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+      scoreList.forEach((elem) => {
+        scoresData[elem.rating - 1] = elem.cnt
+      })
+      return scoresData
+    }
+  },
+
   created(){
     this.$store.dispatch('getUserReviews')
-    this.$store.dispatch('getUserScores')
-    this.$store.dispatch('getUserTags')
-
+    .then((res) => {
+      console.log(res.data)
+      this.myReviews = res.data.items
+    })
+    .then(() => {
+        this.$store.dispatch('getUserScores')
+        .then((res) => {
+          this.myScores = this.getData(res.data.items)
+        })
+        .then(() => {
+          this.$store.dispatch('getUserTags')
+          .then((res) => {
+            this.myTags = res.items
+          })
+        })
+    })
   }
 
 }

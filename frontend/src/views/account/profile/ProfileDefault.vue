@@ -6,16 +6,7 @@
       <h1> 관심 콘텐츠 </h1>
       <v-container
         class="preference-contents-box"
-
       >
-        <!-- <v-img
-          width="300"
-          height="400"
-          v-for="(poster, i) in posters"
-          :key="i"
-        >
-        </v-img> -->
-
         <v-row
           style="height: 100%;"
         >
@@ -32,7 +23,7 @@
               class="preference-content  mx-auto"
             >
               <v-img
-                :src="poster.posterPath"
+                :src="poster.show.posterPath"
                 :aspect-ratio="3/4"
                 width="100%"
                 height="100%"
@@ -67,6 +58,13 @@
               class="history-content mx-auto"
               style="background-color:gray;"
             >
+              <v-img
+                :src="poster.show.posterPath"
+                :aspect-ratio="3/4"
+                width="100%"
+                height="100%"
+              >
+              </v-img>
             </v-card>
           </v-col>
         </v-row>

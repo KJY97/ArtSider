@@ -93,9 +93,6 @@ export default new Vuex.Store({
       state.userTagsCloud = tags
     },
 
-  
-
-
   },
 
   actions: {
@@ -353,12 +350,14 @@ export default new Vuex.Store({
       .catch(()=>{
         alert('인증번호 발송 실패')
       })
-
     },
-
 
     setToken({commit}, token){
       commit('SET_MY_TOKEN', token)
+    },
+
+    deleteToken({state}){
+      state.token = null
     },
 
     getToken({commit}, inputData){
@@ -367,7 +366,7 @@ export default new Vuex.Store({
       .then((res) => {
         localStorage.setItem('accessToken', res.data.accessToken)
         commit('SET_MY_TOKEN', res.data.accessToken)
-        router.push({name: 'Main'})
+        router.push({name: 'Home'}).catch(()=>{})
       })
 
     },
@@ -425,43 +424,33 @@ export default new Vuex.Store({
     },
 
     // 내가 작성한 리뷰 목록 조회
-    getUserReviews({commit, state}){
+    getUserReviews({state}){
       const url = '/api/users/profile/reviewList'
-      axios.get(url, {
+      return axios.get(url, {
         headers: {
           Authorization : `Bearer ${state.token}`
         }
-      })
-      .then((res) => {
-        commit('SET_MY_REVIEWS', res.data.items)
       })
     },
 
     // 유저 리뷰 평점 별 갯수
-    getUserScores({commit, state}){
+    getUserScores({state}){
       const url = '/api/users/review/ratingStars'
-      axios.get(url, {
+      return axios.get(url, {
         headers: {
           Authorization : `Bearer ${state.token}`
         }
-      })
-      .then((res) => {
-        commit('SET_MY_SCORES', res.data.items)
       })
     },
     
 
     // 유저 관심 공연들의 태그 갯수
-    getUserTags({commit, state}){
+    getUserTags({state}){
       const url = '/api/users/show/preference/tag'
-      axios.get(url, {
+      return axios.get(url, {
         headers: {
           Authorization : `Bearer ${state.token}`
         }
-      })
-      .then((res) => {
-        console.log('유저 관심 태그 워드 클라우드 response.data: ', res.data)
-        commit('SET_MY_TAGS_CLOUD', res.data)
       })
     },
 

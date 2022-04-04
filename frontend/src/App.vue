@@ -3,8 +3,7 @@
     app
     id="inspire"
     style="background-color: #FEFEF4;">
-    <NavBar />
-
+      <NavBar />
       <v-main id="main" style="overflow:auto; height:100vh;" >
         <router-view/>
       </v-main>
@@ -24,12 +23,6 @@ export default {
 
   data(){
     return{
-    }
-  },
-
-  computed:{
-    lsLogin(){
-      return this.$store.getters.loginStatus
     }
   },
 

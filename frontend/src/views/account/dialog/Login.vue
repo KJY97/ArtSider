@@ -11,7 +11,7 @@
       </v-card-title>
 
       <v-container>
-        <v-form @submit="(e) => { e.preventDefault, getToken()}">
+        <v-form @submit="(e) => { e.preventDefault(), getToken()}">
           <v-text-field
             v-model="userEmail"
             label="이메일"

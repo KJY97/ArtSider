@@ -7,14 +7,15 @@ export default {
   props:{
     scoreList: Array,
   },
+
   data() {
     return {
       datacollection: {
         //Data to be represented on x-axis
-        labels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
+        labels: ['1점', '2점', '3점', '4점', '5점', '6점', '7점', '8점', '9점', '10점'],
         datasets: [
           {
-            label: '별점 개수',
+            label: '별점 그래프',
             backgroundColor: '#f87979',
             pointBackgroundColor: 'white',
             borderWidth: 1,
@@ -30,13 +31,17 @@ export default {
         scales: {
           yAxes: [{
             ticks: {
-              beginAtZero: true
+              beginAtZero: true,
             },
             gridLines: {
-              display: true
-            }
+              display: false
+            },
           }],
           xAxes: [ {
+            ticks: {
+              minRotation: 40
+            },
+
             gridLines: {
               display: false
             }
@@ -50,7 +55,13 @@ export default {
       }
     }
   },
+
   mounted() {
+    // 그래프 소수점 제거
+    if(Math.max(...this.scoreList) < 10 ){
+      this.options.scales.yAxes[0].ticks.stepSize = 1
+    }
+
     //renderChart function renders the chart with the datacollection and options object.
     this.renderChart(this.datacollection, this.options)
   }
