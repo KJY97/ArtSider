@@ -249,10 +249,16 @@ export default {
     // 선호목록 추가
     addPreference: function() {
       this.$store.dispatch('addPreference', {id:this.id})
+      .then(() => {
+        this.isPreference = !this.isPreference
+      })
     },
     // 선호목록 제거
     deletePreference: function() {
       this.$store.dispatch('deletePreference', {id:this.id})
+      .then(() => {
+        this.isPreference = !this.isPreference
+      })
     },
     // 티켓사이트 이동 & 선호 목록 추가
     goTicketSite: function(number) {
@@ -279,7 +285,6 @@ export default {
       } else {
         this.deletePreference()
       }
-      this.isPreference = !this.isPreference
     }
   },
   created: function () {
