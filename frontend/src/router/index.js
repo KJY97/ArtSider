@@ -4,14 +4,6 @@ import Intro from '../views/home/Intro.vue'
 import Home from './home'
 import Main from './main'
 
-// 카테고리별 컴포넌트
-// import Classic from './category/Classic'
-// import Concert from './category/Concert'
-// import Family from './category/Family'
-// import Theatre from './category/Theatre'
-// import Musical from './category/Musical'
-
-
 // 에티켓
 import Etiquette from './etiquette'
 
@@ -39,12 +31,6 @@ const routes = [
   },
   ...Etiquette,
   ...Main,
-  
-  // ...Classic,
-  // ...Concert,
-  // ...Family,
-  // ...Musical,
-  // ...Theatre,
 
   ...Home,
   ...ShowDetail,

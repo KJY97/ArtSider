@@ -34,28 +34,32 @@
 
       <v-list>
         <v-list-item>
-          <v-btn
+          <v-btn @click="$router.push({name: 'Musical'})"
             text style="width:100%;">
             <v-list-item-title> 뮤지컬 </v-list-item-title>
           </v-btn>
         </v-list-item>
         <v-list-item>
-          <v-btn text style="width:100%;">
+          <v-btn  @click="$router.push({name: 'Theatre'})" 
+            text style="width:100%;">
             <v-list-item-title> 연극 </v-list-item-title>
           </v-btn>
         </v-list-item>
         <v-list-item>
-          <v-btn text style="width:100%;">
+          <v-btn @click="$router.push({name: 'Concert'})" 
+            text style="width:100%;">
             <v-list-item-title> 콘서트 </v-list-item-title>
           </v-btn>
         </v-list-item>
         <v-list-item>
-          <v-btn text style="width:100%;">
+          <v-btn @click="$router.push({name: 'Classic'})" 
+            text style="width:100%;">
             <v-list-item-title> 클래식/오페라/무용 </v-list-item-title>
           </v-btn>
         </v-list-item>
         <v-list-item>
-          <v-btn text style="width:100%;">
+          <v-btn @click="$router.push({name: 'Family'})" 
+            text style="width:100%;">
             <v-list-item-title> 아동/키즈 </v-list-item-title>
           </v-btn>
         </v-list-item>

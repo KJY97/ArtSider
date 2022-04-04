@@ -481,6 +481,21 @@ export default new Vuex.Store({
         })
       }
     },
+    
+    // 프로필 닉네임 수정
+    putUserName({state}, updatedName){
+      const url = '/api/users/profile'
+      return axios({
+        method: 'patch',
+        url: url,
+        headers: { Authorization : `Bearer ${state.token}`},
+        data: {
+          newNickname: updatedName
+        }
+      })
+    },
+
+
     // 카테고리 별 인기공연
     getCategoryPopularShow({ state }, data){
       state

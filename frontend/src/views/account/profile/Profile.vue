@@ -21,10 +21,29 @@
            <input @change="uploadImage" style="display: none;" accept="image/*" ref="image" type="file">
         </v-card>
         <div class="profile-detail d-inline-block ms-5">
-          <h1> 김공연 </h1>
-          <v-btn>
-            수정하기
-          </v-btn>
+          <h1> {{ userInfo.nickname }} </h1>
+          <v-text-field
+            v-show="updateTrigger === true"
+            v-model="updatedName"
+            solo
+            dense
+            :label="userInfo.nickname"
+            clearable
+          >
+            <v-btn
+              text
+              slot="append"
+              @click="() => { updateTrigger = false }"
+            >
+              취소
+            </v-btn>
+          </v-text-field>
+            <v-btn
+              @click="() => { putUserName(), updateTrigger = true}"
+            >
+              이름 수정하기
+            </v-btn>
+
           <div class="profile-tag-wrapper">
             <h2> 선호 태그 </h2>
             <v-chip-group
@@ -65,23 +84,28 @@ export default {
   },
   data(){
     return{
-      userName: '김공연',
-      userTags: ['좋아요', '명배우', '웃겨요'],
       userInfo: {},
       userImgName: null,
       userImgSrc : defaultImage,
-    }
-  },
 
-  computed:{
-    isLogin(){
-      return this.$store.getters.loginStatus
-    },
+      updatedName : '',
+
+      updateTrigger : false
+    }
   },
 
   methods:{
     imageTrigger(){
       this.$refs.image.click()
+    },
+
+    putUserName(){
+      if(this.updateTrigger === true){
+        this.$store.dispatch('putUserName', this.updatedName.trim())
+        .then(() => {
+          this.userInfo.nickname = this.updatedName
+        })
+      } 
     },
 
     uploadImage(){
@@ -140,6 +164,10 @@ export default {
   width: 100%;
   height: 100%;
 
+}
+
+.default-msg{
+  opacity: 0.3;
 }
 
 .profile-wrapper{

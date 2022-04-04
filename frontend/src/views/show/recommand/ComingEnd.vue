@@ -51,7 +51,7 @@ export default {
       })
     },
     addInquire: function (id) {
-      this.$store.dispatch('addInquire', id)
+      this.$store.dispatch('addInquire', {id: id})
       .then(() => {
         this.$router.push({name: `ShowDetail`, params: { showId: id}})
       })
