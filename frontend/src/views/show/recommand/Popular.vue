@@ -2,27 +2,14 @@
 <div class="swiper mt-6">
   <h1 class="ml-4 mb-4">인기 순위</h1> 
   <div class="swiper-wrapper">
-    <div v-for="(idx, popular) in popularList" :key="idx">
-      <div class="swiper-slide">
-        <v-img
-          @click="$router.push({path: `show-detail/${popular.id}`})"
-          :aspect-ratio="3/4"
-          :src="popular.posterPath"    
-          >
-          </v-img>
-      </div>
+      <v-img
+        @click="addInquire(popular.id)"
+        :aspect-ratio="3/4"
+        :src="popular.posterPath"
+        style="width:50%;height:50%;"
+        >
+        </v-img>
     </div>
-  </div>
-  <div class="swiper-button-next"></div>
-  <div class="swiper-button-prev"></div>
-</div>
-</template>
-
-<script>
-import Swiper from 'swiper/js/swiper.esm.bundle'
-import 'swiper/css/swiper.css'
-
-
 export default {
   name: 'Popular',
   data(){
@@ -36,8 +23,14 @@ export default {
     getPopularShow: function() {
       this.$store.dispatch('getPopularShow')
       .then(res => {
-        console.log(res.data)
-        this.popularList = res.data
+        this.popularList = res.data.items
+        console.log(this.popularList)
+      })
+    },
+    addInquire: function (id) {
+      this.$store.dispatch('addInquire', id)
+      .then(() => {
+        this.$router.push({name: `ShowDetail`, params: { showId: id}})
       })
     }
   },
@@ -54,7 +47,8 @@ export default {
         nextEl: '.swiper-button-next',
         prevEl: '.swiper-button-prev'
       },
-    })
+    });
+
   },
   created: function() {
     // 새로 시작할 때 발생하는 이벤트

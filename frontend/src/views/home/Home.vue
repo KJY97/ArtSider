@@ -7,13 +7,20 @@
       </p>
       <v-row>
         <v-col
-          v-for="(poster, i) in posters"
+          v-for="(popular, i) in popularList"
           :key="i"
           cols="4"
+          class="d-flex justify-center"
         >
           <v-card
-            height="400px"
+            max-height="400"
+            max-width="300"
           >
+          <v-img
+            max-height="400"
+            max-width="300"
+            :src="popular.posterPath"
+          ></v-img>
           </v-card>
         </v-col>
       </v-row>
@@ -25,6 +32,7 @@
           outlined
           color="red"
           style="border-color: red;"
+          @click="moveToMain"
         >
           더보기
         </v-btn>
@@ -42,7 +50,7 @@ export default {
   data(){
     return{
       loginDialog : false,
-      posters: ['poster1', 'poster2', 'poster3', 'poster4', 'poster5', 'poster6']
+      popularList: [],
     }
   }, 
 
@@ -51,7 +59,19 @@ export default {
   },
 
   methods: {
-
+    getPopularShow: function() {
+      this.$store.dispatch('getPopularShow')
+      .then(res => {
+        this.popularList = res.data.items.slice(0,6)
+      })
+    },
+    moveToMain: function () {
+      this.$router.push({name: 'Main'})
+    }
+  },
+  created: function () {
+    console.log('생성')
+    this.getPopularShow()
   }
 }
 </script>
