@@ -21,7 +21,7 @@ public class UserTag {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 	
-	private String tagContents;
+	private String tagContent;
 	private int weight;
 	
 	@ManyToOne

@@ -328,14 +328,37 @@ public class UserController {
         User user =userDetails.getUser();
         
         Favorite favorite=null;
+        System.out.println(user.getId()+"   "+ showId);
         try {
 			userService.removeFavorite(user.getId(), showId);
 		} catch (Exception e) {
+			e.printStackTrace();
 			resultMap.put("message", "fail");
             return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.BAD_REQUEST);
 		}
        
         resultMap.put("message", "success");
+        return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
+
+    }
+    
+    @GetMapping("/show/{id}/preference")
+    @ApiOperation(value = "회원 관심목록 여부 확인 ", notes = "회원이 해당하는 공연을 관심표시했는지 아닌지 여부를 확인한다.  ")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "여부확인 성공  "),
+            @ApiResponse(code = 400, message = "여부확인 실패"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<Map<String, Object>> FavoriteGet(@ApiIgnore Authentication authentication,@PathVariable("id") Long showId) {
+
+    	Map<String, Object> resultMap = new HashMap<>();
+    	
+        SsafyUserDetails userDetails = (SsafyUserDetails) authentication.getDetails();
+        User user =userDetails.getUser();
+        
+        boolean result=userService.findFavoriteByShowAndUser(user.getId(), showId);
+        resultMap.put("message", "success");
+		resultMap.put("isFavorite", result);
         return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
 
     }

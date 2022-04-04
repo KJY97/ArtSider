@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -26,10 +27,15 @@ import com.ssafy.myapp.api.service.UserService;
 import com.ssafy.myapp.common.util.JwtTokenUtil;
 import com.ssafy.myapp.db.entity.User;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.AllArgsConstructor;
 
 @RestController
 @RequestMapping("/api/auth")
+@Api(value = "카카오 로그인 API", tags = {"Kakao Login"})
 public class KakaoAuthController {
 
     /**
@@ -49,7 +55,13 @@ public class KakaoAuthController {
 	}
 	
     @ResponseBody
-    @GetMapping("/kakao")
+    @PostMapping("/kakao")
+    @ApiOperation(value = "카카오 로그인/회원가입  ", notes = "카카오 api를 이용해 로그인/회원가입을 진행한다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "실행 성공"),
+            @ApiResponse(code = 401, message = "실행 실패"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
     public ResponseEntity<Map<String, Object>> kakaoCallback(@RequestParam String code) {
         System.out.println(code);
         String token=kakaoAuthService.getKakaoAccessToken(code);

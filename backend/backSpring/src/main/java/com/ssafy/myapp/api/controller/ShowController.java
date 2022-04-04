@@ -5,12 +5,22 @@ import com.ssafy.myapp.api.response.PopularShowListGetRes;
 import com.ssafy.myapp.api.response.ShowDetailsGetRes;
 import com.ssafy.myapp.api.response.ShowListGetRes;
 import com.ssafy.myapp.api.service.ShowService;
+import com.ssafy.myapp.common.auth.SsafyUserDetails;
+import com.ssafy.myapp.db.entity.ExpectRating;
+import com.ssafy.myapp.db.entity.Favorite;
+import com.ssafy.myapp.db.entity.User;
+import com.ssafy.myapp.db.mapping.ExpectRatingMapping;
+
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import springfox.documentation.annotations.ApiIgnore;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
@@ -209,4 +219,29 @@ public class ShowController {
             return new ResponseEntity<Map<String , List<ArtCenterDetailsGetRes>>>(resultMap, HttpStatus.BAD_REQUEST);
         }
     }
+    
+ // 공연을 좋아할 확률 제공
+    @GetMapping("recommend/{showId}/probability")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "사용자와 공연을 좋아할 확률 제공 "),
+            @ApiResponse(code = 401, message = "사용자와 공연을 좋아할 확률 제공 실패"),
+            @ApiResponse(code = 500, message = "서버 에러")
+    })
+    public ResponseEntity<Map<String , Object>> expectRatingGet(@ApiIgnore Authentication authentication,@PathVariable(value = "showId") Long showId) {
+        Map<String, Object> resultMap = new HashMap<>();
+        
+        SsafyUserDetails userDetails = (SsafyUserDetails) authentication.getDetails();
+        User user =userDetails.getUser();
+        
+        ExpectRatingMapping rating=showService.findExpectRating(user.getId(), showId);
+        if(rating!=null) {
+        	resultMap.put("message","success");
+            resultMap.put("rating",rating.getRating());
+            return new ResponseEntity<Map<String , Object>>(resultMap, HttpStatus.ACCEPTED);
+        }
+        resultMap.put("message","rating doesn't exist");
+        resultMap.put("rating",rating);
+        return new ResponseEntity<Map<String , Object>>(resultMap, HttpStatus.ACCEPTED);
+    }
+    
 }

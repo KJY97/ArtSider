@@ -38,9 +38,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
+
+import javax.transaction.Transactional;
 
 /**
  *
@@ -223,12 +226,12 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public void removeFavorite(Long userId, Long showId) throws Exception {
-		// TODO Auto-generated method stub
-		Favorite favorite=null;
-		favorite= favoriteRepository.findTop1ByUserAndShow(userRepository.findById(userId).get(), showRepository.findById(showId).get());
+		Optional<Favorite> favorite=favoriteRepository.findTop1ByUserAndShow(userRepository.findById(userId).get(), showRepository.findById(showId).get());
+
+		 if(favorite.isPresent()) {
+			 favoriteRepository.deleteById(favorite.get().getId());
+	        }
 		
-		
-		favoriteRepository.delete(favorite);
 	}
 	
 	public String saveUploadedFiles(final MultipartFile thumbnail) throws IOException {
@@ -282,6 +285,16 @@ public class UserServiceImpl implements UserService {
 		List<?> result=showTagRepository.findFavoriteShowTagCnt(user.getId());
 		
 		return result;
+	}
+
+	@Override
+	public boolean findFavoriteByShowAndUser(Long userId, Long showId) {
+		Favorite favorite=favoriteRepository.findByUserAndShow(userRepository.findById(userId).get(), showRepository.findById(showId).get());
+		if(favorite==null) {
+			return false;
+		}
+		return true;
+		
 	}
 
 

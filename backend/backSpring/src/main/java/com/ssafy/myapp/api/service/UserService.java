@@ -36,5 +36,6 @@ public interface UserService {
 	List<UserReviewMapping> findUserReview(User user);
 	List<?> findUserReviewRatingCnt(User user);
 	List<?> findFavoriteShowTagCnt(User user);
+	boolean findFavoriteByShowAndUser(Long userId, Long showId);
 	
 }

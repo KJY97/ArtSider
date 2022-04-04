@@ -68,10 +68,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/users/show/{id}").authenticated()
                 .antMatchers("/api/users/review/ratingStars").authenticated()
                 .antMatchers("/api/users/show/preference/tag").authenticated()
-                .antMatchers("/api/show/reviews/{reviewId}").authenticated()
+                .antMatchers(HttpMethod.PUT,"/api/show/reviews/{reviewId}").authenticated()
                 .antMatchers(HttpMethod.POST,"/api/show/reviews/{id}").authenticated()
                 .antMatchers(HttpMethod.POST,"/api/show/expectations/{id}").authenticated()
-                .antMatchers("/api/show/expectations/{expectationId}").authenticated()
+                .antMatchers(HttpMethod.PUT,"/api/show/expectations/{expectationId}").authenticated()
                 .and().cors();
     }
 }

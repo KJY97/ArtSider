@@ -6,6 +6,7 @@ import com.ssafy.myapp.api.response.PopularShowListGetRes;
 import com.ssafy.myapp.api.response.ShowDetailsGetRes;
 import com.ssafy.myapp.api.response.ShowListGetRes;
 import com.ssafy.myapp.db.entity.*;
+import com.ssafy.myapp.db.mapping.ExpectRatingMapping;
 import com.ssafy.myapp.db.mapping.ShowListMapping;
 import com.ssafy.myapp.db.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,8 @@ public class ShowServiceImpl implements ShowService{
     private final RecommendationRepository recommendationRepository;
     private final ShowRepository showRepository;
     private final ShowDetailImgRepository showDetailImgRepository;
+    private final ExpectRatingRepository expectRatingRepository;
+    private final UserRepository userRepository;
 
 
     // 검색 기능(제목)
@@ -305,5 +308,13 @@ public class ShowServiceImpl implements ShowService{
         artCenterList.add(artCenterInfo);
         return artCenterList;
     }
+
+	@Override
+	public ExpectRatingMapping findExpectRating(Long userId, Long showId) {
+		
+		ExpectRatingMapping rating=expectRatingRepository.findByUserAndShow(userRepository.findById(userId).get(), showRepository.findById(showId).get());
+		
+		return rating;
+	}
 
 }
