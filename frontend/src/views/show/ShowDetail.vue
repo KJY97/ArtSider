@@ -32,6 +32,12 @@
                 {{ showDetail.startDate }} ~ {{ showDetail.endDate }}
               </div>
             </li>
+            <li class="li-info" v-if="!showDetail.endDate">
+              <strong class="main-label">오픈런 여부</strong>
+              <div class="sub-label">
+                Y
+              </div>
+            </li>
             <li class="li-info">
               <strong class="main-label">공연시간</strong>
               <div class="sub-label">
@@ -44,11 +50,12 @@
                 {{ showDetail.age }}
               </div>
             </li>
-            <li class="li-info d-flex">
+            <li class="li-info d-flex" v-if="showDetail.price">
               <strong class="main-label">가격</strong>
-              <div class="sub-label wrrap">
+              <div class="sub-label price">
               </div>
             </li>
+            <br>
             
             <div class="mt-auto">
               <v-dialog
@@ -69,7 +76,6 @@
                   >
                     예매하러가기
                   </v-btn>
-                  <v-btn rounded large disabled v-if="isEnd" style="width:340px;">종료 된 공연입니다</v-btn>
                 </template>
                 <v-card>
                   <v-card-title class="text-h5">
@@ -97,6 +103,7 @@
                   </v-card-actions>
                 </v-card>
               </v-dialog>
+              <v-btn rounded large disabled v-if="isEnd" style="width:340px;">종료 된 공연입니다</v-btn>
               <!-- disable 줄것 -->
             </div>
           </ul>
@@ -126,11 +133,13 @@
           <ShowReviews
             :id="id"
             v-if="number == 2"
+            :userId="userId"
           ></ShowReviews>
 
           <ShowExpectations
             :id="id"
             v-if="number == 3"
+            :userId="userId"
           ></ShowExpectations>
 
           <ShowArtCenter
@@ -178,6 +187,7 @@ export default {
       number: 1,
       dialog: false,
       hashTag: '',
+      userId: '',
 
     }
   },
@@ -188,32 +198,46 @@ export default {
       this.$store.dispatch('getDetail', {id:id})
       .then(res => {
         console.log(res.data)
-        this.showDetail = res.data
+        this.showDetail = res.data.items[0]
         this.showDetail.startDate = this.showDetail.startDate.slice(0,10)
-        this.showDetail.endDate = this.showDetail.startDate.slice(0,10)
-
-        const text = this.showDetail.price
-        const firstText = text.replaceAll('원', '원\n')
-        const newText = firstText.replaceAll('/\n/', '<br/>')
-        const p = document.querySelector('.wrrap')
-        p.innerText = newText
-        
+        const today = new Date()
+        const year = today.getFullYear();
+        const month = ('0' + (today.getMonth() + 1)).slice(-2);
+        const day = ('0' + today.getDate()).slice(-2);
+        const dateString = year + '-' + month  + '-' + day;
+        this.showDetail.endDate = this.showDetail.endDate.slice(0,10)
+        if (this.showDetail.endDate < dateString) {
+          this.isEnd = true
+        }
+      })
+      .then(() => {
+        if (this.showDetail.price) {
+          const text = this.showDetail.price
+          const firstText = text.replaceAll('원', '원\n')
+          const newText = firstText.replaceAll('/\n/', '<br/>')
+          const p = document.querySelector('.price')
+          p.innerText = newText
+        }
       })
     },
     changeShow: function(number) {
       this.number = number
     },
+    // 선호목록 추가
+    addPreference: function() {
+      this.$store.dispatch('addPreference', {id:this.id})
+    },
+    // 선호목록 제거
+    deletePreference: function() {
+      this.$store.dispatch('deletePreference', {id:this.id})
+    },
     // 티켓사이트 이동 & 선호 목록 추가
     goTicketSite: function(number) {
       if (number == 1) {
-        this.$store.dispatch('getDetailgoTicketSite', {id:this.id})
+        this.addPreference()
       }
       // 예매사이트로 가게 하기
-      window.location.href=`https://interpark.com/${this.showId}`
-    },
-    // 조회한 공연 추가
-    addLookUp: function () {
-      this.$store.dispatch('addLookUp', {id:this.id})
+      window.location.href=`https://tickets.interpark.com/goods/${this.showDetail.showId}`
     },
     // 연관 공연 추가
     addRelatedShow: function () {
@@ -226,12 +250,20 @@ export default {
     // 연관 공연 상세보기 페이지로 이동
     moveToShow: function(id) {
       this.$router.push({name: 'ShowDetail', params: {id : id}})
+    },
+    // 유저 정보 가져오기
+    getUserInfo: function() {
+      this.$store.dispatch('getUserInfo')
+      .then((res) => {
+        this.userId = res.data.userId
+      })
     }
   },
   created: function () {
-    // this.id = this.$route.params.id
-    this.id = 4
+    this.id = this.$route.params.showId
+    // this.id = 4
     this.getDetail(this.id)
+    this.getUserInfo()
   }
 }
 </script>

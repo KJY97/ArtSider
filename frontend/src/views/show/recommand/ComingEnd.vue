@@ -2,10 +2,10 @@
 <div class="swiper mt-6">
   <h1 class="ml-4 mb-4">종료 임박</h1> 
   <div class="swiper-wrapper">
-    <div v-for="(idx, comingEnd) in comingEndList" :key="idx">
+    <div v-for="(comingEnd, idx) in comingEndList" :key="idx">
       <div class="swiper-slide">
         <v-img
-          @click="$router.push({path: `show-detail/${comingEnd.id}`})"
+          @click="addInquire(comingSoon.id)"
           :aspect-ratio="3/4"
           :src="comingEnd.posterPath"    
           >
@@ -36,7 +36,13 @@ export default {
       this.$store.dispatch('getComingEndShow')
       .then(res => {
         console.log(res.data)
-        this.comingEndList = res.data
+        this.comingEndList = res.data.items
+      })
+    },
+    addInquire: function (id) {
+      this.$store.dispatch('addInquire', id)
+      .then(() => {
+        this.$router.push({name: `ShowDetail`, params: { showId: id}})
       })
     }
   },

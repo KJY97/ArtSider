@@ -2,7 +2,7 @@
   <div>
     <div class="d-flex justify-center flex-column align-center mt-5">
       <h3>공연장 및 주변시설</h3>
-      <p>공연장 전화 번호 : {{ showArtCenterList.artCenterTel }}</p>
+      <p v-if="showArtCenterList.artCenterTel">공연장 전화 번호 : {{ showArtCenterList.artCenterTel }}</p>
     </div>
     <br>
     <KakaoMap 
@@ -33,8 +33,7 @@ export default {
     getShowArtCenter: function (ArtCenterName) {
       this.$store.dispatch('getshowArtCenter', {ArtCenterName:ArtCenterName})
       .then(res => {
-        console.log(res)
-        this.showArtCenterList = res.data
+        this.showArtCenterList = res.data.items[0]
       })
     },
   },

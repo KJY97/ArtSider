@@ -99,6 +99,16 @@ export default new Vuex.Store({
   },
 
   actions: {
+    // 조회한 공연 추가
+    addInquire({state}, data){
+      state
+      const url = `/api/users/show/${data.id}`
+      return axios.post(url, {
+        headers: {
+          Authorization : `Bearer ${state.token}`
+        },
+      })
+    },
     // 관람 후기 제거
     deleteShowReview({state}, data){
       state
@@ -117,7 +127,10 @@ export default new Vuex.Store({
         headers: {
           Authorization : `Bearer ${state.token}`
         },
-        data: data
+        userId: data.userId,
+        title: data.title,
+        contents: data.contents,
+        rating: data.rating,
       })
     },
     // 관람 후기 생성
@@ -128,24 +141,37 @@ export default new Vuex.Store({
         headers: {
           Authorization : `Bearer ${state.token}`
         },
-        data: data
+        userId: data.userId,
+        title: data.title,
+        contents: data.contents,
+        rating: data.rating,
       })
     },
     // 관람 후기 목록 조회
     getShowReviews({state}, data){
       state
-      const url = `/api/show/reviews/${data.id}?page=${data.num}`
+      let sort = ''
+      if (data.categoryNum == 1) {
+        sort = 'createDate,asc'
+      } else if (data.categoryNum == 2) {
+        sort = 'createDate,desc'
+      } else if (data.categoryNum == 3) {
+        sort = 'rating,asc'
+      } else if (data.categoryNum == 4) {
+        sort = 'rating,desc'
+      }
+      let url = ''
+      if (sort == '') {
+        url = `/api/show/reviews/${data.id}?page=${data.num}`
+      } else {
+        url = `/api/show/reviews/${data.id}?page=${data.num}&size=5&sort=${sort}`
+      }
+      
       return axios.get(url)
     },
-
-    // 유저 아이디 불러오기
-    getUserId({state}){
-      state
-      return state.userInfo.userId
-    },
     // 기대평 제거
-    deleteShowExpectations({state},expectationId){
-      const url = `/api/show/expectations/${expectationId}`
+    deleteShowExpectations({state},data){
+      const url = `/api/show/expectations/${data.expectationId}`
       return axios.delete(url, { 
         headers: {
           Authorization : `Bearer ${state.token}`
@@ -155,12 +181,15 @@ export default new Vuex.Store({
     // 기대평 수정
     putShowExpectations({state}, data){
       state
+      console.log(data)
       const url = `/api/show/expectations/${data.expectationId}`
       return axios.put(url, {
         headers: {
           Authorization : `Bearer ${state.token}`
         },
-        data: data,
+        userId: data.userId,
+        title: data.title,
+        contents: data.contents,
       })
     },
 
@@ -172,13 +201,26 @@ export default new Vuex.Store({
         headers: {
           Authorization : `Bearer ${state.token}`
         },
-        data: data,
+        userId: data.userId,
+        title: data.title,
+        contents: data.contents,
       })
     },
     // 기대평 목록 조회
     getShowExpectations({state}, data){
       state
-      const url = `/api/show/expectations/${data.id}`
+      let sort = ''
+      if (data.categoryNum == 1) {
+        sort = 'createDate,asc'
+      } else if (data.categoryNum == 2) {
+        sort = 'createDate,desc'
+      }
+      let url = ''
+      if (sort == '') {
+        url = `/api/show/expectations/${data.id}?page=${data.num}`
+      } else {
+        url = `/api/show/expectations/${data.id}?page=${data.num}&size=5&sort=${sort}`
+      }
       return axios.get(url)
     },
     // 연관 공연 추가
@@ -186,16 +228,6 @@ export default new Vuex.Store({
       state
       const url = `/api/${data.id}/hashTag`
       return axios.get(url)
-    },
-    // 조회한 공연 추가
-    addLookUp({state}, data){
-      state
-      const url = `/api/show/${data.id}`
-      return axios.post(url, {
-        headers: {
-          Authorization : `Bearer ${state.token}`
-        },
-      })
     },
 
     // 티켓사이트 이동 & 선호 목록 추가
@@ -297,7 +329,26 @@ export default new Vuex.Store({
       })
 
     },
-
+    // 선호 목록 추가
+    addPreference({state}, data) {
+      state
+      const url = `/api/users/show/${data.id}/preference`
+      return axios.post(url, {
+        headers: {
+          Authorization : `Bearer ${state.token}`
+        },
+      })
+    },
+    // 선호 목록 제거
+    deletePreference({state}, data) {
+      state
+      const url = `/api/users/show/${data.id}/preference`
+      return axios.delete(url, {
+        headers: {
+          Authorization : `Bearer ${state.token}`
+        },
+      })
+    },
 
     // 관심 공연 목록 조회
     getMyPreference({commit, state}){
@@ -399,166 +450,167 @@ export default new Vuex.Store({
         })
       }
     },
-        // 인기 공연 불러오기
-        getPopularShow({ state }){
-          state
-          const url = '/api/show/popular/'
-          // const userdata = data
-          return axios.get(url)
-          
-        },
-        // 카테고리 별 인기공연
-        getCategoryPopularShow({ state }, data){
-          state
-          const url = ''
-          if ( data.num == 1) {
-            this.url = '/api/show/CL/popular'
-          } else if ( data.num == 2) {
-            this.url = '/api/show/CO/popular'
-          } else if ( data.num == 3) {
-            this.url = '/api/show/FA/popular'
-          } else if ( data.num == 4) {
-            this.url = '/api/show/MU/popular'
-          } else if ( data.num == 5) {
-            this.url = '/api/show/DR/popular'
-          }
-    
-          // 카테고리
-          // -MU :뮤지컬
-          // -CL: 클래식/오페라
-            // -DA: 무용/전통예술
-            // -FA: 아동/가족
-            // -DR: 연극
-            // -CO: 콘서트
-          // const userdata = data
-          return axios.get(url)
-        },
-        // 곧 개봉하는 공연 불러오기
-        getComingSoonShow({ state }){
-          state
-          const url = '/api/show/startDate/'
-          return axios.get(url)
-        },
-    
-        getCategoryComingSoonShow({ state }, data){
-          state
-          const url = ''
-          if ( data.num == 1) {
-            this.url = '/api/show/CL/startDate'
-          } else if ( data.num == 2) {
-            this.url = '/api/show/CO/startDate'
-          } else if ( data.num == 3) {
-            this.url = '/api/show/FA/startDate'
-          } else if ( data.num == 4) {
-            this.url = '/api/show/MU/startDate'
-          } else if ( data.num == 5) {
-            this.url = '/api/show/DR/startDate'
-          }
-    
-          // 카테고리
-          // -MU :뮤지컬
-          // -CL: 클래식/오페라
-            // -DA: 무용/전통예술
-            // -FA: 아동/가족
-            // -DR: 연극
-            // -CO: 콘서트
-          // const userdata = data
-          return axios.get(url)
-        },
-    
-        // 곧 끝나는 공연 불러오기
-        getComingEndShow({ state }){
-          state
-          const url ='/api/show/endDate/'
-          return axios.get(url)
-        },
-    
-        getCategoryComingEndShow({ state }, data){
-          state
-          const url = ''
-          if ( data.num == 1) {
-            this.url = '/api/show/CL/endDate'
-          } else if ( data.num == 2) {
-            this.url = '/api/show/CO/endDate'
-          } else if ( data.num == 3) {
-            this.url = '/api/show/FA/endDate'
-          } else if ( data.num == 4) {
-            this.url = '/api/show/MU/endDate'
-          } else if ( data.num == 5) {
-            this.url = '/api/show/DR/endDate'
-          }
-    
-          // 카테고리
-          // -MU :뮤지컬
-          // -CL: 클래식/오페라
-            // -DA: 무용/전통예술
-            // -FA: 아동/가족
-            // -DR: 연극
-            // -CO: 콘서트
-          // const userdata = data
-          return axios.get(url)
-        },
-    
-        // 선호 태그 별 공연 불러오기
-        // getPreferenceTagShow({commit, }){
-        //   const url = '/api/show/preferenceTag'
-        //   // const userdata = data
-        //   axios.get(url)
-        //     .then(res => {
-        //       commit(res.data)
-        //     })
-        //     .catch(err => {
-        //       console.log(err)
-        //     })
-        // },
-    
-    
-        // getSimilarShow({commit, }){
-        //   const url = '/api/show/similar'
-        //   // const userdata = data
-        //   axios.get(url)
-        //     .then(res => {
-        //       commit(res.data)
-        //     })
-        //     .catch(err => {
-        //       console.log(err)
-        //     })
-        // },
-        // getCategorySimilarShow({commit, }){
-        //   const url = '/api/show/similar/{category}'
-        //   // const userdata = data
-        //   axios.get(url)
-        //     .then(res => {
-        //       commit(res.data)
-        //     })
-        //     .catch(err => {
-        //       console.log(err)
-        //     })
-        // },
-    
-        // getNearShow({commit, }){
-        //   const url = '/api/show/popular/{category}'
-        //   // const userdata = data
-        //   axios.get(url)
-        //     .then(res => {
-        //       commit(res.data)
-        //     })
-        //     .catch(err => {
-        //       console.log(err)
-        //     })
-        // },
-    
-        // getCategoryNearShow({commit, }){
-        //   const url = '/api/show/popular/{category}'
-        //   // const userdata = data
-        //   axios.get(url)
-        //     .then(res => {
-        //       commit(res.data)
-        //     })
-        //     .catch(err => {
-        //       console.log(err)
-        //     })
-        // },
+    // 인기 공연 불러오기
+    getPopularShow({ state }){
+      state
+      const url = '/api/show/popular/'
+      // const userdata = data
+      console.log('인기공연')
+      return axios.get(url)
+      
+    },
+    // 카테고리 별 인기공연
+    getCategoryPopularShow({ state }, data){
+      state
+      const url = ''
+      if ( data.num == 1) {
+        this.url = '/api/show/CL/popular'
+      } else if ( data.num == 2) {
+        this.url = '/api/show/CO/popular'
+      } else if ( data.num == 3) {
+        this.url = '/api/show/FA/popular'
+      } else if ( data.num == 4) {
+        this.url = '/api/show/MU/popular'
+      } else if ( data.num == 5) {
+        this.url = '/api/show/DR/popular'
+      }
+
+      // 카테고리
+      // -MU :뮤지컬
+      // -CL: 클래식/오페라
+        // -DA: 무용/전통예술
+        // -FA: 아동/가족
+        // -DR: 연극
+        // -CO: 콘서트
+      // const userdata = data
+      return axios.get(url)
+    },
+    // 곧 개봉하는 공연 불러오기
+    getComingSoonShow({ state }){
+      state
+      const url = '/api/show/startDate/'
+      return axios.get(url)
+    },
+
+    getCategoryComingSoonShow({ state }, data){
+      state
+      const url = ''
+      if ( data.num == 1) {
+        this.url = '/api/show/CL/startDate'
+      } else if ( data.num == 2) {
+        this.url = '/api/show/CO/startDate'
+      } else if ( data.num == 3) {
+        this.url = '/api/show/FA/startDate'
+      } else if ( data.num == 4) {
+        this.url = '/api/show/MU/startDate'
+      } else if ( data.num == 5) {
+        this.url = '/api/show/DR/startDate'
+      }
+
+      // 카테고리
+      // -MU :뮤지컬
+      // -CL: 클래식/오페라
+        // -DA: 무용/전통예술
+        // -FA: 아동/가족
+        // -DR: 연극
+        // -CO: 콘서트
+      // const userdata = data
+      return axios.get(url)
+    },
+
+    // 곧 끝나는 공연 불러오기
+    getComingEndShow({ state }){
+      state
+      const url ='/api/show/endDate/'
+      return axios.get(url)
+    },
+
+    getCategoryComingEndShow({ state }, data){
+      state
+      const url = ''
+      if ( data.num == 1) {
+        this.url = '/api/show/CL/endDate'
+      } else if ( data.num == 2) {
+        this.url = '/api/show/CO/endDate'
+      } else if ( data.num == 3) {
+        this.url = '/api/show/FA/endDate'
+      } else if ( data.num == 4) {
+        this.url = '/api/show/MU/endDate'
+      } else if ( data.num == 5) {
+        this.url = '/api/show/DR/endDate'
+      }
+
+      // 카테고리
+      // -MU :뮤지컬
+      // -CL: 클래식/오페라
+        // -DA: 무용/전통예술
+        // -FA: 아동/가족
+        // -DR: 연극
+        // -CO: 콘서트
+      // const userdata = data
+      return axios.get(url)
+    },
+
+    // 선호 태그 별 공연 불러오기
+    // getPreferenceTagShow({commit, }){
+    //   const url = '/api/show/preferenceTag'
+    //   // const userdata = data
+    //   axios.get(url)
+    //     .then(res => {
+    //       commit(res.data)
+    //     })
+    //     .catch(err => {
+    //       console.log(err)
+    //     })
+    // },
+
+
+    // getSimilarShow({commit, }){
+    //   const url = '/api/show/similar'
+    //   // const userdata = data
+    //   axios.get(url)
+    //     .then(res => {
+    //       commit(res.data)
+    //     })
+    //     .catch(err => {
+    //       console.log(err)
+    //     })
+    // },
+    // getCategorySimilarShow({commit, }){
+    //   const url = '/api/show/similar/{category}'
+    //   // const userdata = data
+    //   axios.get(url)
+    //     .then(res => {
+    //       commit(res.data)
+    //     })
+    //     .catch(err => {
+    //       console.log(err)
+    //     })
+    // },
+
+    // getNearShow({commit, }){
+    //   const url = '/api/show/popular/{category}'
+    //   // const userdata = data
+    //   axios.get(url)
+    //     .then(res => {
+    //       commit(res.data)
+    //     })
+    //     .catch(err => {
+    //       console.log(err)
+    //     })
+    // },
+
+    // getCategoryNearShow({commit, }){
+    //   const url = '/api/show/popular/{category}'
+    //   // const userdata = data
+    //   axios.get(url)
+    //     .then(res => {
+    //       commit(res.data)
+    //     })
+    //     .catch(err => {
+    //       console.log(err)
+    //     })
+    // },
   },
   modules: {
   }

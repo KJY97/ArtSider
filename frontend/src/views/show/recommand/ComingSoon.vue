@@ -2,10 +2,10 @@
 <div class="swiper mt-6">
   <h1 class="ml-4 mb-4">개봉 예정 공연</h1> 
   <div class="swiper-wrapper">
-    <div v-for="(idx, comingSoon) in comingSoonList" :key="idx">
+    <div v-for="(comingSoon, idx) in comingSoonList" :key="idx">
       <div class="swiper-slide">
         <v-img
-          @click="$router.push({path: `show-detail/${comingSoon.id}`})"
+          @click="addInquire(comingSoon.id)"
           :aspect-ratio="3/4"
           :src="comingSoon.posterPath"    
           >
@@ -36,7 +36,13 @@ export default {
       this.$store.dispatch('getComingSoonShow')
       .then(res => {
         console.log(res.data)
-        this.comingSoonList = res.data
+        this.comingSoonList = res.data.items
+      })
+    },
+    addInquire: function (id) {
+      this.$store.dispatch('addInquire', id)
+      .then(() => {
+        this.$router.push({name: `ShowDetail`, params: { showId: id}})
       })
     }
   },
