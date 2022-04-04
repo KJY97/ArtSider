@@ -31,6 +31,15 @@
               style="background-color: gray;"
               class="preference-content  mx-auto"
             >
+              <v-img
+                :src="poster.posterPath"
+                :aspect-ratio="3/4"
+                width="100%"
+                height="100%"
+              >
+
+              </v-img>
+
             </v-card>
           </v-col>
         </v-row>
