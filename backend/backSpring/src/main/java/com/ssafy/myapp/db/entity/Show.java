@@ -88,5 +88,6 @@ public class Show {
     @LazyCollection(LazyCollectionOption.FALSE)
     @JsonBackReference //추가
     private List<Viewed> viewed = new ArrayList<>();
+
 }
 

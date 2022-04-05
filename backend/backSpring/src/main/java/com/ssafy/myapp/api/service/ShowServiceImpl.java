@@ -26,6 +26,7 @@ public class ShowServiceImpl implements ShowService{
     private final NoticeImgRepository noticeImgRepository;
     private final PopularShowRepository popularShowRepository;
     private final RecommendationRepository recommendationRepository;
+    private final RelatedShowRepository relatedShowRepository;
     private final ShowRepository showRepository;
     private final ShowDetailImgRepository showDetailImgRepository;
     private final ExpectRatingRepository expectRatingRepository;
@@ -192,6 +193,20 @@ public class ShowServiceImpl implements ShowService{
 
         }
         return showRecommendationList;
+    }
+
+    // 연관 공연 추천
+    @Override
+    public List<ShowListGetRes> findShowRelatedList(Long showId) {
+        List<ShowListGetRes> showRelatedList = new ArrayList<>();
+        List<RelatedShow> showList = relatedShowRepository.findByShowId(showId);
+        System.out.println("showList = " + showList.toString());
+        for (RelatedShow show : showList) {
+            ShowListMapping showInfo = showRepository.findByIdEquals(show.getRelatedShowId());
+            ShowListGetRes relatedShowInfo = new ShowListGetRes(showInfo);
+            showRelatedList.add(relatedShowInfo);
+        }
+        return showRelatedList;
     }
 
     // 전체 인기 공연 목록
