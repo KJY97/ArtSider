@@ -75,10 +75,12 @@ export default {
 .carousel-wrapper{
   position: relative;
   width: 100%;
-  height: 70vh;
+  height: 80vh;
   perspective: 1300px;
   overflow: hidden;
-  background-color: black;
+  background-image: url("~@/assets/home_image.png");
+  background-size: 100% 100%;
+  
 }
 .carousel-wrapper #circle{
   position: absolute;  

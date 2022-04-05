@@ -6,14 +6,25 @@
       cols="6"
     >
       <h1> 내가 작성한 리뷰</h1>
-      <div class="my-reviews-box">
+      <div class="my-reviews-box"  style="margin-top:20px;">
         <div class="my-review"
           v-for="(review, i) in myReviews"
           :key="i"
         >
-          <p>
-            {{ review.contents }}
-          </p>
+          <v-container
+            @click="$router.push({name: 'ShowDetail', params: {showId : review.showId}})"
+            style="border: 1px solid rgba(0, 0, 0, .3); border-radius:20px; cursor: pointer;"
+          >
+            <span class="opacity-text">평점 : {{ review.rating }} | </span>
+            <div>
+              <br>
+              <strong> {{review.title}} </strong> 
+            </div>
+            <br>
+            <span> {{review.contents}} </span>
+            <br>
+            <span class="opacity-text">작성 시간 :  | </span>
+          </v-container>
         </div>
       </div>
     </v-col>
@@ -125,13 +136,18 @@ export default {
 }
 
 .my-reviews-box{
+  height: 80%;
   overflow-y: auto;
 }
 
-.my-reviews-box .my-review{
+/* .my-reviews-box .my-review{
   margin-bottom: 30px;
   height: 30%;
   background-color: #FFF0E2;
-}
+} */
+
+.opacity-text {
+    opacity: 0.6;
+  }
 
 </style>

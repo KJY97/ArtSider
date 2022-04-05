@@ -4,7 +4,7 @@
     :num=0
     />
     <br>
-    <v-container>
+    <v-container class="poster-wrapper">
       <p class="text-center">
         <span class="text-h3 d-flex align-center justify-center" ><v-icon size="57.6px" color="yellow">mdi-star</v-icon> 맞춤 공연 추천 </span>
       </p>
@@ -92,7 +92,7 @@ export default {
   position: relative;
   width: 100%;
   height: fit-content;
-  background-color: #FEFEF4;
 }
+
 
 </style>
