@@ -208,9 +208,10 @@ public class UserController {
     }
     
     @PostMapping("/show/{id}/preference")
-    @ApiOperation(value = "회원 관심목록 추가 ", notes = "회원의 관심 공연을 추가한다. ")
+    @ApiOperation(value = "회원 관심목록 추가 및 유저 선호 태그 추가",
+            notes = "회원의 관심 공연과 해당 공연의 태그를 유저 선호 태그로 저장한다.")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "추가 성공  "),
+            @ApiResponse(code = 200, message = "추가 성공"),
             @ApiResponse(code = 400, message = "추가 실패/중복된 공연 등록"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
@@ -232,6 +233,14 @@ public class UserController {
         if(favorite==null) {
         	 resultMap.put("message", "fail");
              return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.BAD_REQUEST);
+        }
+
+        try {
+            userService.addUserTag(user.getId(), showId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            resultMap.put("message", "error saving userTag");
+            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.BAD_REQUEST);
         }
        
         resultMap.put("message", "success");
@@ -314,7 +323,7 @@ public class UserController {
     }
     
     @DeleteMapping("/show/{id}/preference")
-    @ApiOperation(value = "회원 관심목록 삭제 ", notes = "회원의 관심 공연을 삭제한다. ")
+    @ApiOperation(value = "회원 관심목록 및 유저 선호 태그 삭제", notes = "회원의 관심 공연 및 해당 공연의 선호 태그를 삭제한다.")
     @ApiResponses({
             @ApiResponse(code = 200, message = "삭제 성공  "),
             @ApiResponse(code = 400, message = "삭제 실패/중복된 공연 등록"),
@@ -326,11 +335,11 @@ public class UserController {
     	
         SsafyUserDetails userDetails = (SsafyUserDetails) authentication.getDetails();
         User user =userDetails.getUser();
-        
-        Favorite favorite=null;
+
         System.out.println(user.getId()+"   "+ showId);
         try {
 			userService.removeFavorite(user.getId(), showId);
+            userService.removeUserTag(user.getId(), showId);
 		} catch (Exception e) {
 			e.printStackTrace();
 			resultMap.put("message", "fail");

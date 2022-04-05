@@ -16,5 +16,7 @@ public interface ShowTagRepository extends JpaRepository<ShowTag, Long> {
 			+ "FROM ShowTag t INNER JOIN t.show s "
 			+ "WHERE s.id IN (SELECT subS.id FROM Favorite f INNER JOIN f.user subU INNER JOIN f.show subS WHERE subU.id=:id) "
 			+ "GROUP BY t.tagContent")
-    public List<?> findFavoriteShowTagCnt(@Param("id") Long userId);
+    List<?> findFavoriteShowTagCnt(@Param("id") Long userId);
+
+	List<ShowTag> findByShowId(Long showId);
 }
