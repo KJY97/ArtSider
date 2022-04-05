@@ -25,7 +25,8 @@ public class ShowServiceImpl implements ShowService{
     private final CastingListRepository castingListRepository;
     private final NoticeImgRepository noticeImgRepository;
     private final PopularShowRepository popularShowRepository;
-    private final RecommendationRepository recommendationRepository;
+    private final UserBasedRepository userBasedRepository;
+    private final RelatedShowRepository relatedShowRepository;
     private final ShowRepository showRepository;
     private final ShowDetailImgRepository showDetailImgRepository;
     private final ExpectRatingRepository expectRatingRepository;
@@ -180,18 +181,31 @@ public class ShowServiceImpl implements ShowService{
 
     // 공연 추천(사용자간의 유사도 추천)
     @Override
-    public List<ShowListGetRes> findShowRecommendationList(Long userId) {
+    public List<ShowListGetRes> findShowRecommendationList(User user) {
 
         List<ShowListGetRes> showRecommendationList = new ArrayList<>();
-        List<Recommendation> recommendationList = recommendationRepository.findByUserId(userId);
+        List<UserBased> recommendationList = userBasedRepository.findByUserId(user);
 
-        for (Recommendation recommendation : recommendationList) {
-            ShowListMapping show = showRepository.findByIdEquals(recommendation.getShowId());
+        for (UserBased recommendation : recommendationList) {
+            ShowListMapping show = showRepository.findByIdEquals(recommendation.getShow().getId());
             ShowListGetRes recommendationShowInfo = new ShowListGetRes(show);
             showRecommendationList.add(recommendationShowInfo);
 
         }
         return showRecommendationList;
+    }
+
+    // 연관 공연 추천
+    @Override
+    public List<ShowListGetRes> findShowRelatedList(Long showId) {
+        List<ShowListGetRes> showRelatedList = new ArrayList<>();
+        List<RelatedShow> showList = relatedShowRepository.findByShowId(showId);
+        for (RelatedShow show : showList) {
+            ShowListMapping showInfo = showRepository.findByIdEquals(show.getRelatedShowId().getId());
+            ShowListGetRes relatedShowInfo = new ShowListGetRes(showInfo);
+            showRelatedList.add(relatedShowInfo);
+        }
+        return showRelatedList;
     }
 
     // 전체 인기 공연 목록
@@ -257,31 +271,14 @@ public class ShowServiceImpl implements ShowService{
     @Override
     public List<ShowDetailsGetRes> findShowDetails(Long id) throws NoSuchElementException {
 
-        Show show = showRepository.findById(id).get();
+        ShowListMapping show = showRepository.findByIdEquals(id);
         ArtCenter artCenter = artCenterRepository.findByArtCenterName(show.getArtCenterName());
         List<CastingList> casting = castingListRepository.findByShowId(show.getShowId());
         List<NoticeImg> notice = noticeImgRepository.findByShowId(show.getShowId());
         List<ShowDetailImg> showDetail = showDetailImgRepository.findByShowId(show.getShowId());
-
         List<ShowDetailsGetRes> showList = new ArrayList<>();
-        ShowDetailsGetRes showInfo = new ShowDetailsGetRes();
+        ShowDetailsGetRes showInfo = new ShowDetailsGetRes(show);
 
-        showInfo.setId(show.getId());
-        showInfo.setShowId(show.getShowId());
-        showInfo.setShowName(show.getShowName());
-        showInfo.setStartDate(show.getStartDate());
-        showInfo.setEndDate(show.getEndDate());
-        showInfo.setOpenRun(show.getOpenRun());
-        showInfo.setProducer(show.getProducer());
-        showInfo.setAge(show.getAge());
-        showInfo.setRuntime(show.getRuntime());
-        showInfo.setPrice(show.getPrice());
-        showInfo.setPosterPath(show.getPosterPath());
-        showInfo.setShowDay(show.getShowDay());
-        showInfo.setCategory(show.getCategory());
-        showInfo.setArtCenterName(show.getArtCenterName());
-        showInfo.setMenRate(show.getMenRate());
-        showInfo.setWomenRate(show.getWomenRate());
         showInfo.setCastingLists(casting);
         showInfo.setNoticeImg(notice);
         showInfo.setShowDetailImg(showDetail);

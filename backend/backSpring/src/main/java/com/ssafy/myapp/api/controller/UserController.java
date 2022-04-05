@@ -428,7 +428,7 @@ public class UserController {
             @ApiResponse(code = 401, message = "유저 정보 수정 실패"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
-    public ResponseEntity<Map<String, Object>> userReiviewList(@ApiIgnore Authentication authentication) {
+    public ResponseEntity<Map<String, Object>> userReviewList(@ApiIgnore Authentication authentication) {
     	Map<String, Object> resultMap = new HashMap<>();
     	
     	SsafyUserDetails userDetails = (SsafyUserDetails) authentication.getDetails();

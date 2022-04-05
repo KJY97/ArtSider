@@ -16,7 +16,7 @@ public class NoticeImg {
     private Long id;
 
     @Column(nullable = false)
-    private String showId;
+    private String showId;    // 인터파크 기준 공연 id => 출연진, 주의사항 이미지, 상세정보 이미지 찾기 위함
 
     @Column(length = 500, nullable = false)
     private String imgUrl;
