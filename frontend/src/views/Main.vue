@@ -1,9 +1,9 @@
 <template>
 <div>
   <Popular 
-    :swiperOption="swiperOption"
+    :swiperOption="swiperOption1"
     :num = 0
-    :genre = 0
+    :genre = main
   />
   <ComingSoon
     :swiperOption="swiperOption"
@@ -67,8 +67,20 @@ export default {
         navigation: {
           nextEl: '.swiper-button-next',
           prevEl: '.swiper-button-prev'
+        },
+      },
+      swiperOption1: {
+        slidesPerView: 5,
+        spaceBetween: 30,
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev'
+        },
+        autoplay: {
+        delay:2500,
         }
-      }
+      },
+      main: 'main'
     }
   },
 

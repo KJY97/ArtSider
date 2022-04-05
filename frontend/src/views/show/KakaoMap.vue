@@ -1,12 +1,21 @@
 <template>
 <div style="margin-bottom:100px">
+  <div class="d-flex justify-space-around">
+    <div @click="changeCategory(0)" class="d-flex flex-column justify-center align-center">
+      <v-icon size="48px" color="red">mdi-run</v-icon>
+      <p>주변 문화시설</p>
+    </div>
+    <div @click="changeCategory(1)" class="d-flex flex-column justify-center align-center">
+      <v-icon size="48px" color="red">mdi-food-outline</v-icon>
+      <p>주변 음식점</p>
+    </div>
+    <div @click="changeCategory(2)" class="d-flex flex-column justify-center align-center">
+      <v-icon size="48px" color="red">mdi-coffee-outline</v-icon>
+      <p>주변 카페</p>
+    </div>
+  </div>
   <div class="map_wrap">
     <div id="map" style="width:100%;height:100%;position:relative;overflow:hidden;"></div>
-    <ul id="category">
-        <v-btn @click="changeCategory(0)" class="category_bg">문화시설</v-btn>     
-        <v-btn @click="changeCategory(1)" class="category_bg">음식점</v-btn>
-        <v-btn @click="changeCategory(2)" class="category_bg">카페</v-btn>
-    </ul>
   </div>
   <br>
 </div>
@@ -72,7 +81,6 @@ export default {
       // 정상적으로 검색이 완료됐으면 
       if (status === kakao.maps.services.Status.OK) {
         var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-        console.log('진행')
         
 
         // 결과값으로 받은 위치를 마커로 표시합니다

@@ -1,24 +1,27 @@
 <template>
 <div>
-  <h1 class="ml-4 mb-4" v-if="genre != 0">{{ genre }} 인기 순위</h1> 
-  <h1 class="ml-4 mb-4" v-if="genre == 0">인기 순위</h1> 
+  <br>
+  
+  <h1 class="ml-4 mb-4 d-flex align-center" v-if="genre != 'main'"><v-icon size="48px" color="red">mdi-fire</v-icon>{{ genre }} 인기 순위</h1> 
+  <h1 class="ml-4 mb-4 d-flex align-center" v-if="genre == 'main'"><v-icon size="48px" color="red">mdi-fire</v-icon>인기 순위</h1> 
   <swiper class="swiper" 
     :options="swiperOption">
-  <swiper-slide
-   v-for="popular in popularList" 
-   :key="popular.id"
-  > 
-   <v-img
-        @click="addInquire(popular.id)"
-        :aspect-ratio="3/4"
-        :src="popular.posterPath"
-        style="width:50%;height:50%;"
-        >
-  </v-img>
-  </swiper-slide>
-  <div class="swiper-button-prev" slot="button-prev"></div> 
-  <div class="swiper-button-next" slot="button-next"></div>
-</swiper>
+    <swiper-slide
+    v-for="popular in popularList" 
+    :key="popular.id"
+    > 
+    <v-img
+          @click="addInquire(popular.id)"
+          :aspect-ratio="3/4"
+          :src="popular.posterPath"
+          style="width:50%;height:50%;"
+          >
+    </v-img>
+    </swiper-slide>
+    <div class="swiper-button-prev" slot="button-prev"></div> 
+    <div class="swiper-button-next" slot="button-next"></div>
+  </swiper>
+  <br>
 </div>
 </template>
 
@@ -67,12 +70,17 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .rank {
   color: #000;
   -webkit-text-stroke: 1px #fff;
   position: absolute;
   font-size: 4rem;
 }
-
+.swiper-button-prev {
+  color: red;
+}
+.swiper-button-next {
+  color: red;
+}
 </style>

@@ -96,6 +96,15 @@ export default new Vuex.Store({
   },
 
   actions: {
+    kakaoLogin({state}, data){
+      state
+      const url = data.redirectUri
+      return axios({
+        method: 'post',
+        url: url,
+        code: data.data
+      })
+    },
     // 조회한 공연 추가
     addInquire({state}, data){
       state
@@ -369,6 +378,16 @@ export default new Vuex.Store({
         router.push({name: 'Home'}).catch(()=>{})
       })
 
+    },
+    // 이공연이 선호 목록인지 조회
+    checkPreference({state}, data) {
+      state
+      const url = `/api/users/show/${data.id}/preference`
+      return axios({
+        method: 'get',
+        url: url,
+        headers: { Authorization : `Bearer ${state.token}`}
+      })
     },
     // 선호 목록 추가
     addPreference({state}, data) {
