@@ -9,7 +9,7 @@
         <span class="text-h3 d-flex align-center justify-center" ><v-icon size="57.6px" color="yellow">mdi-star</v-icon> 맞춤 공연 추천 </span>
       </p>
       <br>
-      <v-row v-if="SimilarityShowList">
+      <v-row v-if="SimilarityShowList.length == 6">
         <v-col
           v-for="(show, i) in SimilarityShowList"
           :key="i"
@@ -31,7 +31,7 @@
           </v-card>
         </v-col>
       </v-row>
-      <v-row v-if="!SimilarityShowList">
+      <v-row v-if="SimilarityShowList.length < 6">
         <v-col
           v-for="(show, i) in PopularShowList"
           :key="i"
@@ -91,7 +91,9 @@ export default {
     getSimilarityShow: function() {
       this.$store.dispatch('getSimilarityShow', {userId: this.userId})
       .then(res => {
-        this.SimilarityShowList = res.data.items.slice(0,6)
+        if (res.data.items.length > 5) {
+          this.SimilarityShowList = res.data.items.slice(0,6)
+        }
       })
     },
     getCategoryPopularShow: function(num) {

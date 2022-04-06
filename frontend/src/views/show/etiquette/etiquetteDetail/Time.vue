@@ -18,5 +18,8 @@ export default {
 </script>
 
 <style>
-
+pre {
+  word-wrap: break-word;      /* IE 5.5-7 */
+  white-space: pre-wrap;      /* current browsers */
+}
 </style>

@@ -76,6 +76,7 @@
               style="background-color: pink;"
               tile
               :elevation="3" 
+              
             >
               <div>
                 <p v-if="num==1" style><Covid19 /></p>
