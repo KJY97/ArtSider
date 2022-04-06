@@ -35,4 +35,5 @@ public interface UserService {
 	boolean findFavoriteByShowAndUser(Long userId, Long showId);
 	void addUserTag(Long userId, Long showId) throws Exception;
 	void removeUserTag(Long userId, Long showId) throws Exception;
+	List<UserTag> findUserTagByUserId(Long userId);
 }

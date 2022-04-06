@@ -18,7 +18,7 @@ import java.util.List;
 @Getter    // getter 자동 추가
 @Entity    // entity
 @NoArgsConstructor    // 기본생성자 자동 추가
-@Table(name = "performance")
+@Table(name = "performance",indexes = @Index(columnList = "showId"))
 public class Show {
 
     // 공연정보는 수정하지 않기 때문에 setter 생성x

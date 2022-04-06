@@ -82,9 +82,16 @@ public class UserServiceImpl implements UserService {
 	public User findUserByEmail(String email) {
 		User user = userRepository.findUserByEmail(email).get();
 		List<UserTag> userTag=userTagRepository.findTop3ByUserIdOrderByWeightDesc(user.getId());
-		user.setUserTag(userTag); 
+//		user.setUserTag(userTag); 
 		return user;
 	}
+	
+	@Override
+	public List<UserTag> findUserTagByUserId(Long userId) {
+		List<UserTag> userTag=userTagRepository.findTop3ByUserIdOrderByWeightDesc(userId);
+		return userTag;
+	}
+	
 
 	public boolean chkDplByEmail(String email) {
 		if(userRepository.findUserByEmail(email).isPresent())

@@ -162,23 +162,23 @@ public class UserController {
     
     
     
-    @DeleteMapping("/{userEmail}")
-    @ApiOperation(value = "유저 정보 삭제", notes = "유저 정보를 삭제 후 응답한다")
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "유저 정보 삭제(탈퇴) 성공"),
-            @ApiResponse(code = 401, message = "유저 정보 삭제(탈퇴) 실패"),
-            @ApiResponse(code = 500, message = "서버 오류")
-    })
-    public ResponseEntity<Map<String, Object>> userRemove(
-            @PathVariable("userEmail") String userEmail
-    ) {
-    	Map<String, Object> resultMap = new HashMap<>();
-
-        userService.removeUser(userEmail);
-        resultMap.put("message", "success");
-        return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
-
-    }
+//    @DeleteMapping("/{userEmail}")
+//    @ApiOperation(value = "유저 정보 삭제", notes = "유저 정보를 삭제 후 응답한다")
+//    @ApiResponses({
+//            @ApiResponse(code = 200, message = "유저 정보 삭제(탈퇴) 성공"),
+//            @ApiResponse(code = 401, message = "유저 정보 삭제(탈퇴) 실패"),
+//            @ApiResponse(code = 500, message = "서버 오류")
+//    })
+//    public ResponseEntity<Map<String, Object>> userRemove(
+//            @PathVariable("userEmail") String userEmail
+//    ) {
+//    	Map<String, Object> resultMap = new HashMap<>();
+//
+//        userService.removeUser(userEmail);
+//        resultMap.put("message", "success");
+//        return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
+//
+//    }
     
     @PostMapping("/password")
     @ApiOperation(value = "회원 비밀번호 변경", notes = "회원의 비밀번호를 변경한다.")
@@ -395,7 +395,7 @@ public class UserController {
        
         resultMap.put("userId", user.getId());
         resultMap.put("nickname", user.getNickname());
-        resultMap.put("preferTag", user.getUserTag());
+        resultMap.put("preferTag", userService.findUserTagByUserId(user.getId()));
         resultMap.put("profileImg", user.getProfileImg());
         resultMap.put("message", "success");
         return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
