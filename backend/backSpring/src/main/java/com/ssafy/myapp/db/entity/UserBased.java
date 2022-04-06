@@ -8,16 +8,18 @@ import javax.persistence.*;
 @Getter
 @Entity
 @NoArgsConstructor
-@Table(name = "recommendation")
-public class Recommendation {
+@Table(name = "user_based")
+public class UserBased {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
-    private Long showId;
+    @ManyToOne
+    @JoinColumn(name = "show_id")
+    private Show show;
 
-    @Column
-    private Long userId;
+    @ManyToOne
+    @JoinColumn(name = "userId")
+    private User user;
 }

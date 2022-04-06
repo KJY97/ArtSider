@@ -17,7 +17,11 @@ public class RelatedShow {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long showId;
+    @ManyToOne
+    @JoinColumn(name = "show_id")
+    private Show show;
 
-    private Long relatedShowId;
+    @ManyToOne
+    @JoinColumn(name = "related_show_id")
+    private Show relatedShowId;
 }

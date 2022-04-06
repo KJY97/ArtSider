@@ -11,8 +11,6 @@ import javax.persistence.*;
 @Table(name = "art_center")
 public class ArtCenter {
 
-    // 공연장 정보는 수정하지 않기 때문에 setter 생성x
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

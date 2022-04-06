@@ -5,6 +5,7 @@ import com.ssafy.myapp.api.response.ArtCenterDetailsGetRes;
 import com.ssafy.myapp.api.response.PopularShowListGetRes;
 import com.ssafy.myapp.api.response.ShowDetailsGetRes;
 import com.ssafy.myapp.api.response.ShowListGetRes;
+import com.ssafy.myapp.db.entity.User;
 import com.ssafy.myapp.db.mapping.ExpectRatingMapping;
 
 import java.text.ParseException;
@@ -18,7 +19,7 @@ public interface ShowService {
     List<ShowListGetRes> findShowCategoryStartList(String category) throws ParseException;
     List<ShowListGetRes> findShowEndList() throws ParseException;
     List<ShowListGetRes> findShowCategoryEndList(String category) throws ParseException;
-    List<ShowListGetRes> findShowRecommendationList(Long userId);
+    List<ShowListGetRes> findShowRecommendationList(User userId);
     List<ShowListGetRes> findShowRelatedList(Long ShowId);
     List<PopularShowListGetRes> findPopularShowList();
     List<PopularShowListGetRes> findPopularShowCategoryList(String category);

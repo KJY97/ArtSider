@@ -1,9 +1,7 @@
 package com.ssafy.myapp.api.response;
 
-import com.ssafy.myapp.db.entity.ArtCenter;
-import com.ssafy.myapp.db.entity.CastingList;
-import com.ssafy.myapp.db.entity.NoticeImg;
-import com.ssafy.myapp.db.entity.ShowDetailImg;
+import com.ssafy.myapp.db.entity.*;
+import com.ssafy.myapp.db.mapping.ShowListMapping;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -34,6 +32,27 @@ public class ShowDetailsGetRes {
     private List<CastingList> castingLists;    // 출연진
     private List<NoticeImg> noticeImg;    // 공지사항 이미지
     private List<ShowDetailImg> showDetailImg;    // 공연 상세 정보 이미지
+    private List<ShowTag> showTags;    // 공연 태그
+
+    public ShowDetailsGetRes(ShowListMapping entity)
+    {
+        this.id = entity.getId();
+        this.showName = entity.getShowName();
+        this.showId = entity.getShowId();
+        this.startDate = entity.getStartDate();
+        this.endDate = entity.getEndDate();
+        this.openRun = entity.getOpenRun();
+        this.producer = entity.getProducer();
+        this.age = entity.getAge();
+        this.runtime = entity.getRuntime();
+        this.price = entity.getPrice();
+        this.posterPath = entity.getPosterPath();
+        this.showDay = entity.getShowDay();
+        this.category = entity.getCategory();
+        this.menRate = entity.getMenRate();
+        this.womenRate = entity.getWomenRate();
+        this.artCenterName = entity.getArtCenterName();
+    }
 }
 
 
