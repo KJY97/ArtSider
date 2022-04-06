@@ -55,7 +55,7 @@ export default {
       articles.forEach((article)=>{
         const articleWidth = article.clientWidth
         const zDistance = parseInt(((articleWidth * 6) / 3.141592) / 2) * 1.5
-        console.log('zDistance', zDistance)
+        // console.log('zDistance', zDistance)
 
         article.style.transform = `rotateY(${yDeg}deg) translateZ(-${zDistance}px)`
         yDeg += 60

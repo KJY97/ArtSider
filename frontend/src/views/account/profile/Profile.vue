@@ -1,6 +1,8 @@
 <template>
   <div id="profile">
+    <Loading v-if="loading" />
     <v-container
+      v-else
       class="profile-wrapper"
     >
       <div class="profile-info d-flex flex-wrap">
@@ -64,10 +66,17 @@
               <v-chip
                 v-for="(tag, i) in userInfo.preferTag"
                 :key="i"
+                outlined
+                draggable
                 large
+                color="pink"
+                text-color="red"
                 label
               >
-                <span class="font-weight-bold"> {{ tag }} </span> 
+                <v-icon left>
+                  mdi-pound
+                </v-icon>
+                <span class="font-weight-bold"> {{ tag.tag }} </span> 
               </v-chip>
             </v-chip-group>
           </div>
@@ -97,11 +106,12 @@
 
 <script>
 import defaultImage from '@/assets/profile_default.png'
-
+import Loading from '@/views/show/Loading.vue'
 
 export default {
   name: 'Profile',
   components: {
+    Loading
   },
   data(){
     return{
@@ -111,7 +121,8 @@ export default {
 
       updatedName : '',
 
-      updateTrigger : false
+      updateTrigger : false,
+      loading : true
     }
   },
 
@@ -154,7 +165,8 @@ export default {
       this.$store.dispatch('getUserInfo')
       .then((res) => {
         this.userInfo = res.data
-        this.userImgName = res.data.profileImg
+        this.userImgName = res.data.profileImg !== '' ? res.data.profileImg : '' 
+        this.loading = false
       })
       .catch(() => {
         console.log('error: get profile info')
@@ -174,7 +186,7 @@ export default {
         })
       } else{
         this.userImgSrc = defaultImage
-      }
+      } 
     },
 
   }
@@ -185,7 +197,7 @@ export default {
 <style>
 #profile{
   width: 100%;
-  height: 100%;
+  /* height: 100%; */
 
 }
 
@@ -195,7 +207,7 @@ export default {
 
 .profile-wrapper{
   width: 100%;
-  height: 100%;
+  /* height: 100%; */
 }
 
 .profile-page{
@@ -203,6 +215,6 @@ export default {
 }
 
 .profile-page:hover{
-  background-color: rgb(216, 211, 211);
+  background-color: rgba(216, 211, 211, 0.5);
 }
 </style>

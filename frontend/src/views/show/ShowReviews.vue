@@ -142,7 +142,6 @@ export default {
         }
       })
       .then(() => {
-        console.log(this.showReviewsList)
         if (this.showReviewsList.length == this.reviewLength) {
           this.hide = true
         } else {

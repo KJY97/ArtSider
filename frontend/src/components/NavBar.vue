@@ -5,10 +5,10 @@
   scroll-target="#main"
   flat
   collapse-on-scroll
-  style="background-color: rgba(233,30,99,0.9)"
+  style="background-color: black"
   >
-  <v-toolbar-title class="text-uppercase">
-    <span class="font-weight-light"> ArtSider </span>
+  <v-toolbar-title class="text-uppercase d-flex align-center">
+    <v-img src="../assets/123.svg" :aspect-ratio="3.5/1" style="height:100%;max-width:125px; width:100%; cursor:pointer;" @click="moveToHome()"></v-img>
   </v-toolbar-title>
   
   <div class="menu-wrapper" style="margin-left: 50px;">
@@ -71,7 +71,7 @@
   <v-spacer></v-spacer>
 
   <div
-    style="position: relative; width: 40%;"
+    style="position: relative; width: 45%;"
   >
     <v-text-field
       :value="searchKeyword"
@@ -118,7 +118,7 @@
           v-for="result in searchResult"
           :key="result.id"
           style="height: 25%;"
-          @click="$router.push({name: 'ShowDetail', params: {showId: result.id}})"
+          @click="() => { searchKeyword = '',  $router.push({name: 'ShowDetail', params: {showId: result.id}})}"
         >
           <v-img
             :src="result.posterPath"
@@ -145,10 +145,10 @@
     </v-container>
   </div>
     <v-spacer></v-spacer>
-<!-- 
-    <v-btn text color="black">
+
+    <v-btn text color="black" @click="$router.push({name: 'Etiquette'})" >
       <span  style="color: rgb(246,247,235);"> 공연 에티켓 </span>
-    </v-btn> -->
+    </v-btn>
 
     <v-btn text color="gray" @click="deleteToken">
       <span  style="color: rgb(246,247,235);">로그아웃</span>
@@ -191,7 +191,10 @@ export default {
 
     changeKeyword($event){
       this.searchKeyword = $event.target.value
-    }
+    },
+    moveToHome: function () {
+      this.$router.push({name: 'Home'})
+    },
   },
 
   watch: {

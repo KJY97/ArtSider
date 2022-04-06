@@ -13,6 +13,12 @@
     :swiperOption="swiperOption"
     :num = 0
   />
+  <SimilarityShow
+    :swiperOption="swiperOption"
+  />
+  <RelatedTagShow
+    :swiperOption="swiperOption"
+  />
 </div>
 
 
@@ -52,8 +58,8 @@
 import Popular from '../views/show/recommand/Popular.vue'
 import ComingEnd from '../views/show/recommand/ComingSoon.vue'
 import ComingSoon from '../views/show/recommand/ComingEnd.vue'
-// import PreferenceTag from '../views/show/recommand/PreferenceTag.vue'
-// import Similar from '../views/show/recommand/Similar.vue'
+import RelatedTagShow from '../views/show/recommand/RelatedTagShow.vue'
+import SimilarityShow from '../views/show/recommand/SimilarityShow.vue'
 // import Place from '../views/show/recommand/Place.vue'
 
 
@@ -88,6 +94,8 @@ export default {
     Popular,
     ComingEnd,
     ComingSoon,
+    SimilarityShow,
+    RelatedTagShow
     // PreferenceTag,
     // Similar,
     // Place,

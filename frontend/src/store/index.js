@@ -195,7 +195,6 @@ export default new Vuex.Store({
     // 기대평 수정
     putShowExpectations({state}, data){
       state
-      console.log(data)
       const url = `/api/show/expectations/${data.expectationId}`
       return axios({
         method: 'put',
@@ -244,7 +243,7 @@ export default new Vuex.Store({
     // 유저 선호 태그 별 추천 공연 조회
     getRelatedTagShow({state}, data){
       state
-      const url = `/api/show/recommand/user/tag`
+      const url = `/api/show/recommend/user/tag`
       return axios({
         method: 'get',
         url: url,
@@ -264,15 +263,6 @@ export default new Vuex.Store({
         url: url,
       })
     },
-    // 유저가 좋아할 확률 업데이트
-    updateUserExpectation: function ({state},data) {
-      const url = `/api/show/recommand/${data.showId}/probability`
-      return axios({
-        method: 'post',
-        url: url,
-        headers: { Authorization : `Bearer ${state.token}`}
-      })
-    },
     // 사용자간의 유사도 추천 서비스
     getSimilarityShow: function ({state}) {
       const url = `/api/show/recommend/similarity`
@@ -284,9 +274,9 @@ export default new Vuex.Store({
     },
     // 유저가 좋아할 확률 조회
     getUserExpectation: function ({state},data) {
-      const url = `/api/show/recommand/${data.showId}/probability`
+      const url = `/api/show/recommend/${data.showId}/probability`
       return axios({
-        method: 'post',
+        method: 'get',
         url: url,
         headers: { Authorization : `Bearer ${state.token}`}
       })
@@ -311,7 +301,6 @@ export default new Vuex.Store({
       axios.get(url)
       .then((res) => {
         if(res.data.emailCheck){
-          console.log(res.data.emailCheck)
           alert('이메일 중복검사 통과')
           state.isMultiEmail = false
         } else{
@@ -354,7 +343,6 @@ export default new Vuex.Store({
       const url = `/api/users/${userEmail}`
       axios.post(url)
       .then((res)=>{
-        console.log(res.data.emailNumber)
         state.emailConfirmNumber = res.data.emailNumber
       })
       .catch(()=>{
@@ -412,8 +400,7 @@ export default new Vuex.Store({
     },
 
     // 관심 공연 목록 조회
-    getMyPreference({commit, state}){
-      commit
+    getMyPreference({state}){
       const url = '/api/users/profile/preference'
       return axios.get(url, {
         headers: {
@@ -443,7 +430,7 @@ export default new Vuex.Store({
       })
     },
 
-    // 내가 작성한 리뷰 목록 조회
+    // 내가 작성한 후기 목록 조회
     getUserReviews({state}){
       const url = '/api/users/profile/reviewList'
       return axios.get(url, {

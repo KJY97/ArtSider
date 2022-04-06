@@ -28,13 +28,19 @@
               </v-btn>
               </div>
               <div class="d-flex flex-wrap justify-center" style="max-width:300px;">
-                <span v-for="(Tag,idx) in hashTag" :key="idx" class="py-2">
-                  <v-chip label color="pink" draggable text-color="white" class="mr-1"><v-icon left>mdi-label</v-icon>{{ Tag }}</v-chip>
+                <span v-for="(Tag,idx) in showTags" :key="idx" class="py-2">
+                  <v-chip outlined draggable text-color="red" color="red" class="mr-1"><v-icon left size="18px">mdi-pound</v-icon>{{ Tag.tagContent }}</v-chip>
                 </span>
               </div>
             </div>
 
-            <ul class="d-flex flex-column mt-6 ml-10 pb-2" style="min-width:400px; width:100%; max-width:400px">
+            <ul class="d-flex flex-column ml-10 pb-2" style="min-width:400px; width:100%; max-width:400px">
+              <li class="li-info d-flex align-center" v-if="probability">
+                <strong class="main-label">좋아할 확률</strong>
+                <div class="sub-label" style="font-size:2rem; color:red">
+                  {{ probability }}%
+                </div>
+              </li>
               <li class="li-info">
                 <strong class="main-label">장소</strong>
                 <div class="sub-label">
@@ -135,7 +141,7 @@
                   </v-card>
                 </v-dialog>
 
-                <v-btn rounded large disabled v-if="isEnd" style="width:340px;">종료 된 공연입니다</v-btn>
+                <v-btn rounded large disabled v-if="isEnd" style="width:340px;">종료된 공연입니다</v-btn>
                 <!-- disable 줄것 -->
               </div>
             </ul>
@@ -182,23 +188,15 @@
           </div>
         </div>
       </div>
-      <div style="margin-left:100px; max-height:400px; height:100%">
-        <div class="container" style="border: 1px solid rgba(0, 0, 0, .3); position: sticky; top: 100px;">
+      <div style="margin-left:100px;" v-if="haveRelated">
+        <div class="container" style="border: 1px solid rgba(0, 0, 0, .3); position: sticky; top: 0px;">
           <p class="d-flex justify-center">연관공연</p>
-          <swiper class="swiper" 
-            :options="swiperOption"
-            style="max-height: 300px;"
-            >
-            <swiper-slide
-            v-for="(show, idx) in relatedShow" :key="idx"
-            > 
-            <v-card elevation="12" style="max-width:150px;max-height:200px;">
-              <v-img @click="moveToShow(show.id)" :src="show.posterPath" contain max-height="200" max-width="150"></v-img>
-            </v-card>
-            </swiper-slide>
-            <div class="swiper-scrollbar"></div>
-          </swiper>
-          
+          <div v-for="(show, idx) in relatedShow" :key="idx">
+            <div @click="moveToShow(show.id)" style="max-width:90px;max-height:120px; cursor:pointer;">
+              <v-img :src="show.posterPath" contain max-height="200" max-width="150"></v-img>
+            </div>
+            <br>
+          </div>
         </div>
       </div>
     </div>
@@ -233,29 +231,37 @@ export default {
       isPreference: false,
       isDone: false,
       relatedShow: [],
-      swiperOption: {
-        slidesPerView: 2,
-        spaceBetween: 30,
-        direction: 'vertical',
-        height : window.innerHeight,
-      },
-
+      haveRelated: false,
+      probability: null,
+      showTags : [],
     }
   },
 
   methods: {
-    getRelatedShow: function () {
-      this.$store.dispatch('getRelatedShow', {showId: this.id})
+    // 좋아할 확률 
+    getUserExpectation: function (id) {
+      this.$store.dispatch('getUserExpectation', {showId: id})
       .then((res) => {
-        this.relatedShow = res.data.items
+        this.probability = res.data.rating / 10 * 100
+        this.probability.toFixed(2)
+      })
+    },
+    // 연관 공연 조회
+    getRelatedShow: function (id) {
+      this.$store.dispatch('getRelatedShow', {showId: id})
+      .then((res) => {
+        if (res.data.items.length != 0) {
+          this.haveRelated = true
+          this.relatedShow = res.data.items
+        }
       })
     },
     // 공연 상세 정보 불러오기
     getDetail(id) {
       this.$store.dispatch('getDetail', {id:id})
       .then(res => {
-        console.log(res)
         this.showDetail = res.data.items[0]
+        this.showTags = this.showDetail.showTags
         this.showDetail.startDate = this.showDetail.startDate.slice(0,10)
         const today = new Date()
         const year = today.getFullYear();
@@ -306,8 +312,7 @@ export default {
     },
     // 연관 공연 상세보기 페이지로 이동
     moveToShow: function(id) {
-      console.log('이동', id)
-      this.$router.go(this.$router.currentRoute, {params: {id : id}})
+      this.$router.push({name: 'ShowDetail', params: {showId : id}}).catch(()=>{})
     },
     // 유저 정보 가져오기
     getUserInfo: function() {
@@ -328,7 +333,6 @@ export default {
     checkPreference: function() {
       this.$store.dispatch('checkPreference', this.id)
       .then((res)=> {
-        console.log(res)
         this.isPreference = res.data.isFavorite
       })
     },
@@ -344,7 +348,8 @@ export default {
     this.getUserInfo()
     this.checkPreference()
     this.addInquire(this.id)
-    this.getRelatedShow()
+    this.getRelatedShow(this.id)
+    this.getUserExpectation(this.id)
   }
 }
 </script>

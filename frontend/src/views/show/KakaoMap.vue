@@ -66,18 +66,14 @@ export default {
     initMap() {
       const address = this.artCenterAddress
       const name = this.name
-      console.log('주소', address)
-      console.log('이름', name)
       const mapContainer = document.getElementById("map"),
         mapOption = {
               center: new kakao.maps.LatLng(127.298, 36.354), // 지도의 중심좌표
               level: 5 // 지도의 확대 레벨
           };
-      console.log(address)
       var map = new kakao.maps.Map(mapContainer, mapOption); 
       var geocoder = new kakao.maps.services.Geocoder();
       geocoder.addressSearch(address, function(result, status) {
-        console.log(address)
       // 정상적으로 검색이 완료됐으면 
       if (status === kakao.maps.services.Status.OK) {
         var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
@@ -104,8 +100,6 @@ export default {
 
         // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
         map.setCenter(coords);
-      } else {
-        console.log('실패')
       }
     })
     this.map = map
@@ -167,7 +161,6 @@ export default {
  
     // 마커를 생성하고 지도 위에 마커를 표시하는 함수입니다
     addMarker: function (position) {
-      // console.log('마커를 생성')!
       var marker = new kakao.maps.Marker({
         position: position
       });
