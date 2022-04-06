@@ -65,9 +65,14 @@
                 v-for="(tag, i) in userInfo.preferTag"
                 :key="i"
                 large
+                color="pink"
+                text-color="white"
                 label
               >
-                <span class="font-weight-bold"> {{ tag }} </span> 
+                <v-icon left>
+                  mdi-label
+                </v-icon>
+                <span class="font-weight-bold"> {{ tag.tag }} </span> 
               </v-chip>
             </v-chip-group>
           </div>

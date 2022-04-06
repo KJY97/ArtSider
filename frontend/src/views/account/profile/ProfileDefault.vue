@@ -3,24 +3,30 @@
     <div
       class="preference"
     >
-      <h1> 관심 콘텐츠 </h1>
+      <div class="d-flex align-center">
+        <v-icon size="48px" color="yellow"> mdi-star-check </v-icon>
+        <h1>  관심 공연 </h1>  
+      </div>
       <v-container
         class="preference-contents-box"
       >
         <v-row
-          style="height: 100%; width: 100%"
+          style="height: 100%;"
         >
           <v-col
             v-for="(poster, i) in preferencePosters"
             :key="i"
             class="col-3 py-4"
+            style="height: 80%; "
           >
             <v-card
+              max-width="180"
+              max-height="240"
+              class="mx-auto"
               style="background-color: gray;"
-              class="preference-content"
             >
               <v-img
-                :src="poster.posterPath"
+                :src="poster.show.posterPath"
                 :aspect-ratio="3/4"
                 width="100%"
                 height="100%"
@@ -35,7 +41,10 @@
     <div 
       class="history"
     >
-      <h1> 내가 조회한 콘텐츠 목록 </h1>
+      <div class="d-flex align-center">
+        <v-icon size="48px" color="green" > mdi-cart </v-icon>
+        <h1 >  조회한 공연 </h1>
+      </div>
       <v-container
         class="history-contents-box"
       >
@@ -84,19 +93,18 @@ export default {
   created(){
     this.$store.dispatch('getMyPreference')
     .then((res) => {
-        this.preferencePosters = res.data.items
+      console.log(res.data.items)
+      this.preferencePosters = res.data.items 
+      this.$store.dispatch('getMyHistory')
+      .then((res) => {
+        this.historyPosters = res.data.items
       })
-      .catch((err) => {
-        console.log(err)
-      })
-
-
-
-    this.$store.dispatch('getMyHistory')
-    .then((res) => {
-      this.historyPosters = res.data.items
+    })
+    .catch((err) => {
+      console.log(err)
     })
   }
+
 }
 </script>
 

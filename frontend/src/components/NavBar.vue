@@ -145,10 +145,10 @@
     </v-container>
   </div>
     <v-spacer></v-spacer>
-<!-- 
-    <v-btn text color="black">
+
+    <v-btn text color="black" @click="$router.push({name: 'Etiquette'})" >
       <span  style="color: rgb(246,247,235);"> 공연 에티켓 </span>
-    </v-btn> -->
+    </v-btn>
 
     <v-btn text color="gray" @click="deleteToken">
       <span  style="color: rgb(246,247,235);">로그아웃</span>

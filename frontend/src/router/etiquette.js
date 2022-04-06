@@ -2,7 +2,7 @@
 export default [
     {
         path: '/etiquette',
-        name: 'etiquette',
+        name: 'Etiquette',
         component: () => import('@/views/show/Etiquette.vue'),
     }
 ]
