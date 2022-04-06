@@ -283,6 +283,13 @@ export default {
       } else {
         this.deletePreference()
       }
+    },
+    checkPreference: function() {
+      this.$store.dispatch('checkPreference', this.id)
+      .then((res)=> {
+        console.log(res)
+        this.isPreference = res.isFavorite
+      })
     }
   },
   created: function () {
@@ -290,6 +297,7 @@ export default {
     // this.id = 4
     this.getDetail(this.id)
     this.getUserInfo()
+    this.checkPreference()
   }
 }
 </script>

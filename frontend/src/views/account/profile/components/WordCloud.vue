@@ -1,5 +1,5 @@
 <template>
-  <div id="word-cloud" style="height: 100%">
+  <div id="word-cloud" class="word-cloud-wrapper">
   </div>
 </template>
 
@@ -10,40 +10,67 @@ const d3 = require('d3')
 
 export default {
   name: 'WordCloud',
-  props:{
-    words: Object,
-  },
+  // props:{
+  //   words: Object,
+  // },
 
   data(){
     return{
-      // words: [
-        // { text: "명배우", size: 300 },
-        // { text: "존잼", size: 264 },
-        // { text: "좋았다", size: 220 },
-        // { text: "슬픔", size: 111 },
-        // { text: "허무", size: 325 },
-        // { text: "가족", size: 101 },
-        // { text: '가성비', size: 50 },
-        // { text: '행복', size: 78  },
-        // { text: '댄스타임', size: 40 },
-        // { text: '최악', size: 12 },
-      // ],
-      width : 1000,
-      height : 700
+      words: [
+        { text: "명배우", size: 3 },
+        { text: "존잼", size: 2 },
+        { text: "좋았다", size: 2 },
+        { text: "슬픔", size: 1 },
+        { text: "허무", size: 3 },
+        { text: "가족", size: 11 },
+        { text: '가성비', size: 5 },
+        { text: '행복', size: 7  },
+        { text: '댄스타임', size: 4 },
+        { text: '최악', size: 12 },
+        { text: "ㅎㅎㅎㅎ", size: 3 },
+        { text: "테스트", size: 2 },
+        { text: "짱", size: 2 },
+        { text: "힘들다", size: 1 },
+        { text: "배고프다", size: 3 },
+        { text: "노잼", size: 11 },
+        { text: '굳', size: 5 },
+        { text: '해피', size: 7  },
+        { text: '후', size: 4 },
+        { text: '따라딴', size: 12 },
+        { text: '이렇게', size: 12 },
+        { text: "태그를", size: 3 },
+        { text: "시각화", size: 2 },
+        { text: "삼성", size: 2 },
+        { text: "복수", size: 1 },
+        { text: "희망적", size: 3 },
+        { text: "gg", size: 11 },
+        { text: '짠', size: 5 },
+        { text: '별로', size: 7  },
+        { text: 'ssafy', size: 4 },
+        { text: '소프트웨어', size: 12 },
+      ],
+      width : null,
+      height : null
     }
   },
 
   mounted(){
+    const wrapper = document.querySelector('#word-cloud')
+    const wrapperHeight = wrapper.clientHeight
+    const wrapperWidth = wrapper.clientWidth
+    this.width = wrapperWidth
+    this.height = wrapperHeight
+
     this.getLayout()
   },
 
   methods:{
     getLayout(){
       const cloud = require('d3-cloud')
-      const wordScale = d3.scaleLinear().domain([0, 400]).range([0, 200]).clamp(true)
+      const wordScale = d3.scaleLinear().domain([0, 20]).range([0, 250]).clamp(true)
       cloud()
         .words(this.words)
-        .rotate(function(d){ return d.size > 200 ? 0 : 90})
+        .rotate(function(d){ return d.size > 5 ? 0 : 90})
         .size([this.width, this.height])
         .font('Impact')
         .fontSize(function(d){
@@ -56,9 +83,9 @@ export default {
     draw(words){
      const cloud =  d3.select('#word-cloud')
         .append('svg')
-        .attr('width', this.width)
-        .attr('height', this.height)
-        .style('background', 'white')
+        .attr("preserveAspectRatio", "xMinYMin meet")
+        .attr("viewBox", `0 0 ${this.width} ${this.height}`)
+        .style('background', '#FFF0E2')
         .append('g')
         .attr('transform', 'translate(' + this.width / 2 + ',' + this.height / 2 + ')')
         .selectAll('text')
@@ -94,5 +121,13 @@ export default {
 </script>
 
 <style>
+.word-cloud-wrapper{
+    position: relative;
+    height: 100%;
+    vertical-align: top;
+    overflow: hidden;
+}
+
+
 
 </style>

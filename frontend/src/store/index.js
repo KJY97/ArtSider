@@ -4,7 +4,7 @@ import axios from 'axios'
 import router from '@/router'
 
 Vue.use(Vuex)
-axios.defaults.baseURL = 'http://localhost:8080'
+axios.defaults.baseURL = 'http://j6b202.p.ssafy.io'
 
 export default new Vuex.Store({
   state: {
@@ -96,9 +96,30 @@ export default new Vuex.Store({
   },
 
   actions: {
+
+    // 검색 결과 조회
+    getSearchResult({state}, keyword){
+      const url = '/api/show/search'
+      return axios({
+        method: 'get',
+        url: url,
+        headers: { Authorization : `Bearer ${state.token}`},
+        params: {keyword : keyword}
+      })
+    },
+
+
+    kakaoLogin({state}, data){
+      state
+      const url = data.redirectUri
+      return axios({
+        method: 'post',
+        url: url,
+        code: data.data
+      })
+    },
     // 조회한 공연 추가
     addInquire({state}, data){
-      state
       const url = `/api/users/show/${data.id}`
       return axios({
         method: 'post',
@@ -316,6 +337,7 @@ export default new Vuex.Store({
       })
     },
 
+    // 회원 생성
     createUser({dispatch}, data){
       const userData = data.userData
       const signUpVue = data.this
@@ -369,6 +391,16 @@ export default new Vuex.Store({
         router.push({name: 'Home'}).catch(()=>{})
       })
 
+    },
+    // 이공연이 선호 목록인지 조회
+    checkPreference({state}, data) {
+      state
+      const url = `/api/users/show/${data.id}/preference`
+      return axios({
+        method: 'get',
+        url: url,
+        headers: { Authorization : `Bearer ${state.token}`}
+      })
     },
     // 선호 목록 추가
     addPreference({state}, data) {
@@ -481,6 +513,21 @@ export default new Vuex.Store({
         })
       }
     },
+    
+    // 프로필 닉네임 수정
+    putUserName({state}, updatedName){
+      const url = '/api/users/profile'
+      return axios({
+        method: 'patch',
+        url: url,
+        headers: { Authorization : `Bearer ${state.token}`},
+        data: {
+          newNickname: updatedName
+        }
+      })
+    },
+
+
     // 카테고리 별 인기공연
     getCategoryPopularShow({ state }, data){
       state

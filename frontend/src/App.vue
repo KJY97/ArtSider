@@ -5,7 +5,7 @@
     style="background-color: #FEFEF4;">
       <NavBar />
       <v-main id="main" style="overflow:auto; height:100vh;" >
-        <router-view/>
+        <router-view :key="$route.fullPath"/>
       </v-main>
    
   </v-app>

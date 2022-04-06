@@ -1,8 +1,8 @@
 <template>
   <v-parallax
     dark
-    src="../../assets/hall_image.svg"
-    style="height:100vh"
+    src="../../assets/intro.png"
+    style="height:100vh;"
   >
     <v-row
       align="center"
@@ -24,27 +24,17 @@
       </v-btn>
       <br>
       <br>
-        <h4 class="sub-heading">
+      <hr style="width:400px" class="mx-auto">
+      <br>
+        <p class="sub-heading" style="font-size:16px">
           회원이 아니신가요 ? 
           <v-btn
-            class="font-weight-bold text-decoration-underline"
             text
-            color="blue"
-            plain
-            @click="() => { signUpDialog = true }"            
+            class="font-weight-bold"
+            style="font-size:16px; color:rgb(30, 130, 197);"
+            @click="() => { signUpDialog = true }"        
           > 가입하기 </v-btn>
-        </h4>
-        <br>
-        <hr style="width:400px" class="mx-auto">
-        <br>
-        <v-img
-          class="mx-auto" 
-          height="45px"
-          width="183px"
-          position="center center"
-          src="https://developers.kakao.com/tool/resource/static/img/button/login/full/ko/kakao_login_medium_narrow.png"
-          @click="kakaoLoginBtn"
-        ></v-img>
+        </p>
       </v-col>
     </v-row>
 
@@ -77,45 +67,6 @@ export default {
       signUpDialog: false
     }
   },
-  methods: {
-    kakaoLoginBtn: function() {
-      window.Kakao.init('193bfca2b0be2c8fecd92926dbcc7a1f') // Kakao Developers에서 요약 정보 -> JavaScript 키
-
-      if (window.Kakao.Auth.getAccessToken()) {
-        window.Kakao.API.request({
-          url: '/v1/user/unlink',
-          success: function (response) {
-            console.log(response)
-          },
-          fail: function (error) {
-            console.log(error)
-          },
-        })
-        window.Kakao.Auth.setAccessToken(undefined)
-      }
-
-
-      window.Kakao.Auth.login({
-        success: function () {
-          window.Kakao.API.request({
-            url: '/v2/user/me',
-            data: {
-              property_keys: ["kakao_account.email"]
-            },
-            success: async function (response) {
-              console.log(response);
-            },
-            fail: function (error) {
-              console.log(error)
-            },
-          })
-        },
-        fail: function (error) {
-          console.log(error)
-        },
-      })
-    }
-  }
 }
 </script>
 

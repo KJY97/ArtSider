@@ -3,10 +3,12 @@
     <HomeCarousel 
     :num=0
     />
-    <v-container>
+    <br>
+    <v-container class="poster-wrapper">
       <p class="text-center">
-        <span class="text-h2"> Poster </span>
+        <span class="text-h3 d-flex align-center justify-center" ><v-icon size="57.6px" color="yellow">mdi-star</v-icon> 맞춤 공연 추천 </span>
       </p>
+      <br>
       <v-row>
         <v-col
           v-for="(popular, i) in popularList"
@@ -15,13 +17,16 @@
           class="d-flex justify-center"
         >
           <v-card
-            max-height="400"
-            max-width="300"
+            style="width:100%; height:100%"
+            max-height="600"
+            max-width="450"
           >
           <v-img
-            max-height="400"
-            max-width="300"
+            style="width:100%; height:100%"
+            max-height="600"
+            max-width="450"
             :src="popular.posterPath"
+            @click="addInquire(popular.id)"
           ></v-img>
           </v-card>
         </v-col>
@@ -46,7 +51,6 @@
 <script>
 import HomeCarousel from '@/views/home/components/HomeCarousel'
 
-
 export default {
   name: 'Home',
   data(){
@@ -69,6 +73,12 @@ export default {
     },
     moveToMain: function () {
       this.$router.push({name: 'Main'})
+    },
+    addInquire: function (id) {
+      this.$store.dispatch('addInquire',{id:id})
+      .then(() => {
+        this.$router.push({name: `ShowDetail`, params: { showId: id}})
+      })
     }
   },
   created: function () {
@@ -82,7 +92,7 @@ export default {
   position: relative;
   width: 100%;
   height: fit-content;
-  background-color: #FEFEF4;
 }
+
 
 </style>
