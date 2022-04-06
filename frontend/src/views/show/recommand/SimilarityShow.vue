@@ -1,7 +1,7 @@
 <template>
-<div v-if="SimilarityShowList">
+<div v-if="isShow">
   <br>
-  <h1 class="ml-4 mb-4 d-flex align-center"><v-icon size="48px" color="blue">mdi-clock</v-icon>{{ userNickname }}님과 유사한 유저가 본 공연</h1> 
+  <h1 class="ml-4 mb-4 d-flex align-center"><v-icon size="48px" color="green">mdi-account-group</v-icon>{{ userNickname }}님과 유사한 유저가 본 공연</h1> 
   <swiper class="swiper" 
     :options="swiperOption">
     <swiper-slide
@@ -35,6 +35,7 @@ export default {
       SimilarityShowList: [],
       userId: '',
       userNickname: '',
+      isShow: false
     }
   },
    props:{
@@ -51,12 +52,15 @@ export default {
       this.$store.dispatch('getSimilarityShow', {userId: this.userId})
       .then(res => {
         this.SimilarityShowList = res.data.items
+        if (this.SimilarityShowList) {
+          this.isShow = true
+        }
       })
     },
     getUserInfo: function() {
       this.$store.dispatch('getUserInfo')
       .then((res) => {
-        this.userNickname = res.data.userNickname
+        this.userNickname = res.data.nickname
         this.userId = res.data.userId
       })
       .then(() => {
@@ -79,5 +83,11 @@ export default {
   -webkit-text-stroke: 1px #fff;
   position: absolute;
   font-size: 4rem;
+}
+.swiper-button-prev {
+  color: green;
+}
+.swiper-button-next {
+  color: green;
 }
 </style>

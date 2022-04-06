@@ -5,10 +5,10 @@
   scroll-target="#main"
   flat
   collapse-on-scroll
-  style="background-color: rgba(233,30,99,0.9)"
+  style="background-color: black"
   >
-  <v-toolbar-title class="text-uppercase">
-    <span class="font-weight-light"> ArtSider </span>
+  <v-toolbar-title class="text-uppercase d-flex align-center">
+    <v-img src="../assets/123.svg" :aspect-ratio="3.5/1" style="height:100%;max-width:125px; width:100%; cursor:pointer;" @click="moveToHome()"></v-img>
   </v-toolbar-title>
   
   <div class="menu-wrapper" style="margin-left: 50px;">
@@ -71,7 +71,7 @@
   <v-spacer></v-spacer>
 
   <div
-    style="position: relative; width: 40%;"
+    style="position: relative; width: 45%;"
   >
     <v-text-field
       :value="searchKeyword"
@@ -191,7 +191,10 @@ export default {
 
     changeKeyword($event){
       this.searchKeyword = $event.target.value
-    }
+    },
+    moveToHome: function () {
+      this.$router.push({name: 'Home'})
+    },
   },
 
   watch: {

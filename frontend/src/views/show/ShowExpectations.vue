@@ -129,7 +129,6 @@ export default {
         }
       })
       .then(() => {
-        console.log(this.showExpectationsList)
         if (this.showExpectationsList.length == this.expectationLength) {
           this.hide = true
         } else {
@@ -161,7 +160,6 @@ export default {
     },
     // 기대평 제거
     deleteShowExpectations: function(expectationId) {
-      console.log(expectationId)
       this.$store.dispatch('deleteShowExpectations', {expectationId:expectationId})
       .then(() => {
         this.pageNum = 0

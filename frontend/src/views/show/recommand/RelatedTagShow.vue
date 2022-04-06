@@ -1,7 +1,7 @@
 <template>
-<div v-if="RelatedTagShowList">
+<div v-if="isShow">
   <br>
-  <h1 class="ml-4 mb-4 d-flex align-center"><v-icon size="48px" color="blue">mdi-clock</v-icon>{{ userNickname }}님의 선호 태그와 일치하는 공연</h1> 
+  <h1 class="ml-4 mb-4 d-flex align-center"><v-icon size="48px" color="blue">mdi-thumb-up-outline</v-icon>{{ userNickname }}님의 선호 태그와 일치하는 공연</h1> 
   <swiper class="swiper" 
     :options="swiperOption">
     <swiper-slide
@@ -36,6 +36,7 @@ export default {
       userId: '',
       userNickname: '',
       userTag: '',
+      isShow: false,
     }
   },
    props:{
@@ -57,12 +58,15 @@ export default {
     getUserInfo: function() {
       this.$store.dispatch('getUserInfo')
       .then((res) => {
-        this.userNickname = res.data.userNickname
+        this.userNickname = res.data.nickname
         this.userId = res.data.userId
         this.userTag = res.data.userTag
       })
       .then(() => {
-        this.getRelatedTagShow() 
+        if (this.userTag) {
+          this.isShow = true
+          this.getRelatedTagShow() 
+        }
       })
     },
     moveShowDetail: function (id) {

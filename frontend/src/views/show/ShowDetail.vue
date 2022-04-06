@@ -28,16 +28,16 @@
               </v-btn>
               </div>
               <div class="d-flex flex-wrap justify-center" style="max-width:300px;">
-                <span v-for="(Tag,idx) in hashTag" :key="idx" class="py-2">
-                  <v-chip label color="pink" draggable text-color="white" class="mr-1"><v-icon left>mdi-label</v-icon>{{ Tag }}</v-chip>
+                <span v-for="(Tag,idx) in showTags" :key="idx" class="py-2">
+                  <v-chip outlined draggable text-color="red" color="red" class="mr-1"><v-icon left size="18px">mdi-pound</v-icon>{{ Tag.tagContent }}</v-chip>
                 </span>
               </div>
             </div>
 
-            <ul class="d-flex flex-column mt-6 ml-10 pb-2" style="min-width:400px; width:100%; max-width:400px">
-              <li class="li-info" v-if="probability">
+            <ul class="d-flex flex-column ml-10 pb-2" style="min-width:400px; width:100%; max-width:400px">
+              <li class="li-info d-flex align-center" v-if="probability">
                 <strong class="main-label">좋아할 확률</strong>
-                <div class="sub-label">
+                <div class="sub-label" style="font-size:2rem; color:red">
                   {{ probability }}%
                 </div>
               </li>
@@ -233,6 +233,7 @@ export default {
       relatedShow: [],
       haveRelated: false,
       probability: null,
+      showTags : [],
     }
   },
 
@@ -259,8 +260,8 @@ export default {
     getDetail(id) {
       this.$store.dispatch('getDetail', {id:id})
       .then(res => {
-        console.log(res)
         this.showDetail = res.data.items[0]
+        this.showTags = this.showDetail.showTags
         this.showDetail.startDate = this.showDetail.startDate.slice(0,10)
         const today = new Date()
         const year = today.getFullYear();

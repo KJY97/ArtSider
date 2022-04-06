@@ -9,9 +9,9 @@
         <span class="text-h3 d-flex align-center justify-center" ><v-icon size="57.6px" color="yellow">mdi-star</v-icon> 맞춤 공연 추천 </span>
       </p>
       <br>
-      <v-row>
+      <v-row v-if="SimilarityShowList">
         <v-col
-          v-for="(popular, i) in popularList"
+          v-for="(show, i) in SimilarityShowList"
           :key="i"
           cols="4"
           class="d-flex justify-center"
@@ -25,8 +25,30 @@
             style="width:100%; height:100%; cursor:pointer;"
             max-height="600"
             max-width="450"
-            :src="popular.posterPath"
-            @click="moveShowDetail(popular.id)"
+            :src="show.posterPath"
+            @click="moveShowDetail(show.id)"
+          ></v-img>
+          </v-card>
+        </v-col>
+      </v-row>
+      <v-row v-if="!SimilarityShowList">
+        <v-col
+          v-for="(show, i) in PopularShowList"
+          :key="i"
+          cols="4"
+          class="d-flex justify-center"
+        >
+          <v-card
+            style="width:100%; height:100%"
+            max-height="600"
+            max-width="450"
+          >
+          <v-img
+            style="width:100%; height:100%; cursor:pointer;"
+            max-height="600"
+            max-width="450"
+            :src="show.posterPath"
+            @click="moveShowDetail(show.id)"
           ></v-img>
           </v-card>
         </v-col>
@@ -56,7 +78,8 @@ export default {
   data(){
     return{
       loginDialog : false,
-      popularList: [],
+      SimilarityShowList: [],
+      PopularShowList: [],
     }
   }, 
 
@@ -65,10 +88,16 @@ export default {
   },
 
   methods: {
+    getSimilarityShow: function() {
+      this.$store.dispatch('getSimilarityShow', {userId: this.userId})
+      .then(res => {
+        this.SimilarityShowList = res.data.items.slice(0,6)
+      })
+    },
     getCategoryPopularShow: function(num) {
       this.$store.dispatch('getCategoryPopularShow', num)
       .then(res => {
-        this.popularList = res.data.items.slice(0,6)
+        this.PopularShowList = res.data.items.slice(0,6)
       })
     },
     moveToMain: function () {
@@ -79,7 +108,7 @@ export default {
     }
   },
   created: function () {
-    console.log('생성')
+    this.getSimilarityShow()
     this.getCategoryPopularShow(0)
   }
 }

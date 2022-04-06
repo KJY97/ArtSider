@@ -196,7 +196,7 @@ export default {
     checkMultiEmail(){
       const emailValidate = this.$refs.emailForm.validate()
       if(emailValidate){
-        console.log('이메일 유효성 검사 통과')
+        // console.log('이메일 유효성 검사 통과')
         this.$store.dispatch('checkMultiEmail', this.userEmail)
       } 
     },

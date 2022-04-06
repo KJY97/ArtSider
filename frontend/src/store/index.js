@@ -195,7 +195,6 @@ export default new Vuex.Store({
     // 기대평 수정
     putShowExpectations({state}, data){
       state
-      console.log(data)
       const url = `/api/show/expectations/${data.expectationId}`
       return axios({
         method: 'put',
@@ -265,9 +264,8 @@ export default new Vuex.Store({
       })
     },
     // 사용자간의 유사도 추천 서비스
-    getSimilarityShow: function ({state}, data) {
-      console.log(data)
-      const url = `/api/show/recommend/${data.userId}/similarity`
+    getSimilarityShow: function ({state}) {
+      const url = `/api/show/recommend/similarity`
       return axios({
         method: 'get',
         url: url,
@@ -303,7 +301,6 @@ export default new Vuex.Store({
       axios.get(url)
       .then((res) => {
         if(res.data.emailCheck){
-          console.log(res.data.emailCheck)
           alert('이메일 중복검사 통과')
           state.isMultiEmail = false
         } else{
@@ -346,7 +343,6 @@ export default new Vuex.Store({
       const url = `/api/users/${userEmail}`
       axios.post(url)
       .then((res)=>{
-        console.log(res.data.emailNumber)
         state.emailConfirmNumber = res.data.emailNumber
       })
       .catch(()=>{

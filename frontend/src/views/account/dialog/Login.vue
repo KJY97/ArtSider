@@ -84,7 +84,6 @@ export default {
 
   methods:{
     getToken(){
-      console.log('해라')
         this.$store.dispatch('getToken', {userEmail: this.userEmail, password: this.userPassword})
     },
 
