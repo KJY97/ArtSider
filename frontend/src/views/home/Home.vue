@@ -22,7 +22,7 @@
             max-width="450"
           >
           <v-img
-            style="width:100%; height:100%"
+            style="width:100%; height:100%; cursor:pointer;"
             max-height="600"
             max-width="450"
             :src="popular.posterPath"

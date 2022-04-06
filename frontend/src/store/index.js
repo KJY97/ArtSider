@@ -244,7 +244,7 @@ export default new Vuex.Store({
     // 유저 선호 태그 별 추천 공연 조회
     getRelatedTagShow({state}, data){
       state
-      const url = `/api/show/recommand/user/tag`
+      const url = `/api/show/recommend/user/tag`
       return axios({
         method: 'get',
         url: url,
@@ -264,18 +264,10 @@ export default new Vuex.Store({
         url: url,
       })
     },
-    // 유저가 좋아할 확률 업데이트
-    updateUserExpectation: function ({state},data) {
-      const url = `/api/show/recommand/${data.showId}/probability`
-      return axios({
-        method: 'post',
-        url: url,
-        headers: { Authorization : `Bearer ${state.token}`}
-      })
-    },
     // 사용자간의 유사도 추천 서비스
-    getSimilarityShow: function ({state}) {
-      const url = `/api/show/recommend/similarity`
+    getSimilarityShow: function ({state}, data) {
+      console.log(data)
+      const url = `/api/show/recommend/${data.userId}/similarity`
       return axios({
         method: 'get',
         url: url,
@@ -284,9 +276,9 @@ export default new Vuex.Store({
     },
     // 유저가 좋아할 확률 조회
     getUserExpectation: function ({state},data) {
-      const url = `/api/show/recommand/${data.showId}/probability`
+      const url = `/api/show/recommend/${data.showId}/probability`
       return axios({
-        method: 'post',
+        method: 'get',
         url: url,
         headers: { Authorization : `Bearer ${state.token}`}
       })
