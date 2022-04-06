@@ -277,18 +277,21 @@ public class ShowServiceImpl implements ShowService{
         List<NoticeImg> notice = noticeImgRepository.findByShowId(show.getShowId());
         List<ShowDetailImg> showDetail = showDetailImgRepository.findByShowId(show.getShowId());
         List<ShowTag> showTagList = showTagRepository.findByShowId(show.getId());
-        showTagList.sort(Comparator.comparing(ShowTag::getWeight, Comparator.reverseOrder()));
-        List<ShowTag> showTag = showTagList.subList(0, 4);
-
 
         List<ShowDetailsGetRes> showList = new ArrayList<>();
         ShowDetailsGetRes showInfo = new ShowDetailsGetRes(show);
-
         showInfo.setCastingLists(casting);
         showInfo.setNoticeImg(notice);
         showInfo.setShowDetailImg(showDetail);
         showInfo.setArtCenter(artCenter);
-        showInfo.setShowTags(showTag);
+
+        if (showTagList.isEmpty()) {
+            showInfo.setShowTags(showTagList);
+        } else {
+            showTagList.sort(Comparator.comparing(ShowTag::getWeight, Comparator.reverseOrder()));
+            List<ShowTag> showTag = showTagList.subList(0, 4);
+            showInfo.setShowTags(showTag);
+        }
 
         showList.add(showInfo);
         return showList;
