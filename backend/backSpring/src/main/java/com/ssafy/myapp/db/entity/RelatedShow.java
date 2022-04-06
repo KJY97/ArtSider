@@ -3,25 +3,25 @@ package com.ssafy.myapp.db.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+
 import javax.persistence.*;
+
 
 @Getter
 @Entity
 @NoArgsConstructor
-@Table(name = "art_center")
-public class ArtCenter {
+@Table(name = "related_show")
+public class RelatedShow {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String artCenterName;
+    @ManyToOne
+    @JoinColumn(name = "show_id")
+    private Show show;
 
-    private String artCenterAddress;
-
-    private String artCenterTel;
-
-    private String artCenterWeb;
-
+    @ManyToOne
+    @JoinColumn(name = "related_show_id")
+    private Show relatedShowId;
 }

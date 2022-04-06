@@ -45,7 +45,7 @@
       <h1> 관심 공연 해쉬맵 </h1>
       <div
         class="word-map-wrapper"
-        style="background-color: gray; height: 80%;"
+        style="height: 75vh;"
       >
         <WordCloud :words="userTagsCloud" />
       </div>
@@ -68,6 +68,7 @@ export default {
       myReviews : [],
       myScores: [],
       myTags : [],
+      loading: true,
 
       chartRender : false
     }

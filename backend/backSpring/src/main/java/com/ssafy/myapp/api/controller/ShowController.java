@@ -45,8 +45,8 @@ public class ShowController {
     }};
 
 
-    // 검색 기능
     @GetMapping("/search")
+    @ApiOperation(value = "공연 검색", notes = "검색하는 키워드가 포함된 제목의 공연을 찾는다")
     @ApiResponses({    // Api가 붙은 annotation은 swagger와 설정과 관련된 Annotation
             @ApiResponse(code = 200, message = "공연 목록 조회 성공"),
             @ApiResponse(code = 401, message = "공연 목록 조회 실패"),
@@ -59,8 +59,8 @@ public class ShowController {
     }
 
 
-    // 카테고리별 전체 공연 목록 조회
     @GetMapping("/{category}/all")
+    @ApiOperation(value = "카테고리별 전체 공연 목록 조회", notes = "해당 카테고리의 공연을 모두 조회")
     @ApiResponses({
             @ApiResponse(code = 200, message = "공연 목록 조회 성공"),
             @ApiResponse(code = 401, message = "공연 목록 조회 실패"),
@@ -72,8 +72,8 @@ public class ShowController {
         return new ResponseEntity<Map<String , List<ShowListGetRes>>>(resultMap, HttpStatus.OK);
     }
 
-    // 개막 예정 공연 목록
     @GetMapping("startDate")
+    @ApiOperation(value = "개막 예정 공연 목록 조회", notes = "개막 예정인 공연들을 전체 중 오늘 날짜 기준으로 순서대로 가져온다.")
     @ApiResponses({
             @ApiResponse(code = 200, message = "공연 목록 조회 성공"),
             @ApiResponse(code = 401, message = "공연 목록 조회 실패"),
@@ -91,8 +91,8 @@ public class ShowController {
         }
     }
 
-    // 카테고리별 개막 예정 공연 목록
     @GetMapping("/{category}/startDate")
+    @ApiOperation(value = "카테고리별 개막 예정 공연 목록 조회", notes = "개막 예정 순으로 해당 카테고리의 공연들을 조회한다.")
     @ApiResponses({
             @ApiResponse(code = 200, message = "공연 목록 조회 성공"),
             @ApiResponse(code = 401, message = "공연 목록 조회 실패"),
@@ -109,8 +109,8 @@ public class ShowController {
         }
     }
 
-    // 종료 임박 공연 목록
     @GetMapping("endDate")
+    @ApiOperation(value = "종료 임박 공연 목록 조회", notes = "종료날짜가 빠른 순으로 전체 공연을 조회한다.")
     @ApiResponses({
             @ApiResponse(code = 200, message = "공연 목록 조회 성공"),
             @ApiResponse(code = 401, message = "공연 목록 조회 실패"),
@@ -127,8 +127,8 @@ public class ShowController {
         }
     }
 
-    // 카테고리별 종료 임박 공연 목록
     @GetMapping("/{category}/endDate")
+    @ApiOperation(value = "카테고리별 종료 임박 공연 목록 조회", notes = "종료임박 순으로 해당 카테고리의 공연을 조회한다.")
     @ApiResponses({
             @ApiResponse(code = 200, message = "공연 목록 조회 성공"),
             @ApiResponse(code = 401, message = "공연 목록 조회 실패"),
@@ -145,21 +145,36 @@ public class ShowController {
         }
     }
 
-    // 공연 추천(사용자간의 유사도 추천)
-    @GetMapping("/{userId}/recommendation")
+    @GetMapping("/recommend/similarity")
+    @ApiOperation(value = "사용자간의 유사도 공연 추천", notes = "사용자간의 유사도를 통해(리뷰 평점) 추천하는 공연 목록을 조회한다.")
     @ApiResponses({
             @ApiResponse(code = 200, message = "추천 목록 조회 성공"),
-            @ApiResponse(code = 401, message = "추천록 조회 실패"),
+            @ApiResponse(code = 401, message = "추천 목록 조회 실패"),
             @ApiResponse(code = 500, message = "서버 에러")
     })
-    public ResponseEntity<Map<String, List<ShowListGetRes>>> showRecommendationList(@PathVariable Long userId) {
+    public ResponseEntity<Map<String, List<ShowListGetRes>>> showRecommendationList(@ApiIgnore Authentication authentication) {
+        SsafyUserDetails userDetails = (SsafyUserDetails) authentication.getDetails();
+        User userId =userDetails.getUser();
         Map<String, List<ShowListGetRes>> resultMap = new HashMap<>();
         resultMap.put("items", showService.findShowRecommendationList(userId));
         return new ResponseEntity<Map<String, List<ShowListGetRes>>>(resultMap, HttpStatus.OK);
     }
 
-    // 전체 인기 공연 목록
+    @GetMapping("/recommend/{showId}/relatedShow")
+    @ApiOperation(value = "연관 공연 목록", notes = "해당 공연에 연관된 공연을 가져온다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "연관 공연 목록 조회 성공"),
+            @ApiResponse(code = 401, message = "연관 공연 목록 조회 실패"),
+            @ApiResponse(code = 500, message = "서버 에러")
+    })
+    public ResponseEntity<Map<String, List<ShowListGetRes>>> relatedShowList(@PathVariable Long showId) {
+        Map<String, List<ShowListGetRes>> resultMap = new HashMap<>();
+        resultMap.put("items", showService.findShowRelatedList(showId));
+        return new ResponseEntity<Map<String, List<ShowListGetRes>>>(resultMap, HttpStatus.OK);
+    }
+
     @GetMapping("/popular")
+    @ApiOperation(value = "전체 인기 공연 목록", notes = "각 카테고리별 상위 4개씩 가져온다.")
     @ApiResponses({
             @ApiResponse(code = 200, message = "인기공연 목록 조회 성공"),
             @ApiResponse(code = 401, message = "인기공연 목록 조회 실패"),
@@ -171,8 +186,8 @@ public class ShowController {
         return new ResponseEntity<Map<String , List<PopularShowListGetRes>>>(resultMap, HttpStatus.OK);
     }
 
-    // 카테고리별 인기 공연 목록()
     @GetMapping("/{category}/popular")
+    @ApiOperation(value = "카테고리별 인기 공연 목록", notes = "카테고리별 인기 공연 목록을 조회한다.")
     @ApiResponses({
             @ApiResponse(code = 200, message = "카테고리별 인기공연 목록 조회 성공"),
             @ApiResponse(code = 401, message = "카테고리별 인기공연 목록 조회 실패"),
@@ -184,8 +199,8 @@ public class ShowController {
         return new ResponseEntity<Map<String , List<PopularShowListGetRes>>>(resultMap, HttpStatus.OK);
     }
 
-    // 공연 상세 조회
     @GetMapping("/{id}")
+    @ApiOperation(value = "공연 상세 조회", notes = "공연의 상세정보를 가져온다.")
     @ApiResponses({
             @ApiResponse(code = 200, message = "공연 상세 정보 조회 성공"),
             @ApiResponse(code = 401, message = "공연 상세 정보 조회 실패"),
@@ -202,8 +217,9 @@ public class ShowController {
         }
     }
 
-    // 공연 시설 조회
+
     @GetMapping("/{artcentername}/artcenter")
+    @ApiOperation(value = "공연 시설 조회", notes = "공연 시설 정보를 조회한다.")
     @ApiResponses({
             @ApiResponse(code = 200, message = "공연시설 상세 정보 조회 성공"),
             @ApiResponse(code = 401, message = "공연시설 상세 정보 조회 실패"),
@@ -219,9 +235,9 @@ public class ShowController {
             return new ResponseEntity<Map<String , List<ArtCenterDetailsGetRes>>>(resultMap, HttpStatus.BAD_REQUEST);
         }
     }
-    
- // 공연을 좋아할 확률 제공
+
     @GetMapping("recommend/{showId}/probability")
+    @ApiOperation(value = "공연을 좋아할 확률 제공", notes = "해당 공연을 좋아할 확률을 제공한다.")
     @ApiResponses({
             @ApiResponse(code = 200, message = "사용자와 공연을 좋아할 확률 제공 "),
             @ApiResponse(code = 401, message = "사용자와 공연을 좋아할 확률 제공 실패"),
