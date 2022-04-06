@@ -118,7 +118,7 @@
           v-for="result in searchResult"
           :key="result.id"
           style="height: 25%;"
-          @click="$router.push({name: 'ShowDetail', params: {showId: result.id}})"
+          @click="() => { searchKeyword = '',  $router.push({name: 'ShowDetail', params: {showId: result.id}})}"
         >
           <v-img
             :src="result.posterPath"

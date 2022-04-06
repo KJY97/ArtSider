@@ -141,7 +141,7 @@
                   </v-card>
                 </v-dialog>
 
-                <v-btn rounded large disabled v-if="isEnd" style="width:340px;">종료 된 공연입니다</v-btn>
+                <v-btn rounded large disabled v-if="isEnd" style="width:340px;">종료된 공연입니다</v-btn>
                 <!-- disable 줄것 -->
               </div>
             </ul>

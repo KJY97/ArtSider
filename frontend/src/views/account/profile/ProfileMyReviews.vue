@@ -1,62 +1,85 @@
 <template>
-  <v-row
-    class="mt-5"
-  >
-    <v-col
-      cols="6"
+  <div>
+    <v-row
+      class="mt-5"
+      style="height: 80vh; min-height: 400px; max-height: 800px;"
     >
-      <h1> 내가 작성한 리뷰</h1>
-      <div class="my-reviews-box"  style="margin-top:20px;">
-        <div class="my-review"
-          v-for="(review, i) in myReviews"
-          :key="i"
-        >
-          <v-container
-            @click="$router.push({name: 'ShowDetail', params: {showId : review.showId}})"
-            style="border: 1px solid rgba(0, 0, 0, .3); border-radius:20px; cursor: pointer;"
-          >
-            <span class="opacity-text">평점 : {{ review.rating }} | </span>
-            <div>
-              <br>
-              <strong> {{review.title}} </strong> 
-            </div>
-            <br>
-            <span> {{review.contents}} </span>
-            <br>
-            <span class="opacity-text">작성 시간 :  | </span>
-          </v-container>
-        </div>
-      </div>
-    </v-col>
+      <v-col
+        cols="6"
+        style="height: 100%;"
 
-    <v-col
-      cols="6"
-    >
-      <h1> 별점 분포 그래프 </h1>
-      <div 
-        class="chart-box"
       >
-        <BarChart v-if="chartRender" :score-list="myScores" />
-      </div>
-    </v-col>
-    <v-col
-      cols="12"
-    >
-      <h1> 관심 공연 해쉬맵 </h1>
-      <div
-        class="word-map-wrapper"
-        style="height: 75vh;"
-      >
-        <div 
-          id="word-cloud" class="word-cloud-wrapper">
+        <div class="d-flex align-center">
+          <v-icon size="48" > mdi-pencil-box-multiple-outline </v-icon>  <h1> 작성한 후기</h1>
         </div>
-      </div>
-    </v-col>
-  </v-row>
+        <div class="my-reviews-box"  style="margin-top:20px;">
+          <div class="my-review mb-5"
+            v-for="(review, i) in myReviews"
+            :key="i"
+          >
+            <v-container
+              @click="$router.push({name: 'ShowDetail', params: {showId : review.showId}})"
+              style="border: 1px solid rgba(0, 0, 0, .3); border-radius:20px; cursor: pointer;"
+            > 
+              <span class="opacity-text"> 제목: {{ review.showName }} </span>
+              <br>
+              <span class="opacity-text">평점 : {{ review.rating }} | </span>
+              <span class="opacity-text">작성 시간 :  {{ review.createDate.slice(0,10) }} </span>
+              <div>
+                <br>
+                <strong> {{review.title}} </strong> 
+              </div>
+              <br>
+              <span> {{review.contents}} </span>
+              <br>
+            </v-container>
+          </div>
+        </div>
+      </v-col>
+
+      <v-col
+        cols="6"
+        style="height: 100%;"
+      >
+
+        <div class="d-flex align-center">
+          <v-icon size="48"  color="#F59E9E"> mdi-chart-bar </v-icon>
+          <h1> 별점 그래프 </h1>
+        </div>
+        <div 
+          class="chart-box"
+        >
+          <BarChart v-if="chartRender" :score-list="myScores" />
+        </div>
+      </v-col>
+    </v-row>
+
+    <v-row
+      style="height: 70vh; min-height: 400px;"
+    >
+      <v-col
+        cols="12"
+      >
+        <div class="d-flex align-center">
+          <v-icon color="#46D2D2" size="48"> mdi-cloud-outline </v-icon>
+          <h1> 나의 태그맵 </h1>
+        </div>
+        <div
+          class="word-map-wrapper"
+          style="height: 100%;"
+        >
+          <div 
+            id="word-cloud" class="word-cloud-wrapper">
+          </div>
+        </div>
+      </v-col>
+    </v-row>
+  </div>
 </template>
 
 <script>
 import BarChart from './components/BarChart'
+
 
 const d3 = require('d3')
 
@@ -91,7 +114,7 @@ export default {
 
     getLayout(){
       const cloud = require('d3-cloud')
-      const wordScale = d3.scaleLinear().domain([0, 5]).range([40, 100]).clamp(true)
+      const wordScale = d3.scaleLinear().domain([0, 10]).range([40, 100]).clamp(true)
       cloud()
         .words(this.words)
         .rotate(function(){ return 0 })
@@ -206,11 +229,10 @@ export default {
 
 .my-reviews-box, .chart-box{
   width: 100%;
-  height: 70%;
+  height: 80%;
 }
 
 .my-reviews-box{
-  height: 80%;
   overflow-y: auto;
 }
 
