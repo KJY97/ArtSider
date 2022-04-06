@@ -32,6 +32,7 @@ public class ShowDetailsGetRes {
     private List<CastingList> castingLists;    // 출연진
     private List<NoticeImg> noticeImg;    // 공지사항 이미지
     private List<ShowDetailImg> showDetailImg;    // 공연 상세 정보 이미지
+    private List<ShowTag> showTags;    // 공연 태그
 
     public ShowDetailsGetRes(ShowListMapping entity)
     {

@@ -19,11 +19,14 @@ public interface ShowService {
     List<ShowListGetRes> findShowCategoryStartList(String category) throws ParseException;
     List<ShowListGetRes> findShowEndList() throws ParseException;
     List<ShowListGetRes> findShowCategoryEndList(String category) throws ParseException;
-    List<ShowListGetRes> findShowRecommendationList(User userId);
-    List<ShowListGetRes> findShowRelatedList(Long ShowId);
     List<PopularShowListGetRes> findPopularShowList();
     List<PopularShowListGetRes> findPopularShowCategoryList(String category);
     List<ShowDetailsGetRes> findShowDetails(Long id) throws NoSuchElementException;
     List<ArtCenterDetailsGetRes> findArtCenterDetails(String artCenterName) throws NoSuchElementException;
+
+    // 추천 기능
+    Object findUserBasedRecommend(Long userId, String category);
+    List<ShowListGetRes> findShowRecommendationList(User userId);
+    List<ShowListGetRes> findShowRelatedList(Long ShowId);
     ExpectRatingMapping findExpectRating(Long userId,Long showId);
 }

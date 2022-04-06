@@ -6,8 +6,6 @@ import com.ssafy.myapp.api.response.ShowDetailsGetRes;
 import com.ssafy.myapp.api.response.ShowListGetRes;
 import com.ssafy.myapp.api.service.ShowService;
 import com.ssafy.myapp.common.auth.SsafyUserDetails;
-import com.ssafy.myapp.db.entity.ExpectRating;
-import com.ssafy.myapp.db.entity.Favorite;
 import com.ssafy.myapp.db.entity.User;
 import com.ssafy.myapp.db.mapping.ExpectRatingMapping;
 
@@ -43,7 +41,6 @@ public class ShowController {
         put("DR", "연극");
         put("FA", "아동/가족");
     }};
-
 
     @GetMapping("/search")
     @ApiOperation(value = "공연 검색", notes = "검색하는 키워드가 포함된 제목의 공연을 찾는다")
@@ -145,34 +142,6 @@ public class ShowController {
         }
     }
 
-    @GetMapping("/recommend/similarity")
-    @ApiOperation(value = "사용자간의 유사도 공연 추천", notes = "사용자간의 유사도를 통해(리뷰 평점) 추천하는 공연 목록을 조회한다.")
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "추천 목록 조회 성공"),
-            @ApiResponse(code = 401, message = "추천 목록 조회 실패"),
-            @ApiResponse(code = 500, message = "서버 에러")
-    })
-    public ResponseEntity<Map<String, List<ShowListGetRes>>> showRecommendationList(@ApiIgnore Authentication authentication) {
-        SsafyUserDetails userDetails = (SsafyUserDetails) authentication.getDetails();
-        User userId =userDetails.getUser();
-        Map<String, List<ShowListGetRes>> resultMap = new HashMap<>();
-        resultMap.put("items", showService.findShowRecommendationList(userId));
-        return new ResponseEntity<Map<String, List<ShowListGetRes>>>(resultMap, HttpStatus.OK);
-    }
-
-    @GetMapping("/recommend/{showId}/relatedShow")
-    @ApiOperation(value = "연관 공연 목록", notes = "해당 공연에 연관된 공연을 가져온다.")
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "연관 공연 목록 조회 성공"),
-            @ApiResponse(code = 401, message = "연관 공연 목록 조회 실패"),
-            @ApiResponse(code = 500, message = "서버 에러")
-    })
-    public ResponseEntity<Map<String, List<ShowListGetRes>>> relatedShowList(@PathVariable Long showId) {
-        Map<String, List<ShowListGetRes>> resultMap = new HashMap<>();
-        resultMap.put("items", showService.findShowRelatedList(showId));
-        return new ResponseEntity<Map<String, List<ShowListGetRes>>>(resultMap, HttpStatus.OK);
-    }
-
     @GetMapping("/popular")
     @ApiOperation(value = "전체 인기 공연 목록", notes = "각 카테고리별 상위 4개씩 가져온다.")
     @ApiResponses({
@@ -236,7 +205,57 @@ public class ShowController {
         }
     }
 
-    @GetMapping("recommend/{showId}/probability")
+    // ============ 추천 기능 ============
+
+    @GetMapping("/recommend/user/{category}/tag")
+    @ApiOperation(value = "유저 선호 태그 기반 카테고리별 추천", notes = "유저의 선호 태그를 기반으로 카테고리별로 공연을 추천한다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "추천 성공"),
+            @ApiResponse(code = 401, message = "추천 실패"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<Map<String, Object>> userTagBasedRecommend(
+            @ApiIgnore Authentication authentication, @PathVariable("category") String category) {
+
+        SsafyUserDetails userDetails = (SsafyUserDetails) authentication.getDetails();
+        User user = userDetails.getUser();
+
+        Object result = showService.findUserBasedRecommend(user.getId(), category);
+        Map<String, Object> resultMap = new HashMap<>();
+
+        resultMap.put("item", result);
+        return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
+    }
+
+    @GetMapping("/recommend/similarity")
+    @ApiOperation(value = "사용자간의 유사도 공연 추천", notes = "사용자간의 유사도를 통해(리뷰 평점) 추천하는 공연 목록을 조회한다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "추천 목록 조회 성공"),
+            @ApiResponse(code = 401, message = "추천 목록 조회 실패"),
+            @ApiResponse(code = 500, message = "서버 에러")
+    })
+    public ResponseEntity<Map<String, List<ShowListGetRes>>> showRecommendationList(@ApiIgnore Authentication authentication) {
+        SsafyUserDetails userDetails = (SsafyUserDetails) authentication.getDetails();
+        User user =userDetails.getUser();
+        Map<String, List<ShowListGetRes>> resultMap = new HashMap<>();
+        resultMap.put("items", showService.findShowRecommendationList(user));
+        return new ResponseEntity<Map<String, List<ShowListGetRes>>>(resultMap, HttpStatus.OK);
+    }
+
+    @GetMapping("/recommend/{showId}/relatedShow")
+    @ApiOperation(value = "연관 공연 목록", notes = "해당 공연에 연관된 공연을 가져온다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "연관 공연 목록 조회 성공"),
+            @ApiResponse(code = 401, message = "연관 공연 목록 조회 실패"),
+            @ApiResponse(code = 500, message = "서버 에러")
+    })
+    public ResponseEntity<Map<String, List<ShowListGetRes>>> relatedShowList(@PathVariable Long showId) {
+        Map<String, List<ShowListGetRes>> resultMap = new HashMap<>();
+        resultMap.put("items", showService.findShowRelatedList(showId));
+        return new ResponseEntity<Map<String, List<ShowListGetRes>>>(resultMap, HttpStatus.OK);
+    }
+
+    @GetMapping("/recommend/{showId}/probability")
     @ApiOperation(value = "공연을 좋아할 확률 제공", notes = "해당 공연을 좋아할 확률을 제공한다.")
     @ApiResponses({
             @ApiResponse(code = 200, message = "사용자와 공연을 좋아할 확률 제공 "),
