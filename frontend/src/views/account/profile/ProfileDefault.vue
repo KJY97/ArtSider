@@ -8,19 +8,16 @@
         class="preference-contents-box"
       >
         <v-row
-          style="height: 100%;"
+          style="height: 100%; width: 100%"
         >
           <v-col
             v-for="(poster, i) in preferencePosters"
             :key="i"
             class="col-3 py-4"
-            style="height: 80%;"
           >
             <v-card
-              width="70%"
-              height="100%"
               style="background-color: gray;"
-              class="preference-content  mx-auto"
+              class="preference-content"
             >
               <v-img
                 :src="poster.posterPath"
@@ -28,7 +25,6 @@
                 width="100%"
                 height="100%"
               >
-
               </v-img>
 
             </v-card>

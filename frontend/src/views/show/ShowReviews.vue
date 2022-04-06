@@ -2,7 +2,8 @@
   <div style="margin-top:30px">
     <div class="d-flex align-center justify-space-between">
       <p>총 {{ reviewLength }}개의 관람후기가 등록되었습니다.</p>
-      <v-btn color="black" style="float: right; color:white; opacity:0.8s; margin-left:25px" @click="drawUpReview">관람후기 작성</v-btn>
+      <v-btn color="black" style="float: right; color:white; opacity:0.8s; margin-left:25px" @click="drawUpReview" v-if="!isYet">관람후기 작성</v-btn>
+      <v-btn color="black" style="float: right; color:white; opacity:0.8s; margin-left:25px" disabled v-if="isYet">미오픈된 공연입니다.</v-btn>
     </div>
     <br>
     
@@ -55,7 +56,7 @@
       <div class="container" style="border: 1px solid rgba(0, 0, 0, .3); border-radius:20px;">
         <span class="opacity-text">닉네임 : {{showReview.userName}} | </span>
         <span class="opacity-text">평점 : {{ showReview.rating }} | </span>
-        
+        <span class="opacity-text">{{ showReview.createdDate.slice(0,10) }} | </span>
         <div>
           <br>
           <strong>{{showReview.title}}</strong>
@@ -93,7 +94,8 @@ export default {
   name: 'ShowReviews',
   props: {
     id: String,
-    userId: Number
+    userId: Number,
+    startDate: String,
   },
   components: {
     StarRating
@@ -126,6 +128,7 @@ export default {
       categoryNum: 0,
       reviewLength: 0,
       hide: false,
+      isYet: false,
     }
   },
   methods: {
@@ -139,6 +142,7 @@ export default {
         }
       })
       .then(() => {
+        console.log(this.showReviewsList)
         if (this.showReviewsList.length == this.reviewLength) {
           this.hide = true
         } else {
@@ -213,13 +217,24 @@ export default {
   },
   created: function () {
     this.getShowReviews(this.id, this.pageNum, this.categoryNum)
+    if (this.startDate) {
+      const today = new Date()
+      const year = today.getFullYear();
+      const month = ('0' + (today.getMonth() + 1)).slice(-2);
+      const day = ('0' + today.getDate()).slice(-2);
+      const dateString = year + '-' + month  + '-' + day;
+      if (this.startDate > dateString) {
+        this.isYet = true
+      } else {
+        this.isYet = false
+      }
+    }
   },
   watch: {
     categoryNum: function () {
       this.showReviewsList = []
       this.pageNum = 0
       this.getShowReviews(this.id, this.pageNum, this.categoryNum)
-      
     },
   }
   

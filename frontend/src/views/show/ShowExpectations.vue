@@ -52,7 +52,7 @@
     <div v-else v-for="(showExpectation, idx) in showExpectationsList" :key="idx" style="margin-top:50px;">
       <div class="container" style="border: 1px solid rgba(0, 0, 0, .3); border-radius:20px;">
         <span class="opacity-text">닉네임 : {{showExpectation.userName}} | </span>
-        <span>{{ showExpectation.created_date }}</span>
+        <span class="opacity-text">{{ showExpectation.createDate.slice(0,10) }} | </span>
         <div>
           <br>
           <strong>{{showExpectation.title}}</strong>
@@ -129,6 +129,7 @@ export default {
         }
       })
       .then(() => {
+        console.log(this.showExpectationsList)
         if (this.showExpectationsList.length == this.expectationLength) {
           this.hide = true
         } else {
