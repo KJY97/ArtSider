@@ -227,8 +227,9 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-	public List<ShowMapping> findViewedShow(User user) {
-		List<ShowMapping> Viewed =viewedRepository.findByUser(user);
+	public List<?> findViewedShow(User user) {
+//		List<ShowMapping> Viewed =viewedRepository.findByUser(user);
+		List<?> Viewed = viewedRepository.findByUserIdDistinctOderById(user.getId());
 		return Viewed;
 	}
 
@@ -281,8 +282,8 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<UserReviewMapping> findUserReview(User user) {
-		List<UserReviewMapping> reviews=reviewRepository.findByUser(user);
+	public List<UserReviewMapping> findUserReview(Long userId) {
+		List<UserReviewMapping> reviews=reviewRepository.findTop20ByUserIdOrderByIdDesc(userId);
 		return reviews;
 	}
 

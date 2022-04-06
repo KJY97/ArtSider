@@ -306,12 +306,12 @@ public class UserController {
             @ApiResponse(code = 500, message = "서버 오류")
     })
     public ResponseEntity<Map<String, Object>> ViewedList(@ApiIgnore Authentication authentication) {
-
     	Map<String, Object> resultMap = new HashMap<>();
     	
         SsafyUserDetails userDetails = (SsafyUserDetails) authentication.getDetails();
         User user =userDetails.getUser();
-        List<ShowMapping> shows=userService.findViewedShow(user);
+//        List<ShowMapping> shows=userService.findViewedShow(user);
+        List<?> shows=userService.findViewedShow(user);
         if(shows==null) {
         	resultMap.put("message", "fail");
             return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.BAD_REQUEST);
@@ -431,10 +431,10 @@ public class UserController {
     
     
     @GetMapping("/profile/reviewList")
-    @ApiOperation(value = "유저 리뷰 조회", notes = "유저가 작성한 리뷰를 수정한다. ")
+    @ApiOperation(value = "유저 리뷰 조회", notes = "유저가 작성한 리뷰를 조회한다. ")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "유저 정보 수정 성공"),
-            @ApiResponse(code = 401, message = "유저 정보 수정 실패"),
+            @ApiResponse(code = 200, message = "유저 정보 조회 성공"),
+            @ApiResponse(code = 401, message = "유저 정보 조회 실패"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
     public ResponseEntity<Map<String, Object>> userReviewList(@ApiIgnore Authentication authentication) {
@@ -442,10 +442,8 @@ public class UserController {
     	
     	SsafyUserDetails userDetails = (SsafyUserDetails) authentication.getDetails();
         User user =userDetails.getUser();
-        
-        user=userService.findUserByEmail(user.getEmail());
-        
-        List<UserReviewMapping> reviews=userService.findUserReview(user);
+             
+        List<UserReviewMapping> reviews=userService.findUserReview(user.getId());
         resultMap.put("message", "success");
         resultMap.put("items",reviews);
         return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);

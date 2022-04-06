@@ -26,10 +26,10 @@ public interface UserService {
 	void removeFavorite(Long userId, Long showId) throws Exception;
 	Viewed addViewed(Long userId, Long showId);
 	List<ShowMapping> findPreferShow(User user);
-	List<ShowMapping> findViewedShow(User user);
+	List<?> findViewedShow(User user);
 	String saveUploadedFiles(final MultipartFile thumbnail) throws IOException;
 	User modifyUserProfileImg(User user,String profileImg);
-	List<UserReviewMapping> findUserReview(User user);
+	List<UserReviewMapping> findUserReview(Long userId);
 	List<?> findUserReviewRatingCnt(User user);
 	List<?> findFavoriteShowTagCnt(User user);
 	boolean findFavoriteByShowAndUser(Long userId, Long showId);
