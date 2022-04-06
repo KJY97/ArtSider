@@ -1,19 +1,19 @@
 <template>
   <v-dialog
     :value="signUpDialog"
-    dark
     max-width="500px"
     @click:outside="() => { $emit('close-sign-up') }"
   >
-  <v-card>
-      <v-card-title>
-        <span class="text-h2"> {{ currentTitle }} </span>
+  <v-card style="padding: 3rem;">
+      <v-card-title class="d-flex justify-center">
+        <span class="text-h4"> {{ currentTitle }} </span>
       </v-card-title>
-
-      <v-window v-model="step">
+      <span class="d-flex justify-center" style="font-weight: 600; line-height: 1.6; margin-top: 2rem; margin-bottom: 1rem;"> 아트사이더에 오신 걸 환영합니다. </span>
+      <v-window v-model="step" class="d-flex flex-column justify-center align-center" style="padding-bottom:50px">
         <v-window-item :value="1">
           <v-container>
             <v-form
+              style="width:400px;"
               ref="form"
               v-model="valid"
               lazy-validation 
@@ -36,6 +36,7 @@
                 <v-btn
                   slot="append"
                   outlined
+                  color="green"
                   @click="checkMultiEmail"
                 >
                   중복 검사
@@ -78,6 +79,7 @@
         <v-window-item :value="2">
           <v-container>
             <v-text-field
+              style="width:400px;"
               v-model="inputNumber"
               label="이메일 인증 번호 입력"
               required
@@ -104,7 +106,8 @@
         <v-spacer></v-spacer>
         <v-btn
           depressed
-          color="red"
+          text
+          color="blue"
           @click="getNextStep"
         >
           <span v-show="step < 2"> 다음 </span>

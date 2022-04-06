@@ -110,16 +110,6 @@ export default new Vuex.Store({
       })
     },
 
-
-    kakaoLogin({state}, data){
-      state
-      const url = data.redirectUri
-      return axios({
-        method: 'post',
-        url: url,
-        code: data.data
-      })
-    },
     // 조회한 공연 추가
     addInquire({state}, data){
       const url = `/api/users/show/${data.id}`
@@ -268,14 +258,10 @@ export default new Vuex.Store({
     // 공연의 연관 공연 조회
     getRelatedShow: function ({state}, data) {
       state
-      const url = `/api/show/recommand/${data.showId}/relatedShow`
+      const url = `/api/show/recommend/${data.showId}/relatedShow`
       return axios({
         method: 'get',
         url: url,
-        headers: { Authorization : `Bearer ${state.token}`},
-        data: {
-          userTag: data.showTag
-        }
       })
     },
     // 유저가 좋아할 확률 업데이트
@@ -397,7 +383,7 @@ export default new Vuex.Store({
     // 이공연이 선호 목록인지 조회
     checkPreference({state}, data) {
       state
-      const url = `/api/users/show/${data.id}/preference`
+      const url = `/api/users/show/${data}/preference`
       return axios({
         method: 'get',
         url: url,

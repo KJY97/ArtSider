@@ -9,7 +9,7 @@
     :key="comingSoon.id"
     > 
     <v-img
-          @click="addInquire(comingSoon.id)"
+          @click="moveShowDetail(comingSoon.id)"
           :aspect-ratio="3/4"
           :src="comingSoon.posterPath"
           style="width:50%;height:50%;"
@@ -51,11 +51,8 @@ export default {
         this.comingSoonList = res.data.items
       })
     },
-    addInquire: function (id) {
-      this.$store.dispatch('addInquire', {id:id})
-      .then(() => {
-        this.$router.push({name: `ShowDetail`, params: { showId: id}})
-      })
+    moveShowDetail: function (id) {
+      this.$router.push({name: `ShowDetail`, params: { showId: id}})
     }
   },
   created: function() {

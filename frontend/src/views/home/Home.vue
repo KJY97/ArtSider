@@ -26,7 +26,7 @@
             max-height="600"
             max-width="450"
             :src="popular.posterPath"
-            @click="addInquire(popular.id)"
+            @click="moveShowDetail(popular.id)"
           ></v-img>
           </v-card>
         </v-col>
@@ -74,11 +74,8 @@ export default {
     moveToMain: function () {
       this.$router.push({name: 'Main'})
     },
-    addInquire: function (id) {
-      this.$store.dispatch('addInquire',{id:id})
-      .then(() => {
-        this.$router.push({name: `ShowDetail`, params: { showId: id}})
-      })
+    moveShowDetail: function (id) {
+      this.$router.push({name: `ShowDetail`, params: { showId: id}})
     }
   },
   created: function () {

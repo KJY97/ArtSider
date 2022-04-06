@@ -30,12 +30,12 @@ export default {
   },
   data() {
     return {
-      markers: [], // 마커를 담을 배열입니다
+      markers: [], // 마커를 담을 배열입니다.
       infowindow: null,
       ps: '',
       placeOverlay: '',
-      contentNode: '', // 커스텀 오버레이의 컨텐츠 엘리먼트 입니다 
-      currCategory: '', // 현재 선택된 카테고리를 가지고 있을 변수입니다
+      contentNode: '', // 커스텀 오버레이의 컨텐츠 엘리먼트 입니다.
+      currCategory: '', // 현재 선택된 카테고리를 가지고 있을 변수입니다.
       map: '',
       category: '',
       children: '',
@@ -81,7 +81,6 @@ export default {
       // 정상적으로 검색이 완료됐으면 
       if (status === kakao.maps.services.Status.OK) {
         var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-        
 
         // 결과값으로 받은 위치를 마커로 표시합니다
         var marker = new kakao.maps.Marker({
@@ -105,6 +104,8 @@ export default {
 
         // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
         map.setCenter(coords);
+      } else {
+        console.log('실패')
       }
     })
     this.map = map

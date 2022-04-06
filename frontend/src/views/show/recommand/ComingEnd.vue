@@ -9,7 +9,7 @@
     :key="comingEnd.id"
     > 
     <v-img
-          @click="addInquire(comingEnd.id)"
+          @click="moveShowDetail(comingEnd.id)"
           :aspect-ratio="3/4"
           :src="comingEnd.posterPath"
           style="width:50%;height:50%;"
@@ -52,11 +52,8 @@ export default {
         this.comingEndList = res.data.items
       })
     },
-    addInquire: function (id) {
-      this.$store.dispatch('addInquire', {id:id})
-      .then(() => {
-        this.$router.push({name: `ShowDetail`, params: { showId: id}})
-      })
+    moveShowDetail: function (id) {
+      this.$router.push({name: `ShowDetail`, params: { showId: id}})
     }
   },
   created: function() {

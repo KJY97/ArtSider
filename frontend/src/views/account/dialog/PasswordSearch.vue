@@ -1,16 +1,16 @@
 <template>
   <v-dialog
   :value="passwordSearchDialog"
-  dark
   max-width="500px"
   persistent
   >
-    <v-card>
-      <v-card-title>
-        <span class="text-h2" > 비밀번호 찾기 </span>        
+    <v-card style="padding: 3rem;">
+      <v-card-title class="d-flex justify-center">
+        <span class="text-h3" > 비밀번호 찾기 </span>        
       </v-card-title>
 
-      <v-container>
+      <v-container style="padding-bottom:50px">
+        <span class="d-flex justify-center" style="font-weight: 600; line-height: 1.6; margin-top: 0; margin-bottom: 1rem;"> 가입하신 이메일을 입력하세요 </span>
         <v-form
           ref="form"
         >
@@ -19,6 +19,7 @@
             :rules="userEmailRules"
             label="이메일"
             required
+            style="width:400px;"
           >
           
           </v-text-field>
@@ -27,11 +28,13 @@
 
         <v-row class="mt-5 px-3 justify-space-between">
           <v-btn
+            text
             @click="() => { userEmail='', $emit('close-password-search') }"
           >
             닫기
           </v-btn>
           <v-btn
+            text
             @click="getNewPassword"
           >
             임시 비밀번호 발급

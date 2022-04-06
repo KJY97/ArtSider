@@ -1,18 +1,19 @@
 <template>
   <v-dialog
   :value="loginDialog"
-  dark
   max-width="500px"
   @click:outside="() => { $emit('close-login') }"
   >
-    <v-card>
-      <v-card-title>
-        <span class="text-h2"> 로그인 </span>
+    <v-card style="padding: 3rem;">
+      <v-card-title class="d-flex justify-center">
+        <span class="text-h4"> 로그인 </span>
       </v-card-title>
 
-      <v-container>
-        <v-form @submit="(e) => { e.preventDefault(), getToken()}">
+      <v-container class="d-flex flex-column justify-center align-center" style="padding-bottom:50px">
+        <span style="font-weight: 600; line-height: 1.6; margin-top: 0; margin-bottom: 1rem;"> 아트사이더의 일원이 되어 보세요 </span>
+        <div>
           <v-text-field
+            style="width:400px;"
             v-model="userEmail"
             label="이메일"
             required
@@ -20,6 +21,7 @@
 
 
           <v-text-field
+            style="width:400px;"
             v-model="userPassword"
             :append-icon="passwordShow ? 'mdi-eye' : 'mdi-eye-off'"
             :type="passwordShow ? 'text' : 'password'"
@@ -40,12 +42,12 @@
           </div>
           <v-btn
             outlined
-            width="100%"
-            type="submit"
+            width="400px"
+            @click="() => { getToken()}"
           >
             로그인
           </v-btn>
-        </v-form>
+        </div>
       </v-container>
     </v-card>
 
@@ -82,6 +84,7 @@ export default {
 
   methods:{
     getToken(){
+      console.log('해라')
         this.$store.dispatch('getToken', {userEmail: this.userEmail, password: this.userPassword})
     },
 
