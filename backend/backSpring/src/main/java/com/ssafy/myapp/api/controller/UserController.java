@@ -162,23 +162,23 @@ public class UserController {
     
     
     
-    @DeleteMapping("/{userEmail}")
-    @ApiOperation(value = "유저 정보 삭제", notes = "유저 정보를 삭제 후 응답한다")
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "유저 정보 삭제(탈퇴) 성공"),
-            @ApiResponse(code = 401, message = "유저 정보 삭제(탈퇴) 실패"),
-            @ApiResponse(code = 500, message = "서버 오류")
-    })
-    public ResponseEntity<Map<String, Object>> userRemove(
-            @PathVariable("userEmail") String userEmail
-    ) {
-    	Map<String, Object> resultMap = new HashMap<>();
-
-        userService.removeUser(userEmail);
-        resultMap.put("message", "success");
-        return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
-
-    }
+//    @DeleteMapping("/{userEmail}")
+//    @ApiOperation(value = "유저 정보 삭제", notes = "유저 정보를 삭제 후 응답한다")
+//    @ApiResponses({
+//            @ApiResponse(code = 200, message = "유저 정보 삭제(탈퇴) 성공"),
+//            @ApiResponse(code = 401, message = "유저 정보 삭제(탈퇴) 실패"),
+//            @ApiResponse(code = 500, message = "서버 오류")
+//    })
+//    public ResponseEntity<Map<String, Object>> userRemove(
+//            @PathVariable("userEmail") String userEmail
+//    ) {
+//    	Map<String, Object> resultMap = new HashMap<>();
+//
+//        userService.removeUser(userEmail);
+//        resultMap.put("message", "success");
+//        return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
+//
+//    }
     
     @PostMapping("/password")
     @ApiOperation(value = "회원 비밀번호 변경", notes = "회원의 비밀번호를 변경한다.")
@@ -208,9 +208,10 @@ public class UserController {
     }
     
     @PostMapping("/show/{id}/preference")
-    @ApiOperation(value = "회원 관심목록 추가 ", notes = "회원의 관심 공연을 추가한다. ")
+    @ApiOperation(value = "회원 관심목록 추가 및 유저 선호 태그 추가",
+            notes = "회원의 관심 공연과 해당 공연의 태그를 유저 선호 태그로 저장한다.")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "추가 성공  "),
+            @ApiResponse(code = 200, message = "추가 성공"),
             @ApiResponse(code = 400, message = "추가 실패/중복된 공연 등록"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
@@ -232,6 +233,14 @@ public class UserController {
         if(favorite==null) {
         	 resultMap.put("message", "fail");
              return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.BAD_REQUEST);
+        }
+
+        try {
+            userService.addUserTag(user.getId(), showId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            resultMap.put("message", "error saving userTag");
+            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.BAD_REQUEST);
         }
        
         resultMap.put("message", "success");
@@ -297,12 +306,12 @@ public class UserController {
             @ApiResponse(code = 500, message = "서버 오류")
     })
     public ResponseEntity<Map<String, Object>> ViewedList(@ApiIgnore Authentication authentication) {
-
     	Map<String, Object> resultMap = new HashMap<>();
     	
         SsafyUserDetails userDetails = (SsafyUserDetails) authentication.getDetails();
         User user =userDetails.getUser();
-        List<ShowMapping> shows=userService.findViewedShow(user);
+//        List<ShowMapping> shows=userService.findViewedShow(user);
+        List<?> shows=userService.findViewedShow(user);
         if(shows==null) {
         	resultMap.put("message", "fail");
             return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.BAD_REQUEST);
@@ -314,7 +323,7 @@ public class UserController {
     }
     
     @DeleteMapping("/show/{id}/preference")
-    @ApiOperation(value = "회원 관심목록 삭제 ", notes = "회원의 관심 공연을 삭제한다. ")
+    @ApiOperation(value = "회원 관심목록 및 유저 선호 태그 삭제", notes = "회원의 관심 공연 및 해당 공연의 선호 태그를 삭제한다.")
     @ApiResponses({
             @ApiResponse(code = 200, message = "삭제 성공  "),
             @ApiResponse(code = 400, message = "삭제 실패/중복된 공연 등록"),
@@ -326,11 +335,11 @@ public class UserController {
     	
         SsafyUserDetails userDetails = (SsafyUserDetails) authentication.getDetails();
         User user =userDetails.getUser();
-        
-        Favorite favorite=null;
+
         System.out.println(user.getId()+"   "+ showId);
         try {
 			userService.removeFavorite(user.getId(), showId);
+            userService.removeUserTag(user.getId(), showId);
 		} catch (Exception e) {
 			e.printStackTrace();
 			resultMap.put("message", "fail");
@@ -386,7 +395,7 @@ public class UserController {
        
         resultMap.put("userId", user.getId());
         resultMap.put("nickname", user.getNickname());
-        resultMap.put("preferTag", user.getUserTag());
+        resultMap.put("preferTag", userService.findUserTagByUserId(user.getId()));
         resultMap.put("profileImg", user.getProfileImg());
         resultMap.put("message", "success");
         return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
@@ -422,10 +431,10 @@ public class UserController {
     
     
     @GetMapping("/profile/reviewList")
-    @ApiOperation(value = "유저 리뷰 조회", notes = "유저가 작성한 리뷰를 수정한다. ")
+    @ApiOperation(value = "유저 리뷰 조회", notes = "유저가 작성한 리뷰를 조회한다. ")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "유저 정보 수정 성공"),
-            @ApiResponse(code = 401, message = "유저 정보 수정 실패"),
+            @ApiResponse(code = 200, message = "유저 정보 조회 성공"),
+            @ApiResponse(code = 401, message = "유저 정보 조회 실패"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
     public ResponseEntity<Map<String, Object>> userReviewList(@ApiIgnore Authentication authentication) {
@@ -433,10 +442,8 @@ public class UserController {
     	
     	SsafyUserDetails userDetails = (SsafyUserDetails) authentication.getDetails();
         User user =userDetails.getUser();
-        
-        user=userService.findUserByEmail(user.getEmail());
-        
-        List<UserReviewMapping> reviews=userService.findUserReview(user);
+             
+        List<UserReviewMapping> reviews=userService.findUserReview(user.getId());
         resultMap.put("message", "success");
         resultMap.put("items",reviews);
         return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);

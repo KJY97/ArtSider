@@ -3,11 +3,13 @@ package com.ssafy.myapp.db.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
 
 @Getter
+@Setter
 @Entity
 @NoArgsConstructor
 public class ShowTag {

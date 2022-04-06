@@ -48,20 +48,20 @@ public class User {
 
     private String profileImg;
     
-    @OneToMany(mappedBy = "user")//뒤의 fetch 안했을 시에 에러나서 추가해줌
-    @LazyCollection(LazyCollectionOption.FALSE)
-    @JsonBackReference 
-    private List<Favorite> favorite = new ArrayList<>();
-    
-    @OneToMany(mappedBy = "user")//뒤의 fetch 안했을 시에 에러나서 추가해줌
-    @LazyCollection(LazyCollectionOption.FALSE)
-    @JsonBackReference 
-    private List<Viewed> viewed = new ArrayList<>();
-    
-    @OneToMany(mappedBy = "user")//뒤의 fetch 안했을 시에 에러나서 추가해줌
-    @LazyCollection(LazyCollectionOption.FALSE)
-    @JsonBackReference //무한 호출 방지
-    private List<UserTag> userTag = new ArrayList<>();
+//    @OneToMany(mappedBy = "user")//뒤의 fetch 안했을 시에 에러나서 추가해줌
+//    @LazyCollection(LazyCollectionOption.FALSE)
+//    @JsonBackReference 
+//    private List<Favorite> favorite = new ArrayList<>();
+//    
+//    @OneToMany(mappedBy = "user")//뒤의 fetch 안했을 시에 에러나서 추가해줌
+//    @LazyCollection(LazyCollectionOption.FALSE)
+//    @JsonBackReference 
+//    private List<Viewed> viewed = new ArrayList<>();
+//    
+//    @OneToMany(mappedBy = "user")//뒤의 fetch 안했을 시에 에러나서 추가해줌
+//    @LazyCollection(LazyCollectionOption.FALSE)
+//    @JsonBackReference //무한 호출 방지
+//    private List<UserTag> userTag = new ArrayList<>();
 
  
     private LocalDateTime createDate;

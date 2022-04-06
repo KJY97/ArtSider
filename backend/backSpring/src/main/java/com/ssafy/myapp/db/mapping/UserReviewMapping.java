@@ -9,6 +9,7 @@ import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ssafy.myapp.db.entity.Show;
 import com.ssafy.myapp.db.entity.User;
 
 public interface UserReviewMapping {
@@ -20,11 +21,11 @@ public interface UserReviewMapping {
 	LocalDateTime getCreateDate();
 	Long getShowId();
 	
-
+	default String getShowName(){
+		return getShowShowName();
+	}
 	
-	
-
-	
-	
+	@JsonIgnore
+	String getShowShowName();
 
 }

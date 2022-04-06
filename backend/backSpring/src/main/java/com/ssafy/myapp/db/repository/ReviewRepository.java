@@ -24,5 +24,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     public List<?> findReviewRatingCnt(@Param("id") Long id);
     
     List<UserReviewMapping> findByUser(User user);
+    List<UserReviewMapping> findByUserId(Long userId);
+    List<UserReviewMapping> findTop20ByUserIdOrderByIdDesc(Long userId);
 }
 
