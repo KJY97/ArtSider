@@ -11,7 +11,7 @@
 
       <v-container class="d-flex flex-column justify-center align-center" style="padding-bottom:50px">
         <span style="font-weight: 600; line-height: 1.6; margin-top: 0; margin-bottom: 1rem;"> 아트사이더의 일원이 되어 보세요 </span>
-        <v-form @submit="(e) => { e.preventDefault(), getToken()}">
+        <div>
           <v-text-field
             style="width:400px;"
             v-model="userEmail"
@@ -43,11 +43,11 @@
           <v-btn
             outlined
             width="400px"
-            type="submit"
+            @click="() => { getToken()}"
           >
             로그인
           </v-btn>
-        </v-form>
+        </div>
       </v-container>
     </v-card>
 
