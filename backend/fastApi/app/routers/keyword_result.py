@@ -1,9 +1,7 @@
-from hanspell import spell_checker
 import pandas as pd
 from konlpy.tag import Mecab
 from collections import Counter
 import re
-import pymysql
 from sqlalchemy import create_engine
 from urllib import parse
 
@@ -193,14 +191,10 @@ def show_keyword():
 
     # 결측치 행 추출 및 제거
     DB_tag_result = DB_tag_result.dropna(axis=0)
-    # DB_tag_result
+    print(DB_tag_result)
 
-
+    # DB 저장
     DB_tag_result.to_sql(name='show_tag', con=connection, if_exists='append', index=False)
-
-
-    DB_tag_check = pd.read_sql("SELECT * FROM show_tag;", connection)
-    # DB_tag_check
 
     # DB 연결 끊기
     # connection.commit() : MySQL은 commit을 해줘야 하는데, SQLAlchemy 가 auto commit 을 해주기 때문에 따로 할 필요가 없다.

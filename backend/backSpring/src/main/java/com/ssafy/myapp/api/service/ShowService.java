@@ -29,4 +29,6 @@ public interface ShowService {
     List<ShowListGetRes> findShowRecommendationList(User userId);
     List<ShowListGetRes> findShowRelatedList(Long ShowId);
     ExpectRatingMapping findExpectRating(Long userId,Long showId);
+    List<?> findRandomShowExistTag();
+    List<?> findByShowIdLimit3Pageable(Long showId);
 }
