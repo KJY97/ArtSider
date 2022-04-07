@@ -18,6 +18,7 @@
   />
   <RelatedTagShow
     :swiperOption="swiperOption"
+    :num = 0
   />
 </div>
 

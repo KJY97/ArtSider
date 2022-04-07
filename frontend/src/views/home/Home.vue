@@ -6,7 +6,7 @@
     <br>
     <v-container class="poster-wrapper">
       <p class="text-center">
-        <span class="text-h3 d-flex align-center justify-center" ><v-icon size="57.6px" color="yellow">mdi-star</v-icon> 맞춤 공연 추천 </span>
+        <span class="home-title d-flex align-center justify-center" ><v-icon size="57.6px" color="yellow">mdi-star</v-icon> 맞춤 공연 추천 </span>
       </p>
       <br>
       <v-row v-if="SimilarityShowList.length == 6">
@@ -55,7 +55,7 @@
       </v-row>
       <div class="d-flex justify-center">
         <v-btn
-          class="mx-auto mt-5"
+          class="more-btn mx-auto mt-5"
           width="20%"
           text
           outlined
@@ -116,11 +116,13 @@ export default {
 }
 </script>
 <style>
+@import '../../../src/assets/css/font.css';
+
+
 .home{
   position: relative;
   width: 100%;
   height: fit-content;
 }
-
 
 </style>

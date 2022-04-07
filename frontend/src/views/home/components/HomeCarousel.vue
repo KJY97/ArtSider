@@ -17,20 +17,11 @@ export default {
   props: {
     num: Number
   },
-  created: function () {
-    this.$store.dispatch('getCategoryPopularShow', this.num)
-    .then((res) => {
-      this.popularList = res.data.items.slice(0,6)
-      for (let show of this.popularList) {
-      this.posters.push(show.posterPath)
-      }
-    })
-  },
-  watch: {
-    posters: function () {
-      if(this.posters){
-      const circle = document.querySelector('#circle')
-      window.addEventListener('resize', () => {
+
+  methods: {
+    drawCircle(posters){
+        const circle = document.querySelector('#circle')
+        window.addEventListener('resize', () => {
         const articles = circle.childNodes
         articles.forEach((article)=>{
         const articleWidth = article.clientWidth
@@ -41,26 +32,43 @@ export default {
         })
       })
       let yDeg = 0
-      this.posters.forEach((poster) => {
+      posters.forEach((poster) => {
         const article = document.createElement('article')
         var img = document.createElement("IMG");
-        img.setAttribute("src", poster);
+        img.setAttribute("src", poster.posterPath)
         img.style = "width: 100%; height: 100%;"
         article.appendChild(img)
         circle.appendChild(article)
       })
 
-      const articles = circle.childNodes
+        const articles = circle.childNodes
 
-      articles.forEach((article)=>{
-        const articleWidth = article.clientWidth
-        const zDistance = parseInt(((articleWidth * 6) / 3.141592) / 2) * 1.5
-        // console.log('zDistance', zDistance)
+        articles.forEach((article)=>{
+          const articleWidth = article.clientWidth
+          const zDistance = parseInt(((articleWidth * 6) / 3.141592) / 2) * 1.5
+          // console.log('zDistance', zDistance)
 
-        article.style.transform = `rotateY(${yDeg}deg) translateZ(-${zDistance}px)`
-        yDeg += 60
-      })
+          article.style.transform = `rotateY(${yDeg}deg) translateZ(-${zDistance}px)`
+          yDeg += 60
+        })
+    }
+  },
+  created: function () {
+    this.$store.dispatch('getSimilarityShow')
+    .then(res => {
+      if (res.data.items.length > 5) {
+        this.posters = res.data.items.slice(0,6)
+      } else{
+        this.$store.dispatch('getCategoryPopularShow', this.num)
+        .then((res) => {
+          this.posters = res.data.items.slice(0,6)
+        })
       }
+    })
+  },
+  watch: {
+    posters: function () {
+      this.drawCircle(this.posters)
     },
   },
 }

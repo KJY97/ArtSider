@@ -1,0 +1,134 @@
+@font-face {
+    font-family: 'ROKAFSlabSerifBold';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts2201-3@1.0/ROKAFSlabSerifBold.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'SUIT-Medium';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_suit@1.0/SUIT-Medium.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+  font-family: 'ROKAFSlabSerifMedium';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts2201-3@1.0/ROKAFSlabSerifMedium.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.home-title {
+  font-family: 'ROKAFSlabSerifBold';
+  font-size: 3rem;
+}
+
+.show-name {
+  font-family: 'ROKAFSlabSerifBold';
+}
+
+.main-label {
+  font-family: 'ROKAFSlabSerifMedium';
+}
+
+.sub-label {
+  font-family: 'SUIT-Medium';
+}
+
+.more-btn {
+  font-family: 'SUIT-Medium';
+}
+
+.v-btn__content {
+  font-family: 'ROKAFSlabSerifMedium';
+}
+.prefer-tag {
+  font-family: 'SUIT-Medium';
+}
+
+.user-name {
+  font-family: 'SUIT-Medium';
+}
+
+.profile-page{
+  font-family: 'SUIT-Medium';
+}
+
+.preference {
+  font-family: 'ROKAFSlabSerifMedium';
+}
+
+.history {
+  font-family: 'ROKAFSlabSerifMedium';
+}
+
+.login-btn {
+  font-family: 'SUIT-Medium';
+}
+
+.signup-btn {
+  font-family: 'SUIT-Medium';
+}
+
+.sub-heading {
+  font-family: 'SUIT-Medium';
+}
+
+.recommend-title {
+  font-family: 'ROKAFSlabSerifBold';
+}
+
+.review-result {
+  font-family: 'SUIT-Medium';
+}
+
+.expect-result{
+  font-family: 'SUIT-Medium';
+}
+.opacity-text {
+  font-family: 'SUIT-Medium';
+}
+
+.review-title {
+  font-family: 'ROKAFSlabSerifBold';
+}
+
+.review-content {
+  font-family: 'SUIT-Medium';
+}
+
+.expect-title {
+  font-family: 'ROKAFSlabSerifBold';
+}
+
+.expect-content {
+  font-family: 'SUIT-Medium';
+}
+
+.no-content {
+  font-family: 'ROKAFSlabSerifBold';
+}
+
+.near-place {
+  font-family: 'SUIT-Medium';
+}
+
+.artcenter-info {
+  font-family: 'SUIT-Medium';
+}
+
+.etiquette-title{
+  font-family: 'ROKAFSlabSerifBold';
+  font-size: 3rem;
+}
+
+
+.clap-detail{
+  font-family: 'ROKAFSlabSerifBold';
+}
+
+.pick-title{
+  font-family: 'ROKAFSlabSerifBold';
+}
+

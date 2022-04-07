@@ -13,6 +13,10 @@
   :swiperOption="swiperOption"
   :num = num
   />
+   <RelatedTagShow
+    :swiperOption="swiperOption"
+    :num = 3
+  />
   <!-- <div class=recommand-list>
   <PreferenceTag />
   </div>
@@ -29,6 +33,7 @@
 import Popular from '../recommand/Popular.vue'
 import ComingEnd from '../recommand/ComingSoon.vue'
 import ComingSoon from '../recommand/ComingEnd.vue'
+import RelatedTagShow from '../recommand/RelatedTagShow.vue'
 // import FamilyPreferenceTag from '../views/show/recommand/family/PreferenceTag.vue'
 // import FamilySimilar from '../views/show/recommand/family/Similar.vue'
 // import FamilyPlace from '../views/show/recommand/family/Place.vue'
@@ -67,6 +72,7 @@ export default {
     Popular,
     ComingEnd,
     ComingSoon,
+    RelatedTagShow,
     // FamilyPreferenceTag,
     // FamilySimilar,
     // FamilyPlace,

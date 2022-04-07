@@ -1,31 +1,36 @@
 <template>
 <div>
-  <h1 class="etiquette-title mb-10">공연 에티켓</h1>
+  <h1 class="etiquette-title mt-4 mb-10">공연 에티켓</h1>
   <div class="etiquette-category">
     <div class="show-category mb-8">
       <v-btn 
         :class="{'is-state': num == '1' }"
         @click="go(1)"
         text
+        x-large
       >클래식</v-btn>
       <v-btn
         text
         @click="go(2)"
+        x-large
         :class="{'is-state': num == '2' }" 
       >국악</v-btn>
       <v-btn
         text
         @click="go(3)"
+        x-large
         :class="{'is-state': num == '3' }"
       >뮤지컬</v-btn>
       <v-btn
         text
         @click="go(4)"
+        x-large
         :class="{'is-state': num == '4' }"
       >오페라</v-btn>
       <v-btn
         text
         @click="go(5)"
+        x-large
         :class="{'is-state': num == '5' }"
       >연극</v-btn>
     </div>
@@ -106,6 +111,7 @@ export default {
 .show-category {
   display: flex;
   justify-content: space-evenly;
+  font-size: 3rem;
 }
 
 .show-image {

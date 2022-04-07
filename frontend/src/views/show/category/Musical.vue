@@ -13,6 +13,10 @@
   :swiperOption="swiperOption"
   :num = num
   />
+   <RelatedTagShow
+    :swiperOption="swiperOption"
+    :num = 4
+  />
   <!-- <div class=recommand-list>
   <MusicalPreferenceTag />
   </div>
@@ -29,6 +33,7 @@
 import Popular from '../recommand/Popular.vue'
 import ComingEnd from '../recommand/ComingSoon.vue'
 import ComingSoon from '../recommand/ComingEnd.vue'
+import RelatedTagShow from '../recommand/RelatedTagShow.vue'
 // import MusicalPreferenceTag from '../views/show/recommand/musical/PreferenceTag.vue'
 // import MusicalSimilar from '../views/show/recommand/musical/Similar.vue'
 // import MusicalPlace from '../views/show/recommand/musical/Place.vue'
@@ -66,6 +71,7 @@ export default {
     Popular,
     ComingEnd,
     ComingSoon,
+    RelatedTagShow,
     // MusicalPreferenceTag,
     // MusicalSimilar,
     // MusicalPlace,

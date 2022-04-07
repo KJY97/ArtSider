@@ -3,7 +3,7 @@
     <div class="d-flex justify-center" style="padding-top: 100px">
       <div>
         <div class="d-flex flex-column" style="max-width:900px; min-width:900px; margin-left: 150px">
-          <h1 style="padding-left:30px">{{ showDetail.showName }}</h1>
+          <h1 class="show-name" style="padding-left:30px">{{ showDetail.showName }}</h1>
           <div class="d-flex justify-center">
             <div class="d-flex flex-column" style="margin-right:100px">
               <v-img :src="showDetail.posterPath" style="max-width:300px; width:100%; min-width:300px; height:100%; min-height:400px; max-height:400px"></v-img>
@@ -29,7 +29,7 @@
               </div>
               <div class="d-flex flex-wrap justify-center" style="max-width:300px;">
                 <span v-for="(Tag,idx) in showTags" :key="idx" class="py-2">
-                  <v-chip outlined draggable text-color="red" color="red" class="mr-1"><v-icon left size="18px">mdi-pound</v-icon>{{ Tag.tagContent }}</v-chip>
+                  <v-chip outlined draggable text-color="red" color="red" class="mr-1"><v-icon left size="18px">mdi-pound</v-icon>{{ Tag.tag }}</v-chip>
                 </span>
               </div>
             </div>
@@ -242,8 +242,10 @@ export default {
     getUserExpectation: function (id) {
       this.$store.dispatch('getUserExpectation', {showId: id})
       .then((res) => {
-        this.probability = res.data.rating / 10 * 100
-        this.probability.toFixed(2)
+        if (res.data.rating) {
+          this.probability = res.data.rating / 10 * 100
+          this.probability.toFixed(2)
+        }
       })
     },
     // 연관 공연 조회
@@ -355,6 +357,8 @@ export default {
 </script>
 
 <style>
+@import '../../../src/assets/css/font.css';
+
   .li-info {
     list-style: none;
     margin-top: 16px;

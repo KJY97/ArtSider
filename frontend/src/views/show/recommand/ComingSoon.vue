@@ -1,7 +1,7 @@
 <template>
 <div>
   <br>
-  <h1 class="ml-4 mb-4 d-flex align-center"><v-icon size="48px" color="blue">mdi-clock</v-icon>곧 상영 예정</h1> 
+  <h1 class="recommend-title ml-4 mb-4 d-flex align-center"><v-icon size="48px" color="blue">mdi-clock</v-icon>곧 상영 예정</h1> 
   <swiper class="swiper" 
     :options="swiperOption">
     <swiper-slide

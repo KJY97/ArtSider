@@ -23,7 +23,7 @@
            <input @change="uploadImage" style="display: none;" accept="image/*" ref="image" type="file">
         </v-card>
         <div class="profile-detail d-inline-block ms-5">
-          <h1 class="d-inline-block"> {{ userInfo.nickname }} </h1>
+          <h1 class="user-name d-inline-block"> {{ userInfo.nickname }} </h1>
           <v-text-field
             class="d-inlie-block"
             v-show="updateTrigger === true"
@@ -59,7 +59,7 @@
             </v-btn>
 
           <div class="profile-tag-wrapper mt-4">
-            <h2> 선호 태그 </h2>
+            <h2 class="prefer-tag"> 선호 태그 </h2>
             <v-chip-group
               column
             >

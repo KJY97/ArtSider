@@ -6,10 +6,10 @@
   >
   <v-card style="padding: 3rem;">
       <v-card-title class="d-flex justify-center">
-        <span class="text-h4"> {{ currentTitle }} </span>
+        <span class="home-title"> {{ currentTitle }} </span>
       </v-card-title>
-      <span class="d-flex justify-center" style="font-weight: 600; line-height: 1.6; margin-top: 2rem; margin-bottom: 1rem;"> 아트사이더에 오신 걸 환영합니다. </span>
-      <v-window v-model="step" class="d-flex flex-column justify-center align-center" style="padding-bottom:50px">
+      <span class="d-flex justify-center sub-label" style="font-weight: 600; line-height: 1.6; margin-top: 2rem; margin-bottom: 1rem;"> 아트사이더에 오신 걸 환영합니다. </span>
+      <v-window v-model="step" class="d-flex flex-column justify-center align-center sub-label" style="padding-bottom:50px">
         <v-window-item :value="1">
           <v-container>
             <v-form

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="d-flex justify-center flex-column align-center mt-5">
+    <div class="artcenter-info d-flex justify-center flex-column align-center mt-5">
       <h3>공연장 및 주변시설</h3>
       <p v-if="showArtCenterList.artCenterTel">공연장 전화 번호 : {{ showArtCenterList.artCenterTel }}</p>
     </div>
