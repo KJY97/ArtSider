@@ -5,11 +5,17 @@ WORKDIR /code
 
 COPY ./requirements.txt /code/requirements.txt
 
-# install dependencies
-RUN pip install --upgrade pip
-RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
+### install dependencies ###
+
+# java stuff
 RUN apt-get update && \
-    apt-get install curl
+    apt-get install -y curl openjdk-11-jdk
+
+# install python packages
+RUN pip3 install --upgrade pip
+RUN pip3 install --no-cache-dir --upgrade -r /code/requirements.txt
+
+# mecab
 RUN cd /code && \ 
     curl -s https://raw.githubusercontent.com/konlpy/konlpy/master/scripts/mecab.sh | bash -s
 
