@@ -279,4 +279,27 @@ public class ShowController {
         return new ResponseEntity<Map<String , Object>>(resultMap, HttpStatus.ACCEPTED);
     }
     
+    @GetMapping("/random")
+    @ApiOperation(value = "랜덤 공연 목록 ", notes = "태그를 3개이상 가지는 공연을 랜덤으로 6개 가져온다")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "공연목록 조회 성송"),
+            @ApiResponse(code = 401, message = "공연목록 조회 실패"),
+            @ApiResponse(code = 500, message = "서버 에러")
+    })
+    public ResponseEntity<Map<String , Object>> randomShowList() {
+        Map<String, Object> resultMap = new HashMap<>();
+        Map<String, Object> tagMap = new HashMap<>();
+        
+        List<?> shows=showService.findRandomShowExistTag();
+        
+        for (int i = 0; i <6; i++) {
+        	Map<String, Object> show=(Map<String, Object>) shows.get(i);
+        	String id= show.get("id").toString();
+        	tagMap.put(id,showService.findByShowIdLimit3Pageable(Long.parseLong(id)));
+		}
+        resultMap.put("items", shows);
+        resultMap.put("tagList",tagMap);
+        return new ResponseEntity<Map<String , Object>>(resultMap, HttpStatus.OK);
+    }
+    
 }

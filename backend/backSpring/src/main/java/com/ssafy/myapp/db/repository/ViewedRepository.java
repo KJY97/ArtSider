@@ -22,6 +22,6 @@ public interface ViewedRepository extends JpaRepository<Viewed, Long>{
 	
 	default List<?> findByUserIdDistinctOderById(Long id)
     {
-        return findByUserIdDistinctOderByIdPageable(id, PageRequest.of(0, 19));
+        return findByUserIdDistinctOderByIdPageable(id, PageRequest.of(0, 20));
     }
 }
