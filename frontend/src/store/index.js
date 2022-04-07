@@ -368,17 +368,37 @@ export default new Vuex.Store({
       state.token = null
     },
 
-    getToken({commit}, inputData){
+    
+    // 로그인
+    getToken({commit, dispatch, state}, inputData){
       const url = '/api/auth/login'
       axios.post(url, {...inputData})
       .then((res) => {
         localStorage.setItem('accessToken', res.data.accessToken)
         commit('SET_MY_TOKEN', res.data.accessToken)
-        router.push({name: 'Home'}).catch(()=>{})
       })
-
+      .then(() => {
+        dispatch('getUserInfo')
+        .then((res) => {
+          commit('SET_USER_INFO', res.data)
+        })
+        .then(() => {
+          console.log(state.userInfo)
+          router.push({name: 'Home'}).catch(()=>{})
+        })
+      })
     },
-    // 이공연이 선호 목록인지 조회
+
+    // 초기 유저 공연 리스트업
+    getInitPoster(){
+      const url = '/api/show/random'
+      return axios({
+        method: 'get',
+        url: url
+      })
+    },
+
+    // 이 공연이 선호 목록인지 조회
     checkPreference({state}, data) {
       state
       const url = `/api/users/show/${data}/preference`
@@ -388,19 +408,29 @@ export default new Vuex.Store({
         headers: { Authorization : `Bearer ${state.token}`}
       })
     },
+
     // 선호 목록 추가
     addPreference({state}, data) {
       state
       const url = `/api/users/show/${data.id}/preference`
-      return axios({
-        method: 'post',
-        url: url,
-        headers: { Authorization : `Bearer ${state.token}`}
+      return new Promise((resolve, reject) => {
+        axios({
+          method: 'post',
+          url: url,
+          headers: { Authorization : `Bearer ${state.token}`}
+        })
+        .then(() => {
+          resolve('complete')
+        })
+        .catch(() => {
+          reject('network err')
+        })
       })
     },
+      
+
     // 선호 목록 제거
     deletePreference({state}, data) {
-      state
       const url = `/api/users/show/${data.id}/preference`
       return axios({
         method: 'delete',
