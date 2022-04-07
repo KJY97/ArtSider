@@ -1,5 +1,5 @@
 <template>
-<div style="margin-bottom:100px">
+<div style="margin-bottom:100px" v-if="isShow">
   <div class="near-place d-flex justify-space-around">
     <div @click="changeCategory(0)" class="d-flex flex-column justify-center align-center">
       <v-icon size="48px" color="red">mdi-run</v-icon>
@@ -18,6 +18,9 @@
     <div id="map" style="width:100%;height:100%;position:relative;overflow:hidden;"></div>
   </div>
   <br>
+</div>
+<div v-else>
+  <p class="near-place d-flex justify-center align-center" style="margin-top: 50px">지도에 표시할 수 없어요! ㅠㅠ</p>
 </div>
 </template>
 
@@ -42,6 +45,7 @@ export default {
       marker: '',
       content: '',
       cg: '',
+      isShow: true
     };
   },
   mounted() {
@@ -71,38 +75,43 @@ export default {
               center: new kakao.maps.LatLng(127.298, 36.354), // 지도의 중심좌표
               level: 5 // 지도의 확대 레벨
           };
-      var map = new kakao.maps.Map(mapContainer, mapOption); 
+      var map = new kakao.maps.Map(mapContainer, mapOption);
       var geocoder = new kakao.maps.services.Geocoder();
+      var isShow = true
       geocoder.addressSearch(address, function(result, status) {
-      // 정상적으로 검색이 완료됐으면 
-      if (status === kakao.maps.services.Status.OK) {
-        var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+        // 정상적으로 검색이 완료됐으면 
+        if (status === kakao.maps.services.Status.OK) {
+          var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+          // 결과값으로 받은 위치를 마커로 표시합니다
+          var marker = new kakao.maps.Marker({
+              map: map,
+              position: coords,
+          });
+          marker.setMap(map);
+          var infowindow = new kakao.maps.InfoWindow({
+            content: '<div style="width:150px;text-align:center;padding:6px 0;">' + name + '</div>',
+          });
+          kakao.maps.event.addListener(marker, 'mouseover', function() {
+            // 마커 위에 인포윈도우를 표시합니다
+            infowindow.open(map, marker);  
+          });
+          kakao.maps.event.addListener(marker, 'mouseout', function() {
+            // 마커 위에 인포윈도우를 표시합니다
+            setTimeout(() => {
+              infowindow.close()
+            }, 1500);  
+          });
 
-        // 결과값으로 받은 위치를 마커로 표시합니다
-        var marker = new kakao.maps.Marker({
-            map: map,
-            position: coords,
-        });
-        marker.setMap(map);
-        var infowindow = new kakao.maps.InfoWindow({
-          content: '<div style="width:150px;text-align:center;padding:6px 0;">' + name + '</div>',
-        });
-        kakao.maps.event.addListener(marker, 'mouseover', function() {
-          // 마커 위에 인포윈도우를 표시합니다
-          infowindow.open(map, marker);  
-        });
-        kakao.maps.event.addListener(marker, 'mouseout', function() {
-          // 마커 위에 인포윈도우를 표시합니다
-          setTimeout(() => {
-            infowindow.close()
-          }, 1500);  
-        });
-
-        // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
-        map.setCenter(coords);
-      }
-    })
-    this.map = map
+          // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+          map.setCenter(coords);
+        } else {
+          isShow = false
+        }
+      })
+      setTimeout(() => {
+        this.isShow = isShow
+      }, 100);
+      this.map = map
     },
     changeCategory: function (num) {
       // 커스텀 오버레이를 숨깁니다 

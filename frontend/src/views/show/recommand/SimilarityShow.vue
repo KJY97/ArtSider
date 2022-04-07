@@ -52,7 +52,7 @@ export default {
       this.$store.dispatch('getSimilarityShow', {userId: this.userId})
       .then(res => {
         this.SimilarityShowList = res.data.items
-        if (this.SimilarityShowList) {
+        if (this.SimilarityShowList.length > 1) {
           this.isShow = true
         }
       })

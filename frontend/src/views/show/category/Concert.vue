@@ -13,6 +13,10 @@
   :swiperOption="swiperOption"
   :num = num
   />
+   <RelatedTagShow
+    :swiperOption="swiperOption"
+    :num = 2
+  />
   <!-- <div class=recommand-list>
   <ConcertPreferenceTag />
   </div>
@@ -32,6 +36,7 @@
 import Popular from '../recommand/Popular.vue'
 import ComingEnd from '../recommand/ComingSoon.vue'
 import ComingSoon from '../recommand/ComingEnd.vue'
+import RelatedTagShow from '../recommand/RelatedTagShow.vue'
 // import ConcertPreferenceTag from '../views/show/recommand/concert/PreferenceTag.vue'
 // import ConcertSimilar from '../views/show/recommand/concert/Similar.vue'
 // import ConcertPlace from '../views/show/recommand/concert/Place.vue'
@@ -69,6 +74,7 @@ export default {
     Popular,
     ComingEnd,
     ComingSoon,
+    RelatedTagShow,
     // ConcertPreferenceTag,
     // ConcertSimilar,
     // ConcertPlace,

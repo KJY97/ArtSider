@@ -13,6 +13,10 @@
   :swiperOption="swiperOption"
   :num = num
   />
+   <RelatedTagShow
+    :swiperOption="swiperOption"
+    :num = 5
+  />
 </div>
 </template>
 
@@ -20,6 +24,7 @@
 import Popular from '../recommand/Popular.vue'
 import ComingEnd from '../recommand/ComingSoon.vue'
 import ComingSoon from '../recommand/ComingEnd.vue'
+import RelatedTagShow from '../recommand/RelatedTagShow.vue'
 // import TheatrePreferenceTag from '../views/show/recommand/theatre/PreferenceTag.vue'
 // import TheatreSimilar from '../views/show/recommand/theatre/Similar.vue'
 // import TheatrePlace from '../views/show/recommand/theatre/Place.vue'
@@ -57,6 +62,7 @@ export default {
     Popular,
     ComingEnd,
     ComingSoon,
+    RelatedTagShow,
     // TheatrePreferenceTag,
     // TheatreSimilar,
     // TheatrePlace,

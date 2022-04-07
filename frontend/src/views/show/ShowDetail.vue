@@ -29,7 +29,7 @@
               </div>
               <div class="d-flex flex-wrap justify-center" style="max-width:300px;">
                 <span v-for="(Tag,idx) in showTags" :key="idx" class="py-2">
-                  <v-chip outlined draggable text-color="red" color="red" class="mr-1"><v-icon left size="18px">mdi-pound</v-icon>{{ Tag.tagContent }}</v-chip>
+                  <v-chip outlined draggable text-color="red" color="red" class="mr-1"><v-icon left size="18px">mdi-pound</v-icon>{{ Tag.tag }}</v-chip>
                 </span>
               </div>
             </div>
@@ -242,8 +242,10 @@ export default {
     getUserExpectation: function (id) {
       this.$store.dispatch('getUserExpectation', {showId: id})
       .then((res) => {
-        this.probability = res.data.rating / 10 * 100
-        this.probability.toFixed(2)
+        if (res.data.rating) {
+          this.probability = res.data.rating / 10 * 100
+          this.probability.toFixed(2)
+        }
       })
     },
     // 연관 공연 조회

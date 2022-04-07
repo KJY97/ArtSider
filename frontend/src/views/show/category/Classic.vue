@@ -13,6 +13,10 @@
   :swiperOption="swiperOption"
   :num = num
   />
+   <RelatedTagShow
+    :swiperOption="swiperOption"
+    :num = 1
+  />
   <!-- <div class=recommand-list>
   <ClassicPreferenceTag />
   </div>
@@ -29,6 +33,7 @@
 import Popular from '../recommand/Popular.vue'
 import ComingEnd from '../recommand/ComingSoon.vue'
 import ComingSoon from '../recommand/ComingEnd.vue'
+import RelatedTagShow from '../recommand/RelatedTagShow.vue'
 // import ClassicPreferenceTag from '../views/show/recommand/classic/PreferenceTag.vue'
 // import ClassicSimilar from '../views/show/recommand/classic/Similar.vue'
 // import ClassicPlace from '../views/show/recommand/classic/Place.vue'
@@ -66,6 +71,7 @@ export default {
     Popular,
     ComingEnd,
     ComingSoon,
+    RelatedTagShow,
     // ClassicPreferenceTag,
     // ClassicSimilar,
     // ClassicPlace,
