@@ -264,9 +264,9 @@ public class ShowServiceImpl implements ShowService{
         if (showTagList.isEmpty()) {
             showInfo.setShowTags(showTagList);
         } else {
-            showTagList.sort(Comparator.comparing(ShowTag::getWeight, Comparator.reverseOrder()));
-            List<ShowTag> showTag = showTagList.subList(0, 4);
-            showInfo.setShowTags(showTag);
+//            showTagList.sort(Comparator.comparing(ShowTag::getWeight, Comparator.reverseOrder()));
+//            List<ShowTag> showTag = showTagList.subList(0, 4);
+            showInfo.setShowTags(showTagRepository.findByShowIdLimit3(show.getId()));
         }
 
         showList.add(showInfo);
