@@ -67,8 +67,7 @@ router.beforeEach((to, from, next) => {
   } else{
     if(!accessToken){
       alert('로그인이 필요합니다.')
-      // next(from)
-      next()
+      next(from)
     } else{
       next()
     }
