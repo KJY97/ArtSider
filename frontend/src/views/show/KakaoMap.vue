@@ -1,20 +1,32 @@
 <template>
 <div style="margin-bottom:100px" v-if="isShow">
   <div class="near-place d-flex justify-space-around">
-    <div @click="changeCategory(0)" class="d-flex flex-column justify-center align-center">
+    <div 
+      style="height: 120px;"
+      @click="() => {culture = true, restaurant = false, cafe = false, changeCategory(0)}"
+      :class="{'active' : culture}" 
+      class="d-flex flex-column justify-center align-center map-category">
       <v-icon size="48px" color="red">mdi-run</v-icon>
       <p>주변 문화시설</p>
     </div>
-    <div @click="changeCategory(1)" class="d-flex flex-column justify-center align-center">
+    <div 
+      style="height: 120px;"
+      @click="() => {culture = false, restaurant = true, cafe = false,  changeCategory(1)}" 
+      :class="{'active' : restaurant}" 
+      class="d-flex flex-column justify-center align-center map-category">
       <v-icon size="48px" color="red">mdi-food-outline</v-icon>
       <p>주변 음식점</p>
     </div>
-    <div @click="changeCategory(2)" class="d-flex flex-column justify-center align-center">
+    <div 
+      style="height: 120px;"
+      @click="() => {culture = false, restaurant = false, cafe = true,  changeCategory(2)}" 
+      :class="{'active' : cafe}" 
+      class="d-flex flex-column justify-center align-center map-category">
       <v-icon size="48px" color="red">mdi-coffee-outline</v-icon>
       <p>주변 카페</p>
     </div>
   </div>
-  <div class="map_wrap">
+  <div class="map_wrap mt-5">
     <div id="map" style="width:100%;height:100%;position:relative;overflow:hidden;"></div>
   </div>
   <br>
@@ -45,7 +57,12 @@ export default {
       marker: '',
       content: '',
       cg: '',
-      isShow: true
+      isShow: true,
+
+      culture: false,
+      restaurant: false,
+      cafe: false,
+
     };
   },
   mounted() {
@@ -223,5 +240,30 @@ export default {
 .map_wrap, .map_wrap * {margin:0; padding:0;font-family:'Malgun Gothic',dotum,'돋움',sans-serif;font-size:12px;}
 .map_wrap {position:relative;width:100%;height:350px;}
 #category {position:absolute;top:10px;left:10px;border-radius: 5px; border:1px solid #909090;box-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);background: #fff;overflow: hidden;z-index: 2;}
+
+.map-category{
+  width: 20%;
+  height: fit-content;
+
+}
+
+.map-category p {
+  margin-bottom: 0px;
+}
+
+.map-category:hover{
+  background-color: rgba(238, 165, 126, 0.5);
+  border-radius: 10px;
+  box-shadow: 2px 2px 2px 2px gray;
+  cursor: pointer;
+}
+
+.active{
+  font-weight: bolder;
+  border-radius: 10px;
+  background-color: rgba(238, 165, 126, 0.5);
+  box-shadow: 2px 2px 2px 2px gray;
+}
+
 
 </style>
