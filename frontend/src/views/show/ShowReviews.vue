@@ -93,7 +93,7 @@ import StarRating from 'vue-star-rating'
 export default {
   name: 'ShowReviews',
   props: {
-    id: String,
+    id: [String, Number],
     userId: Number,
     startDate: String,
   },

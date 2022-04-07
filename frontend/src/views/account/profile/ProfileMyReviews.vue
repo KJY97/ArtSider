@@ -185,7 +185,6 @@ export default {
   created(){
     this.$store.dispatch('getUserReviews')
     .then((res) => {
-      console.log(res.data)
       this.myReviews = res.data.items
     })
     .then(() => {

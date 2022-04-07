@@ -87,7 +87,7 @@ export default {
   name: 'ShowExpectations',
 
   props: {
-    id: String,
+    id: [String,Number],
     userId: Number
   },
 

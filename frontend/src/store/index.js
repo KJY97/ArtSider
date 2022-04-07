@@ -370,7 +370,7 @@ export default new Vuex.Store({
 
     
     // 로그인
-    getToken({commit, dispatch, state}, inputData){
+    getToken({commit, dispatch}, inputData){
       const url = '/api/auth/login'
       axios.post(url, {...inputData})
       .then((res) => {
@@ -383,7 +383,6 @@ export default new Vuex.Store({
           commit('SET_USER_INFO', res.data)
         })
         .then(() => {
-          console.log(state.userInfo)
           router.push({name: 'Home'}).catch(()=>{})
         })
       })
