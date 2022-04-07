@@ -1,10 +1,7 @@
-from contextlib import nullcontext
 import numpy as np
 from numpy import dot
 from numpy.linalg import norm
 import pandas as pd
-from collections import Counter
-import pymysql
 from sqlalchemy import create_engine
 from urllib import parse
 from tqdm import tqdm
@@ -46,6 +43,7 @@ def hello(userId, category):
 
     # uri의 카테고리 값과 DB의 카테고리 값 map 저장
     category_Map = {
+            "ALL" : "전체",
             "MU" : "뮤지컬",
             "CO" : "콘서트",
             "CL" : "클래식/오페라",
@@ -88,8 +86,16 @@ def hello(userId, category):
 
     '''category를 활용하여 필요한 데이터 정제'''
 
-    # 카테고리에 해당하는 모든 공연의 태그 정보와 공연 포스터 가져오기
-    show = pd.read_sql("SELECT p.id, st.tag_content, st.weight, p.poster_path "
+    
+    if category_Map.get(category) == "전체":
+        # 모든 공연의 태그 정보와 공연 포스터 가져오기
+        show = pd.read_sql("SELECT p.id, st.tag_content, st.weight, p.poster_path "
+                    + "FROM show_tag st "
+                    + "INNER JOIN performance p "
+                    + "ON st.show_id = p.id;", connection)
+    else:
+        # 카테고리에 해당하는 모든 공연의 태그 정보와 공연 포스터 가져오기
+        show = pd.read_sql("SELECT p.id, st.tag_content, st.weight, p.poster_path "
                     + "FROM show_tag st "
                     + "INNER JOIN performance p "
                     + "ON st.show_id = p.id "

@@ -2,8 +2,6 @@ import numpy as np
 from numpy import dot
 from numpy.linalg import norm
 import pandas as pd
-from collections import Counter
-import pymysql
 from sqlalchemy import create_engine
 from urllib import parse
 from tqdm import tqdm
