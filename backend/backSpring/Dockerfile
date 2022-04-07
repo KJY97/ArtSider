@@ -4,10 +4,10 @@ WORKDIR /backend
 COPY . .
 
 # 권한 주기
-RUN chmod +x gradlew
+RUN chmod +x ./gradlew
 
 # spring 프로젝트 build
-RUN ./gradlew clean build
+CMD ["./gradlew", "clean", "build"]
 
 # JAR_FILE 위치에 있는 jar파일을 app.jar이름의 파일로 복사
 ARG JAR_FILE=build/libs/artSider-0.0.1-SNAPSHOT.jar

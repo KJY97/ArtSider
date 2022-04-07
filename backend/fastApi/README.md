@@ -15,8 +15,8 @@
 2. package 설치
 
    ```bash
-   $ pip install --upgrade pip
-   $ pip install -r requirements.txt
+   $ pip3 install --upgrade pip
+   $ pip3 install -r requirements.txt
    ```
 
 3. mecab 다운로드
