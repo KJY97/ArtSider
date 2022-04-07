@@ -1,7 +1,7 @@
 <template>
 <div v-if="isShow">
   <br>
-  <h1 class="ml-4 mb-4 d-flex align-center"><v-icon size="48px" color="blue">mdi-thumb-up-outline</v-icon>{{ userNickname }}님의 선호 태그와 일치하는 공연</h1> 
+  <h1 class="recommend-title ml-4 mb-4 d-flex align-center"><v-icon size="48px" color="blue">mdi-thumb-up-outline</v-icon>{{ userNickname }}님의 선호 태그와 일치하는 공연</h1> 
   <swiper class="swiper" 
     :options="swiperOption">
     <swiper-slide

@@ -84,7 +84,7 @@
     >
       <div class="d-flex align-center">
         <v-icon size="48px" color="green" > mdi-cart </v-icon>
-        <h1 >  조회한 공연 </h1>
+        <h1>  조회한 공연 </h1>
       </div>
       <v-container
         class="history-contents-box"
@@ -99,8 +99,8 @@
             style="height: 80%;"
           >
             <v-card
-              max-width="180"
-              max-height="240"
+              max-width="67.5%"
+              max-height="90%"
               class="history-content mx-auto"
               style="background-color:gray;"
               @click="$router.push({name: 'ShowDetail', params: {showId: poster.id}})"

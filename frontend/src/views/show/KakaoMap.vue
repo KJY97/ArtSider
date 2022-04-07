@@ -1,6 +1,6 @@
 <template>
 <div style="margin-bottom:100px">
-  <div class="d-flex justify-space-around">
+  <div class="near-place d-flex justify-space-around">
     <div @click="changeCategory(0)" class="d-flex flex-column justify-center align-center">
       <v-icon size="48px" color="red">mdi-run</v-icon>
       <p>주변 문화시설</p>

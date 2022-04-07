@@ -75,6 +75,7 @@
               outlined
               style="background-color: pink;"
               tile
+              height="12rem"
               :elevation="3"
             >
               <div>

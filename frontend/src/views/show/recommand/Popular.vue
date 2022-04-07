@@ -2,8 +2,8 @@
 <div>
   <br>
   
-  <h1 class="ml-4 mb-4 d-flex align-center" v-if="genre != 'main'"><v-icon size="48px" color="red">mdi-fire</v-icon>{{ genre }} 인기 순위</h1> 
-  <h1 class="ml-4 mb-4 d-flex align-center" v-if="genre == 'main'"><v-icon size="48px" color="red">mdi-fire</v-icon>인기 순위</h1> 
+  <h1 class="recommend-title ml-4 mb-4 d-flex align-center" v-if="genre != 'main'"><v-icon size="48px" color="red">mdi-fire</v-icon>{{ genre }} 인기 순위</h1> 
+  <h1 class="recommend-title ml-4 mb-4 d-flex align-center" v-if="genre == 'main'"><v-icon size="48px" color="red">mdi-fire</v-icon>인기 순위</h1> 
   <swiper class="swiper" 
     :options="swiperOption">
     <swiper-slide

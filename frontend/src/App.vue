@@ -36,6 +36,8 @@ export default {
 </script>
 
 <style>
+@import '../src/assets/css/font.css';
+
 html{
   overflow-y: auto !important;
 }

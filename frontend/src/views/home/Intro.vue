@@ -22,6 +22,7 @@
           아트사이더에 오신걸 환영합니다.
         </h1>
       <v-btn
+        class ="login-btn"
         color="red"
         dark
         @click="() => { loginDialog = true }"
@@ -35,7 +36,7 @@
           회원이 아니신가요 ?
           <span
             text
-            class="font-weight-bold"
+            class="signup-btn font-weight-bold"
             style="font-size:16px; color:pink; margin-left: 30px; cursor:pointer;"
             @click="() => { signUpDialog = true }"        
           >가입하기 </span>

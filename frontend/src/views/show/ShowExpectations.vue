@@ -1,7 +1,7 @@
 <template>
   <div style="margin-top:30px">
     <div class="d-flex align-center justify-space-between">
-      <p>총 {{ expectationLength }}개의 기대평이 등록되었습니다.</p>
+      <p class="expect-result">총 {{ expectationLength }}개의 기대평이 등록되었습니다.</p>
       <v-btn color="black" style="float: right; color:white; opacity:0.8s; margin-left:25px" @click="drawUpExpectation">기대평 작성</v-btn>
     </div>
     <br>
@@ -47,7 +47,7 @@
       </v-menu>
     </div>
     <div v-if="showExpectationsList.length == 0" >
-      <h2 class="d-flex justify-center" style="margin: 150px 0px; ">기대평이 없습니다.</h2> 
+      <h2 class="no-content d-flex justify-center" style="margin: 150px 0px; ">기대평이 없습니다.</h2> 
     </div>
     <div v-else v-for="(showExpectation, idx) in showExpectationsList" :key="idx" style="margin-top:50px;">
       <div class="container" style="border: 1px solid rgba(0, 0, 0, .3); border-radius:20px;">
@@ -55,13 +55,13 @@
         <span class="opacity-text">{{ showExpectation.createDate.slice(0,10) }} | </span>
         <div>
           <br>
-          <strong>{{showExpectation.title}}</strong>
+          <strong class="expect-title">{{showExpectation.title}}</strong>
           <v-btn style="float: right;" v-if="userId == showExpectation.userId" text @click="deleteShowExpectations(showExpectation.expectationId)">삭제</v-btn>
           <v-btn style="float: right;" v-if="userId == showExpectation.userId" text @click="openUpdate(showExpectation)">수정</v-btn>
         </div>
         <br>
         
-        <span>{{showExpectation.contents}}</span>
+        <span class="expect-content">{{showExpectation.contents}}</span>
         <br>
         <!-- 수정버튼을 누르면 나오는 수정창 -->
         <div v-if="reviewNum == showExpectation.expectationId" class="container d-flex flex-column align-center">

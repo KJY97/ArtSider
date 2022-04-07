@@ -3,7 +3,7 @@
     <div class="d-flex justify-center" style="padding-top: 100px">
       <div>
         <div class="d-flex flex-column" style="max-width:900px; min-width:900px; margin-left: 150px">
-          <h1 style="padding-left:30px">{{ showDetail.showName }}</h1>
+          <h1 class="show-name" style="padding-left:30px">{{ showDetail.showName }}</h1>
           <div class="d-flex justify-center">
             <div class="d-flex flex-column" style="margin-right:100px">
               <v-img :src="showDetail.posterPath" style="max-width:300px; width:100%; min-width:300px; height:100%; min-height:400px; max-height:400px"></v-img>
@@ -355,6 +355,8 @@ export default {
 </script>
 
 <style>
+@import '../../../src/assets/css/font.css';
+
   .li-info {
     list-style: none;
     margin-top: 16px;

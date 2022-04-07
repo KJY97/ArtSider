@@ -1,7 +1,7 @@
 <template>
 <div>
   <div v-if="clap==1">
-    <pre class="clap-detail" >
+    <pre class="clap-detail"  >
       연극의 경우 기본적으로 한 막이 끝나면 박수를 칩니다.
       관객의 박수는 공연자에게 큰 힘이 됩니다.
     </pre>
@@ -44,9 +44,6 @@ export default {
 </script>
 
 <style>
-.clap-detail {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-}
 pre {
   word-wrap: break-word;      /* IE 5.5-7 */
   white-space: pre-wrap;      /* current browsers */

@@ -73,12 +73,12 @@
             <v-card
               class="pa-4"
               outlined
-              style="background-color: pink;"
+              style="background-color: pink; overflow:scroll;"
               tile
-              :elevation="3" 
-              
+              :elevation="3"
+              height="12rem"
             >
-              <div>
+              <div class="col-12">
                 <p v-if="num==1" style><Covid19 /></p>
                 <p v-else-if="num==2"><Clap :clap="2"/></p>
                 <p v-else-if="num==3"><Camera /></p>
