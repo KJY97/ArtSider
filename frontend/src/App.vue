@@ -1,28 +1,45 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+  <v-app 
+    app
+    id="inspire"
+    style="background-color: #FEFEF4;">
+      <NavBar />
+      <v-main id="main" style="overflow:auto; height:100vh;" >
+        <router-view :key="$route.fullPath"/>
+      </v-main>
+   
+  </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import NavBar from '@/components/NavBar'
 
 export default {
   name: 'App',
+
   components: {
-    HelloWorld
+    NavBar
+  },
+
+  data(){
+    return{
+    }
+  },
+
+  created(){
+    const token = localStorage.getItem('accessToken')
+    if(token){
+      this.$store.dispatch('setToken', token)
+    } 
   }
 }
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+@import '../src/assets/css/font.css';
+
+html{
+  overflow-y: auto !important;
 }
+
 </style>

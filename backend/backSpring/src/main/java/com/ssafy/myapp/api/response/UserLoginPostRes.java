@@ -1,0 +1,19 @@
+package com.ssafy.myapp.api.response;
+
+
+import lombok.Getter;
+import lombok.Setter;
+
+
+@Getter
+@Setter
+
+public class UserLoginPostRes {
+	String accessToken;
+	
+	public static UserLoginPostRes of(Integer statusCode, String message, String accessToken) {
+		UserLoginPostRes res = new UserLoginPostRes();
+		res.setAccessToken(accessToken);
+		return res;
+	}
+}

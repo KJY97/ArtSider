@@ -1,4 +1,4 @@
-# testvue
+# frontend
 
 ## Project setup
 ```
